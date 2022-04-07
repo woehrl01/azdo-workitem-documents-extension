@@ -23,7 +23,7 @@
     "package-extension": "tfx extension create --manifest-globs azure-devops-extension.json src/Code/**/*.json",
     "package-extension:dev": "tfx extension create --manifest-globs azure-devops-extension.dev.json src/Code/**/*.json",
     "publish-extension": "tfx extension publish --manifest-globs azure-devops-extension.json src/Code/**/*.json",
-    "publish-extension:dev": "tfx extension publish --manifest-globs azure-devops-extension.dev.json src/Code/**/*.json --share-with lukaswoehrl-dev",
+    "publish-extension:dev": "tfx extension publish --manifest-globs azure-devops-extension.dev.json src/Code/**/*.json",
     "test": ""
   },
   "dependencies": {
