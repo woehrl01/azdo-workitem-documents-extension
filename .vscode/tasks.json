@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "serve",
+			"problemMatcher": [],
+			"label": "npm: serve",
+			"detail": "webpack serve --mode development",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}

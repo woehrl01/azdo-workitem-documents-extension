@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "charset": "utf8",
+        "experimentalDecorators": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "strict": true,
+        "strictFunctionTypes": true,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "target": "es5",
+        "rootDir": "src/",
+        "outDir": "dist/",
+        "jsx": "react",
+        "lib": [
+            "es5",
+            "es6",
+            "dom",
+            "es2015.promise"
+        ],
+        "types": [
+            "react",
+            "jest",
+            "node"
+        ],
+        "esModuleInterop": true
+    }
+}
