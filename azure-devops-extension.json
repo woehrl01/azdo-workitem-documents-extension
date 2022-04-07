@@ -13,6 +13,24 @@
             "id": "Microsoft.VisualStudio.Services"
         }
     ],
+    "scopes": [
+        "vso.work"
+    ],
+    "galleryFlags": [
+        "Preview"
+    ],
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/woehrl01/azdo-workitem-documents-extension/"
+    },
+    "links": {
+        "support": {
+            "uri": "https://github.com/woehrl01/azdo-workitem-documents-extension/issues"
+        },
+        "license": {
+            "uri": "https://github.com/woehrl01/azdo-workitem-documents-extension/blob/main/LICENSE"
+        }
+    },
     "icons": {
         "default": "logo.png"
     },
