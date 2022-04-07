@@ -4,7 +4,7 @@ With this extension you can display linked documents. All relations of the type 
 
 ### Supported optimizations
 
-- Google Documents (Docs, Sheets, Slides, etc.)
+- Google Documents (Embedded mode for Docs, Sheets, Slides, etc.)
 - Google Drive (Displayed as list)
 - Diagram.net/Draw.io (Viewer mode)
 
