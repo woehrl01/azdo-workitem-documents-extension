@@ -14,6 +14,8 @@ The comment of the _Hyperlink_ is used as the title of the tab.
 - Google Drive (Displayed as list)
 - [diagrams.net/draw.io](https://app.diagrams.net/) (Viewer mode)
 
+_If you have additional ideas, please create an [issue](https://github.com/woehrl01/azdo-workitem-documents-extension/issues)._
+
 ### Screenshot
 
 ![diagrams.net](static/diagrams.net.png)
