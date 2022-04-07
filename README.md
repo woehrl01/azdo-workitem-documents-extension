@@ -14,7 +14,6 @@ The comment of the _Hyperlink_ is used as the titel of the tab.
 
 ### Screenshot
 
-![diagrams.net](./static/diagrams.net.png)
+![diagrams.net](static/diagrams.net.png)
 
-
-[Document icons created by Driss Lebbat - Flaticon](https://www.flaticon.com/free-icons/document)
+_[Document icons created by Driss Lebbat - Flaticon](https://www.flaticon.com/free-icons/document)_
