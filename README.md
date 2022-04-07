@@ -1,10 +1,12 @@
 # Azure DevOps - Work Item Documents Viewer extension
 
-With this extension you can display linked documents in work items. All relations of the type _Hyperlink_ are embedded into a new tab _Documents_ on the work item form. Depending on the content, an optimized visualisation is selected.
+Would you like to view all documents of a work item without opening several new tabs? This extension will display all linked documents in a tab next to the work item. Cool, huh? 🤩
 
-The comment of the _Hyperlink_ is used as the titel of the tab.
+### How?
 
-[ [Azure DevOps - Marketplace Extension](https://marketplace.visualstudio.com/items?itemName=lukaswoehrl.azdo-workitem-documents) ]
+All relations of the type _Hyperlink_ are embedded into a new tab _Documents_ on the work item form. Depending on the URL, an optimized visualization is displayed so that you can perform actions directly.
+
+The comment of the _Hyperlink_ is used as the title of the tab.
 
 ### Supported optimizations
 
@@ -15,5 +17,7 @@ The comment of the _Hyperlink_ is used as the titel of the tab.
 ### Screenshot
 
 ![diagrams.net](static/diagrams.net.png)
+
+In some scenarios, this extension might be treated as a must-have feature. I hope that it will be useful for you and your team. The extension is available on the [Azure DevOps Marketplace](https://marketplace.visualstudio.com/items?itemName=lukaswoehrl.azdo-workitem-documents) ] and on [GitHub](https://github.com/woehrl01/azdo-workitem-documents-extension) under MIT license!
 
 _[Document icons created by Driss Lebbat - Flaticon](https://www.flaticon.com/free-icons/document)_
