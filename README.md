@@ -12,7 +12,7 @@ With this extension you can display linked documents in work items. All relation
 
 ### Screenshot
 
-![diagrams.net](./docs/diagrams.net.png)
+![diagrams.net](./static/diagrams.net.png)
 
 ### Attributions
 
