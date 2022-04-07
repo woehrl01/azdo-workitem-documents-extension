@@ -8,7 +8,7 @@ jobs:
   steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: '10.19.0'
+      versionSpec: '12.x'
     displayName: 'Install Node.js'
 
   - script: |
@@ -18,4 +18,6 @@ jobs:
   - script: |
       npm run build:dev
     displayName: 'Compile and package'
+
+  
     
