@@ -4,7 +4,7 @@
     "baseUri": "http://localhost:8080",
     "publisher": "lukaswoehrl",
     "version": "1.0.1",
-    "name": "Work Item Embedded Documents",
+    "name": "(Dev) Work Item Embedded Documents",
     "description": "Display linked documents on an additional page for direct viewing.",
     "categories": [
         "Azure Boards"
@@ -19,7 +19,7 @@
     },
     "content": {
         "details": {
-            "path": "overview.md"
+            "path": "README.md"
         }
     },
     "files": [

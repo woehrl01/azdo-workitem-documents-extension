@@ -4,13 +4,20 @@
 jobs:
 - job: Linux
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   steps:
-  - template: azure-pipelines-steps.yml
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '12.x'
+    displayName: 'Install Node.js'
 
-- job: Windows
-  pool:
-    vmImage: 'vs2017-win2016'
-  steps:
-  - template: azure-pipelines-steps.yml
+  - script: |
+      npm ci
+    displayName: 'Install dependencies'
+
+  - script: |
+      npm run build:dev
+    displayName: 'Compile and package'
+
   
+    
