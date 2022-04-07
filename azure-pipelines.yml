@@ -16,5 +16,6 @@ jobs:
     displayName: 'Install dependencies'
 
   - script: |
-      npm run build
+      npm run build:dev
     displayName: 'Compile and package'
+    
