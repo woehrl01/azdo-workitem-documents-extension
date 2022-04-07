@@ -73,13 +73,4 @@ module.exports = {
       process: "process/browser",
     }),
   ],
-  devtool: "source-map",
-  devServer: {
-    static: {
-      directory: path.join(__dirname, "dist"),
-      publicPath: "/dist",
-      watch: true,
-    },
-    watchFiles: ["src/**/*", "dist/**/*"],
-  },
 };
