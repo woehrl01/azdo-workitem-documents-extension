@@ -4,7 +4,7 @@
     "publisher": "lukaswoehrl",
     "version": "1.0.1",
     "name": "Work Item Embedded Documents",
-    "description": "Display linked documents on an additional page at the work item form for direct viewing.",
+    "description": "Display linked documents on an additional tab at the work item form for direct viewing.",
     "categories": [
         "Azure Boards"
     ],
@@ -16,6 +16,7 @@
     "scopes": [
         "vso.work"
     ],
+    "public": true,
     "galleryFlags": [
         "Preview"
     ],
