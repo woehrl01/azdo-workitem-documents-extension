@@ -20,6 +20,6 @@ _If you have additional ideas, please create an [issue](https://github.com/woehr
 
 ![diagrams.net](static/diagrams.net.png)
 
-In some scenarios, this extension might be treated as a must-have feature. I hope that it will be useful for you and your team. The extension is available on the [Azure DevOps Marketplace](https://marketplace.visualstudio.com/items?itemName=lukaswoehrl.azdo-workitem-documents) ] and on [GitHub](https://github.com/woehrl01/azdo-workitem-documents-extension) under MIT license!
+In some scenarios, this extension might be treated as a must-have feature. I hope that it will be useful for you and your team. The extension is available on the [Azure DevOps Marketplace](https://marketplace.visualstudio.com/items?itemName=lukaswoehrl.azdo-workitem-documents) and on [GitHub](https://github.com/woehrl01/azdo-workitem-documents-extension) under MIT license!
 
 _[Document icons created by Driss Lebbat - Flaticon](https://www.flaticon.com/free-icons/document)_
