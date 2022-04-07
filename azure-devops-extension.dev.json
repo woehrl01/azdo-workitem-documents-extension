@@ -17,9 +17,6 @@
     "scopes": [
         "vso.work"
     ],
-    "galleryFlags": [
-        "Preview"
-    ],
     "repository": {
         "type": "git",
         "uri": "https://github.com/woehrl01/azdo-workitem-documents-extension/"
