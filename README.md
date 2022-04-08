@@ -26,7 +26,7 @@ _If you have additional ideas, please create an [issue](https://github.com/woehr
 
 #### How can I hide the tab from specific work item types?
 
-You can hide the tab by [modifing your process](https://docs.microsoft.com/en-us/azure/devops/organizations/settings/work/customize-process-form?view=azure-devops). Simply `hide from layout` on the specific work item type.
+You can hide the tab by [modifing your process](https://docs.microsoft.com/en-us/azure/devops/organizations/settings/work/customize-process-form?view=azure-devops). Use _Hide from layout_ on the specific work item type.
 
 ![hide from layout](static/hide_from_layout.png)
 
