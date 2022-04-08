@@ -34,5 +34,6 @@ You can hide the tab by [modifing your process](https://docs.microsoft.com/en-us
 
 In some scenarios, this extension might be treated as a must-have feature. I hope that it will be useful for you and your team. The extension is available on the [Azure DevOps Marketplace](https://marketplace.visualstudio.com/items?itemName=lukaswoehrl.azdo-workitem-documents) and on [GitHub](https://github.com/woehrl01/azdo-workitem-documents-extension) under MIT license!
 
+---
 
 _[Document icons created by Driss Lebbat - Flaticon](https://www.flaticon.com/free-icons/document)_
