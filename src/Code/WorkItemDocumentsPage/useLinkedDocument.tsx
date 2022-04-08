@@ -12,19 +12,15 @@ const registerSdk = async (callback: () => void) => {
     SDK.register(SDK.getContributionId(), () => {
         return {
             onLoaded: function () {
-                console.debug("onLoad");
                 callback();
             },
             onFieldChanged: function () {
-                console.debug("fieldChanged");
                 callback();
             },
             onReset: function () {
-                console.debug("onReset");
                 callback();
             },
             onRefresh: function () {
-                console.debug("onRefresh");
                 callback();
             }
         };
@@ -35,7 +31,9 @@ export const useLinkedDocuments = (): ILinkedDocument[] => {
     var [documents, setDocuments] = useState<ILinkedDocument[]>([]);
 
     const updateCurrentDocuments = useCallback(async () => {
+        console.log("fetching and refreshing current documents");
         const documents = await fetchCurrentDocuments();
+        console.log(`received ${documents.length} documents`);
         setDocuments(documents);
     }, []);
 
