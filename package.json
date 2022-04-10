@@ -17,12 +17,12 @@
     "compile": "npm run clean && npm run test && webpack --mode production --config webpack.prod.js",
     "compile:dev": "npm run clean && npm run test && webpack --mode development --config webpack.dev.js",
     "build": "npm run compile",
-    "serve": "webpack serve --mode development",
     "build:dev": "npm run compile:dev",
-    "package-extension": "tfx extension create --manifest-globs azure-devops-extension.json src/Code/**/*.json",
-    "package-extension:dev": "tfx extension create --manifest-globs azure-devops-extension.dev.json src/Code/**/*.json",
-    "publish-extension": "tfx extension publish --manifest-globs azure-devops-extension.json src/Code/**/*.json",
-    "publish-extension:dev": "tfx extension publish --manifest-globs azure-devops-extension.dev.json src/Code/**/*.json",
+    "serve": "webpack serve --mode development",
+    "package-extension": "tfx extension create --manifest-globs azure-devops-extension.common.json azure-devops-extension.prod.json src/Code/**/*.json",
+    "package-extension:dev": "tfx extension create --manifest-globs azure-devops-extension.common.json azure-devops-extension.dev.json src/Code/**/*.json",
+    "publish-extension": "tfx extension publish --manifest-globs azure-devops-extension.common.json azure-devops-extension.prod.json src/Code/**/*.json",
+    "publish-extension:dev": "tfx extension publish --manifest-globs azure-devops-extension.common.json azure-devops-extension.dev.json src/Code/**/*.json",
     "test": ""
   },
   "dependencies": {
