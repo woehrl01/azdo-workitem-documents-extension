@@ -32,6 +32,23 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0"
   },
+  "override": {
+    "npm:azure-devops-extension-api": {
+      "version": "$azure-devops-extension-api"
+    },
+    "npm:azure-devops-extension-sdk": {
+      "version": "$azure-devops-extension-sdk"
+    },
+    "npm:azure-devops-ui": {
+      "version": "$azure-devops-ui"
+    },
+    "npm:react": {
+      "version": "$react"
+    },
+    "npm:react-dom": {
+      "version": "$react-dom"
+    }
+  },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^10.4.4",
