@@ -30,7 +30,8 @@
     "azure-devops-extension-sdk": "^2.0.11",
     "azure-devops-ui": "^2.167.31",
     "react": "^16.14.0",
-    "react-dom": "^16.14.0"
+    "react-dom": "^16.14.0",
+    "uuid": "^8.3.2"
   },
   "override": {
     "npm:azure-devops-extension-api": {
@@ -47,6 +48,9 @@
     },
     "npm:react-dom": {
       "version": "$react-dom"
+    },
+    "npm:uuid": {
+      "version": "$uuid"
     }
   },
   "devDependencies": {
