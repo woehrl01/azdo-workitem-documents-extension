@@ -13,7 +13,7 @@
     "url": ""
   },
   "scripts": {
-    "clean": "rimraf ./dist",
+    "clean": "rimraf ./dist && rimraf ./*.vsix",
     "compile": "npm run clean && npm run test && webpack --mode production --config webpack.prod.js",
     "compile:dev": "npm run clean && npm run test && webpack --mode development --config webpack.dev.js",
     "build": "npm run compile",
