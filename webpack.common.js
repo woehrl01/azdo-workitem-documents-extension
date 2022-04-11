@@ -19,7 +19,7 @@ module.exports = {
   entry: entries,
   output: {
     filename: "[name]/[name].js",
-    publicPath: "dist",
+    publicPath: "dist/",
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
@@ -64,18 +64,9 @@ module.exports = {
         loader: "file-loader",
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[sha512:hash:base64:7].[ext]',
-              publicPath: '',
-            },
-          },
-        ],
-
-      },
+        test: /\.png/,
+        type: 'asset/resource'
+      }
     ],
   },
   plugins: [
