@@ -69,7 +69,8 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: './[contenthash].[ext]',
+              name: '[sha512:hash:base64:7].[ext]',
+              publicPath: '',
             },
           },
         ],
