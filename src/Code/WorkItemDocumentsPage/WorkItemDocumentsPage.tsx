@@ -12,7 +12,6 @@ import { ILinkedDocument, useLinkedDocuments } from "./useLinkedDocument";
 import { PageContent } from "./PageContent";
 import { Tabs } from "./Tabs";
 
-import no_documents from "./no_documents.png"
 
 const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocument[]) => {
     if (existingDocuments.findIndex(d => d.url == url) == -1) {
@@ -49,7 +48,7 @@ const Empty: FC<{}> = ({ }) => {
             </span>
         }
         imageAltText="No documents"
-        imagePath={no_documents}
+        imagePath="no_documents.png"
     />
 }
 

@@ -20,6 +20,7 @@ module.exports = {
   output: {
     filename: "[name]/[name].js",
     publicPath: "dist/",
+    assetModuleFilename: 'images/[hash][ext][query]'
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
@@ -61,7 +62,7 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        loader: "file-loader",
+        type: 'asset/resource'
       },
       {
         test: /\.png/,
@@ -71,7 +72,9 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [{ from: "**/*.html", context: "src/Code" }],
+      patterns: [
+        { from: "**/*.html", context: "src/Code" },
+        { from: "**/*.png", context: "src/Code" }],
     }),
     new webpack.ProvidePlugin({
       process: "process/browser",
