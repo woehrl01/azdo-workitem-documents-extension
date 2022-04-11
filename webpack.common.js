@@ -19,7 +19,7 @@ module.exports = {
   entry: entries,
   output: {
     filename: "[name]/[name].js",
-    publicPath: "/dist",
+    publicPath: "dist",
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
