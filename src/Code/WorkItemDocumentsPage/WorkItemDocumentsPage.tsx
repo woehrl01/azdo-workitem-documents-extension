@@ -40,24 +40,29 @@ const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocu
     return url
 }
 
+const Tabs: FC<{ documents: ILinkedDocument[], onTabChanged: (id: string) => void, selectedTab: string }> = ({ documents, onTabChanged, selectedTab }) => {
+    if (documents.length <= 1) {
+        return <></>
+    }
+
+    return <TabBar
+        onSelectedTabChanged={onTabChanged}
+        selectedTabId={selectedTab}
+        tabSize={TabSize.Compact}>
+
+        {documents.map(t => <Tab key={t.url} name={t.name} id={t.url} />)}
+    </TabBar>
+}
+
 const HubContent: FC<{}> = ({ }) => {
     const [selectedDocumentUrl, setSelectedDocumentUrl] = useState<string>("");
     const documents = useLinkedDocuments();
-    const docUrltoShow = fallbackToFirstPageIfNeeded(selectedDocumentUrl, documents);
+    const documentUrlToShow = fallbackToFirstPageIfNeeded(selectedDocumentUrl, documents);
 
     return (
         <Page className="document-hub flex-grow" >
-            {documents.length > 1 &&
-                <TabBar
-                    onSelectedTabChanged={setSelectedDocumentUrl}
-                    selectedTabId={docUrltoShow}
-                    tabSize={TabSize.Compact}>
-
-                    {documents.map(t => <Tab key={t.url} name={t.name} id={t.url} />)}
-                </TabBar>
-            }
-
-            <PageContent url={docUrltoShow} />
+            <Tabs documents={documents} onTabChanged={setSelectedDocumentUrl} selectedTab={documentUrlToShow} />
+            <PageContent url={documentUrlToShow} />
         </Page>
     );
 }
