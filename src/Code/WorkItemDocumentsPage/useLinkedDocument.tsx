@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import * as SDK from "azure-devops-extension-sdk";
 import { IWorkItemFormService, WorkItemRelation, WorkItemTrackingServiceIds } from "azure-devops-extension-api/WorkItemTracking";
+import { validUrl } from "./UriOptimizer";
 
 export interface ILinkedDocument {
     name: string;
@@ -61,7 +62,11 @@ const fetchCurrentDocuments = async (): Promise<ILinkedDocument[]> => {
 
     return ([] as ILinkedDocument[])
         .concat(documents)
-        .concat(crawled.filter(e => documents.findIndex(d => d.url == e.url) === -1));
+        .concat(removeAlreadyLinkedDocuments(crawled, documents));
+}
+
+function removeAlreadyLinkedDocuments(crawled: { name: string; url: string; }[], documents: ILinkedDocument[]): Array<ILinkedDocument> {
+    return crawled.filter(e => documents.findIndex(d => d.url == e.url) === -1);
 }
 
 async function extractFromRelations(formService: IWorkItemFormService) {
@@ -77,6 +82,7 @@ async function extractFromDescriptionField(formService: IWorkItemFormService) {
     const description = await formService.getFieldValue("System.Description", { returnOriginalValue: false }) as string;
 
     const crawled = unique(description.match(regex) || [])
-        .map(v => { return { name: v, url: v }; });
+        .filter(uri => validUrl(uri))
+        .map(uri => { return { name: uri, url: uri }; });
     return crawled;
 }
