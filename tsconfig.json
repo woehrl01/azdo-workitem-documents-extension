@@ -29,5 +29,9 @@
             "node"
         ],
         "esModuleInterop": true
-    }
+    },
+    "include": [
+        "src",
+        "index.d.ts"
+    ]
 }
