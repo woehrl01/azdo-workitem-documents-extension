@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import * as SDK from "azure-devops-extension-sdk";
 import { IWorkItemFormService, WorkItemRelation, WorkItemTrackingServiceIds } from "azure-devops-extension-api/WorkItemTracking";
+import { validUrl } from "./UriOptimizer";
 
 export interface ILinkedDocument {
     name: string;
@@ -46,18 +47,42 @@ export const useLinkedDocuments = (): ILinkedDocument[] => {
 const mapRelationToDocument = (rel: WorkItemRelation): ILinkedDocument => {
     var name = rel.attributes.comment || "";
     if (name.length == 0) {
-        name = rel.url.substring(0, 25) + "...";
+        name = rel.url;
     }
     return { name: name, url: rel.url }
 };
 
+const regex = /(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/g;
+const unique = function <T>(arr: T[]): T[] { return [...new Set<T>(arr)] };
+
 const fetchCurrentDocuments = async (): Promise<ILinkedDocument[]> => {
     const formService = await SDK.getService<IWorkItemFormService>(WorkItemTrackingServiceIds.WorkItemFormService);
+    const documents = await extractFromRelations(formService);
+    const crawled = await extractFromDescriptionField(formService);
+
+    return ([] as ILinkedDocument[])
+        .concat(documents)
+        .concat(removeAlreadyLinkedDocuments(crawled, documents));
+}
+
+function removeAlreadyLinkedDocuments(crawled: { name: string; url: string; }[], documents: ILinkedDocument[]): Array<ILinkedDocument> {
+    return crawled.filter(e => documents.findIndex(d => d.url == e.url) === -1);
+}
+
+async function extractFromRelations(formService: IWorkItemFormService) {
     const relations = await formService.getWorkItemRelations();
 
     const documents = relations
         .filter(f => f.rel == "Hyperlink" && f.attributes.isDeleted == false)
         .map(mapRelationToDocument);
-
     return documents;
+}
+
+async function extractFromDescriptionField(formService: IWorkItemFormService) {
+    const description = await formService.getFieldValue("System.Description", { returnOriginalValue: false }) as string;
+
+    const crawled = unique(description.match(regex) || [])
+        .filter(uri => validUrl(uri))
+        .map(uri => { return { name: uri, url: uri }; });
+    return crawled;
 }

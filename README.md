@@ -8,6 +8,8 @@ All relations of the type _Hyperlink_ are embedded into a new tab _Documents_ on
 
 The comment of the _Hyperlink_ is used as the title of the tab.
 
+Additionaly, referenced document urls in the _Description_ field are extracted and embedded, too.
+
 ### Supported optimizations
 
 - Google Documents (Embedded mode for Docs, Sheets, Slides, etc.)
@@ -29,6 +31,10 @@ _If you have additional ideas, please create an [issue](https://github.com/woehr
 You can hide the tab by [modifing your process](https://docs.microsoft.com/en-us/azure/devops/organizations/settings/work/customize-process-form?view=azure-devops). Use _Hide from layout_ on the specific work item type.
 
 ![hide from layout](static/hide_from_layout.png)
+
+#### Why are some documents, referenced in _Description_, not shown?
+
+To reduce clutter and embedding incompatible documents, we only crawl for supported documents inside the _Description_ field. If you still want to embed them, add them via a _Hyperlink_ relation.
 
 ---
 
