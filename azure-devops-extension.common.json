@@ -1,9 +1,7 @@
 {
     "manifestVersion": 1,
-    "id": "azdo-workitem-documents",
     "publisher": "lukaswoehrl",
-    "version": "1.0.1",
-    "name": "Work Item Embedded Documents",
+    "version": "1.0.0",
     "description": "Display linked documents on an additional tab at the work item form for direct viewing.",
     "categories": [
         "Azure Boards"
@@ -15,10 +13,6 @@
     ],
     "scopes": [
         "vso.work"
-    ],
-    "public": true,
-    "galleryFlags": [
-        "Preview"
     ],
     "repository": {
         "type": "git",
