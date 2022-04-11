@@ -8,7 +8,7 @@ module.exports = merge(common, {
   devServer: {
     static: {
       directory: path.join(__dirname, "dist"),
-      publicPath: "/123/dist",
+      publicPath: "/dist",
       watch: true,
     },
     watchFiles: ["src/**/*", "dist/**/*"],
