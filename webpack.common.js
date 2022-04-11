@@ -19,8 +19,8 @@ module.exports = {
   entry: entries,
   output: {
     filename: "[name]/[name].js",
-    publicPath: "dist/",
-    assetModuleFilename: 'images/[hash][ext][query]'
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: "",
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
@@ -59,14 +59,6 @@ module.exports = {
             loader: "base64-inline-loader",
           },
         ],
-      },
-      {
-        test: /\.html$/,
-        type: 'asset/resource'
-      },
-      {
-        test: /\.png/,
-        type: 'asset/resource'
       }
     ],
   },
@@ -74,7 +66,8 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: "**/*.html", context: "src/Code" },
-        { from: "**/*.png", context: "src/Code" }],
+        { from: "**/*.svg", context: "src/Code" },
+      ],
     }),
     new webpack.ProvidePlugin({
       process: "process/browser",
