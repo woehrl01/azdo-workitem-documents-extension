@@ -48,7 +48,7 @@ const Empty: FC<{}> = ({ }) => {
             </span>
         }
         imageAltText="No documents"
-        imagePath="no_documents.svg"
+        imagePath="no_documents.png"
     />
 }
 

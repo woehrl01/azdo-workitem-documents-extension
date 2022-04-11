@@ -77,11 +77,6 @@ async function extractFromDescriptionField(formService: IWorkItemFormService) {
     const description = await formService.getFieldValue("System.Description", { returnOriginalValue: false }) as string;
 
     const crawled = unique(description.match(regex) || [])
-        .map(v => {
-            return {
-                name: v,
-                url: v
-            };
-        });
+        .map(v => { return { name: v, url: v }; });
     return crawled;
 }

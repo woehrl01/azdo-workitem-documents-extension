@@ -65,7 +65,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: "**/*.html", context: "src/Code" },
-        { from: "**/*.svg", context: "src/Code" },
+        { from: "**/*.png", context: "src/Code" },
       ],
     }),
     new webpack.ProvidePlugin({
