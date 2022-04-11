@@ -37,3 +37,4 @@ In some scenarios, this extension might be treated as a must-have feature. I hop
 ---
 
 _[Document icons created by Driss Lebbat - Flaticon](https://www.flaticon.com/free-icons/document)_
+_[Cancel icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/cancel)_
