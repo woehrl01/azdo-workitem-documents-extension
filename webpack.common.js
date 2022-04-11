@@ -68,8 +68,12 @@ module.exports = {
         use: [
           {
             loader: 'file-loader',
+            options: {
+              name: './[contenthash].[ext]',
+            },
           },
         ],
+
       },
     ],
   },
