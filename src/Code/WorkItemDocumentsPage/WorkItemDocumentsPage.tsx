@@ -4,13 +4,12 @@ import { useState, FC } from "react";
 
 import { Page } from "azure-devops-ui/Page";
 
-import { ZeroData } from "azure-devops-ui/ZeroData";
-
 import { showRootComponent } from "../../Common";
 import React from "react";
-import { ILinkedDocument, useLinkedDocuments } from "./useLinkedDocument";
+import { ILinkedDocument, useLinkedDocuments } from "../useLinkedDocument";
 import { PageContent } from "./PageContent";
 import { Tabs } from "./Tabs";
+import { Empty } from "./Empty";
 
 
 const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocument[]) => {
@@ -35,21 +34,6 @@ const HubContent: FC<{}> = ({ }) => {
             <PageContent url={documentUrlToShow} />
         </Page>
     );
-}
-
-const Empty: FC<{}> = ({ }) => {
-    return <ZeroData
-        primaryText="No documents linked"
-        className="empty-data"
-        secondaryText={
-            <span>
-                There are currently no documents linked. If you want to display a
-                document here, add a reference of type <i>Hyperlink</i> to this work item.
-            </span>
-        }
-        imageAltText="No documents"
-        imagePath="no_documents.png"
-    />
 }
 
 showRootComponent(<HubContent />);

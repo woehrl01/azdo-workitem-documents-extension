@@ -1,0 +1,16 @@
+{
+    "contributions": [
+        {
+            "id": "workitem-documents-group",
+            "type": "ms.vss-work-web.work-item-form-group",
+            "description": "Work item form group to display linked documents",
+            "targets": [
+                "ms.vss-work-web.work-item-form"
+            ],
+            "properties": {
+                "name": "Documents",
+                "uri": "dist/WorkItemDocumentsGroup/index.html"
+            }
+        }
+    ]
+}
