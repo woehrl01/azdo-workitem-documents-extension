@@ -3,6 +3,7 @@ import "./WorkItemDocumentsPage.scss";
 import { useState, FC } from "react";
 
 import { Page } from "azure-devops-ui/Page";
+import { Spinner, SpinnerSize } from "azure-devops-ui/Spinner";
 
 import { showRootComponent } from "../../Common";
 import React from "react";
@@ -21,8 +22,12 @@ const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocu
 
 const HubContent: FC<{}> = ({ }) => {
     const [selectedDocumentUrl, setSelectedDocumentUrl] = useState<string>("");
-    const documents = useLinkedDocuments();
+    const { documents, isLoading } = useLinkedDocuments();
     const documentUrlToShow = fallbackToFirstPageIfNeeded(selectedDocumentUrl, documents);
+
+    if (isLoading) {
+        return <Spinner size={SpinnerSize.large} className="loading" label="Loading..." />
+    }
 
     if (documents.length == 0) {
         return <Empty />;

@@ -39,7 +39,7 @@ const Document: FC<{ document: ILinkedDocument, additionalData?: string }> = ({ 
 }
 
 export const WorkItemFormGroupComponent: FC<{}> = ({ }) => {
-  const documents = useLinkedDocuments();
+  const { documents } = useLinkedDocuments();
 
   useEffect(() => {
     SDK.resize()

@@ -9,6 +9,12 @@ export interface ILinkedDocument {
     addedDate?: Date
 }
 
+export interface IUseLinkedDocument {
+    documents: ILinkedDocument[];
+    isLoading: boolean;
+}
+
+
 const registerSdk = async (callback: () => void) => {
     await SDK.init();
     SDK.register(SDK.getContributionId(), () => {
@@ -29,20 +35,24 @@ const registerSdk = async (callback: () => void) => {
     });
 };
 
-export const useLinkedDocuments = (): ILinkedDocument[] => {
+export const useLinkedDocuments = (): IUseLinkedDocument => {
     var [documents, setDocuments] = useState<ILinkedDocument[]>([]);
+    var [isLoading, setIsLoading] = useState<boolean>(true);
 
     const updateCurrentDocuments = useCallback(async () => {
+        setIsLoading(true);
         console.log("fetching and refreshing current documents");
         const documents = await fetchCurrentDocuments();
         console.log(`received ${documents.length} documents`);
         setDocuments(documents);
+        setIsLoading(false);
     }, []);
 
     useEffect(() => {
         registerSdk(updateCurrentDocuments);
     }, []);
-    return documents;
+
+    return { documents, isLoading };
 };
 
 const mapRelationToDocument = (rel: WorkItemRelation): ILinkedDocument => {
