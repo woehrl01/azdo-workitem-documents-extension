@@ -16,6 +16,7 @@ fs.readdirSync(codeDir).filter((dir) => {
 });
 
 const apmSource = fs.readFileSync(path.join(__dirname, './newrelic.apm.js'), 'utf8');
+const enableApm = false;
 
 const createHtmlWebpackPluginEntry = (name, env) => {
   return new HtmlWebpackPlugin({
@@ -23,7 +24,7 @@ const createHtmlWebpackPluginEntry = (name, env) => {
     filename: `${name}.html`,
     chunks: [name],
     publicPath: '',
-    apmSource: env === 'prod' ? apmSource : ''
+    apmSource: env === 'prod' && enableApm ? apmSource : ''
   })
 };
 
