@@ -6,6 +6,7 @@ import { validUrl } from "./UriOptimizer";
 export interface ILinkedDocument {
     name: string;
     url: string;
+    addedDate?: Date
 }
 
 const registerSdk = async (callback: () => void) => {
@@ -49,7 +50,7 @@ const mapRelationToDocument = (rel: WorkItemRelation): ILinkedDocument => {
     if (name.length == 0) {
         name = rel.url;
     }
-    return { name: name, url: rel.url }
+    return { name: name, url: rel.url, addedDate: rel.attributes.resourceCreatedDate as Date }
 };
 
 const regex = /(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/g;
