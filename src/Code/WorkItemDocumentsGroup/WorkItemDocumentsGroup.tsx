@@ -20,7 +20,7 @@ const Document: FC<{ document: ILinkedDocument, additionalData?: string }> = ({ 
         <div className="la-artifact-data">
           <div className="la-primary-data">
             <Icon iconName="Attach" className="la-primary-icon" />
-            <Link href={document.url}>
+            <Link href={document.url} target="_blank">
               {document.name}
             </Link>
           </div>
