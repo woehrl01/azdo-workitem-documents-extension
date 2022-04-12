@@ -33,6 +33,9 @@ const registerSdk = async (callback: () => void) => {
             }
         };
     });
+    /* call the callback initally if events have 
+     * been missed because of later loading */
+    callback();
 };
 
 export const useLinkedDocuments = (): IUseLinkedDocument => {
