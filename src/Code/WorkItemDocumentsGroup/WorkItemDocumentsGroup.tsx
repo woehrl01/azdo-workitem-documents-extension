@@ -19,7 +19,7 @@ const Document: FC<{ document: ILinkedDocument, additionalData?: string }> = ({ 
       <div className="la-item-wrapper">
         <div className="la-artifact-data">
           <div className="la-primary-data">
-            <Icon iconName="Attach" className="la-primary-icon" />
+            <Icon iconName="NavigateExternalInline" className="la-primary-icon" />
             <Link href={document.url} target="_blank">
               {document.name}
             </Link>
