@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Tab, TabBar, TabSize } from "azure-devops-ui/Tabs";
 import React from "react";
-import { ILinkedDocument } from "./useLinkedDocument";
+import { ILinkedDocument } from "../../useLinkedDocument";
 
 const stripName = (name: string): string => {
     if (name.length > 25) {

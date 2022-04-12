@@ -1,0 +1,54 @@
+@import "node_modules/azure-devops-ui/Core/_platformCommon.scss";
+
+.la-item {
+    padding: 4px 0;
+    position: relative;
+}
+
+.la-item-wrapper {
+    margin-right: 20px;
+}
+
+.la-artifact-data {}
+
+.la-primary-data {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 1px;
+}
+
+.la-primary-icon {
+    float: left;
+    width: 20px;
+    height: 16px;
+    padding-left: 1px;
+}
+
+.la-additional-data {
+    margin-left: 20px;
+}
+
+.la-additional-data-item {
+    color: rgba(0, 0, 0, .55);
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    vertical-align: top;
+}
+
+.la-additional-data-item .la-text {
+    display: inline;
+    vertical-align: top;
+}
+
+#root {
+    flex-direction: column;
+}
+
+body {
+    font-size: 12px;
+    overflow: hidden;
+}
