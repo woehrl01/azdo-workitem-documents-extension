@@ -7,9 +7,11 @@ import { FC } from "react";
 
 import { Link } from "azure-devops-ui/Link"
 import { Icon } from "azure-devops-ui/Icon";
+import { Ago } from "azure-devops-ui/Ago";
 
 import { showRootComponent } from "../../Common";
 import { ILinkedDocument, useLinkedDocuments } from "../../useLinkedDocument";
+import { AgoFormat } from "azure-devops-ui/Utilities/Date";
 
 const Document: FC<{ document: ILinkedDocument, additionalData?: string }> = ({ document, additionalData }) => {
   return (
@@ -23,10 +25,10 @@ const Document: FC<{ document: ILinkedDocument, additionalData?: string }> = ({ 
             </Link>
           </div>
           {
-            additionalData &&
+            document.addedDate &&
             <div className="la-additional-data">
               <div className="la-additional-data-item">
-                <span className="la-text">{additionalData}</span>
+                <span className="la-text">Added <Ago date={document.addedDate} format={AgoFormat.Extended} /></span>
               </div>
             </div>
           }
