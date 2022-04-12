@@ -9,7 +9,7 @@
             ],
             "properties": {
                 "name": "Documents",
-                "uri": "dist/WorkItemDocumentsPage/index.html"
+                "uri": "dist/WorkItemDocumentsPage.html"
             }
         }
     ]

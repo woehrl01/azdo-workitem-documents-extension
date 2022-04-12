@@ -4,7 +4,7 @@ const common = require('./webpack.common.js');
 const CompressionPlugin = require("compression-webpack-plugin")
 const TerserPlugin = require("terser-webpack-plugin");
 
-module.exports = merge(common, {
+module.exports = merge(common("prod"), {
   plugins:
     [
       new CompressionPlugin({

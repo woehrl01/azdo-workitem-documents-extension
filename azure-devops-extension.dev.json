@@ -1,5 +1,4 @@
 {
     "id": "azdo-workitem-documents-dev",
-    "baseUri": "http://localhost:8080",
     "name": "(Dev) Work Item Embedded Documents"
 }

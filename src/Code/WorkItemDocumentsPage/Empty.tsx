@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { ZeroData } from "azure-devops-ui/ZeroData";
 import React from "react";
+import doDocuments from './no_documents.png';
 
 export const Empty: FC<{}> = () => {
     return <ZeroData
@@ -11,5 +12,5 @@ export const Empty: FC<{}> = () => {
             document here, add a reference of type <i>Hyperlink</i> to this work item.
         </span>}
         imageAltText="No documents"
-        imagePath="no_documents.png" />;
+        imagePath={doDocuments} />;
 };
