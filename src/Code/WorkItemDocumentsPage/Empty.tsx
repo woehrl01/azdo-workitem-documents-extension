@@ -2,7 +2,7 @@ import { FC } from "react";
 import { ZeroData } from "azure-devops-ui/ZeroData";
 import React from "react";
 
-export const Empty: FC<{}> = ({ }) => {
+export const Empty: FC<{}> = () => {
     return <ZeroData
         primaryText="No documents linked"
         className="empty-data"

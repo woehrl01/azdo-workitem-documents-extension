@@ -20,13 +20,15 @@ const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocu
     return url
 }
 
+const Loading: FC<{}> = () => <Spinner size={SpinnerSize.large} className="loading" label="Loading..." />;
+
 const HubContent: FC<{}> = ({ }) => {
     const [selectedDocumentUrl, setSelectedDocumentUrl] = useState<string>("");
     const { documents, isLoading } = useLinkedDocuments();
     const documentUrlToShow = fallbackToFirstPageIfNeeded(selectedDocumentUrl, documents);
 
     if (isLoading) {
-        return <Spinner size={SpinnerSize.large} className="loading" label="Loading..." />
+        return <Loading />
     }
 
     if (documents.length == 0) {
