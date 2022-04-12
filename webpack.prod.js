@@ -14,6 +14,16 @@ module.exports = merge(common("prod"), {
       }),
     ],
   optimization: {
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+          name: 'vendor',
+          chunks: 'all',
+        },
+      },
+    },
     minimize: true,
     minimizer: [
       new TerserPlugin({
