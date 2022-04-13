@@ -2,6 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // Webpack entry points. Mapping from resulting bundle name to the source file entry.
 const entries = {};
@@ -64,7 +65,10 @@ module.exports = (env) => {
         },
         {
           test: /\.css$/,
-          use: ["style-loader", "css-loader"],
+          use: [
+            env === "prod" ? MiniCssExtractPlugin.loader : "style-loader", 
+            "css-loader"
+          ],
         },
         {
           test: /\.woff$/,
@@ -85,6 +89,10 @@ module.exports = (env) => {
       new webpack.ProvidePlugin({
         process: "process/browser",
       }),
+      new MiniCssExtractPlugin({
+        filename: "[name].css",
+        chunkFilename: "[id].css"
+      })
     ],
   }
 };
