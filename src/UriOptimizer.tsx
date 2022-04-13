@@ -6,9 +6,9 @@ interface IUriOptimizer {
 
 class DelegateUriOptimizer implements IUriOptimizer {
     constructor(
+        private readonly icon: string,
         private readonly regex: RegExp,
-        private readonly optimizer: (uri: string, result: RegExpExecArray) => string,
-        private readonly icon: string
+        private readonly optimizer: (uri: string, result: RegExpExecArray) => string
     ) { }
 
     canHandle(uri: string): boolean {
@@ -23,9 +23,20 @@ class DelegateUriOptimizer implements IUriOptimizer {
 }
 
 const handler = [
-    new DelegateUriOptimizer(/^https:\/\/docs\.google\.com\//, (uri) => `${uri}?rm=minimal`, "TextDocument"),
-    new DelegateUriOptimizer(/^https:\/\/drive\.google\.com\/drive\/folders\/([^?]*)/, (_, result) => `https://drive.google.com/embeddedfolderview?id=${result[1]}#list`, "FabricNetworkFolder"),
-    new DelegateUriOptimizer(/^https:\/\/app.diagrams.net\/#(.*)/, (uri, result) => `https://viewer.diagrams.net/?highlight=0000ff&edit=${encodeURIComponent(uri)}&layers=1&nav=1#${result[1]}`, "GitGraph"),
+    new DelegateUriOptimizer(
+        "TextDocument",
+        /^https:\/\/docs\.google\.com\//, (uri) => `${uri}?rm=minimal`
+    ),
+    new DelegateUriOptimizer(
+        "FolderList",
+        /^https:\/\/drive\.google\.com\/drive\/folders\/([^?]*)/,
+        (_, result) => `https://drive.google.com/embeddedfolderview?id=${result[1]}#list`
+    ),
+    new DelegateUriOptimizer(
+        "ViewDashboard",
+        /^https:\/\/app.diagrams.net\/#(.*)/,
+        (uri, result) => `https://viewer.diagrams.net/?highlight=0000ff&edit=${encodeURIComponent(uri)}&layers=1&nav=1#${result[1]}`
+    ),
 ];
 
 function foreachHandler<T>(uri: string, found: (handler: IUriOptimizer) => T, notFound: () => T): T {
