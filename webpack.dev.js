@@ -7,8 +7,8 @@ module.exports = merge(common("dev"), {
   devtool: "source-map",
   devServer: {
     static: {
-      directory: path.join(__dirname),
-      publicPath: "",
+      directory: path.join(__dirname, "dist"),
+      publicPath: "/dist/",
       watch: true,
     },
     watchFiles: ["src/**/*", "dist/**/*"],

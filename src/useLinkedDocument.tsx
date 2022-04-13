@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import * as SDK from "azure-devops-extension-sdk";
 import { IWorkItemFormService, WorkItemRelation, WorkItemTrackingServiceIds } from "azure-devops-extension-api/WorkItemTracking";
-import { validUrl } from "./UriOptimizer";
+import { isValidUrl } from "./UriOptimizer";
 
 export interface ILinkedDocument {
     name: string;
     url: string;
-    addedDate?: Date
+    addedDate?: Date;
 }
 
 export interface IUseLinkedDocument {
@@ -119,7 +119,7 @@ class DescriptionBasedDocumentSource implements ILinkedDocumentSource {
         var links = document.querySelectorAll("a");
 
         const crawled = Array.from(links)
-            .filter(link => validUrl(link.href))
+            .filter(link => isValidUrl(link.href))
             .map(this.mapDomLinkToDocument);
         return crawled;
     }

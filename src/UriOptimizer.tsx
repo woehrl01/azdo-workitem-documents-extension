@@ -1,15 +1,15 @@
 interface IUriOptimizer {
+    getIcon(url: string): any;
     canHandle(uri: string): boolean;
-    optimize(uri: string, result: RegExpExecArray): string;
+    optimize(uri: string): string;
 }
 
 class DelegateUriOptimizer implements IUriOptimizer {
-    private readonly regex: RegExp;
-    private readonly optimizer: (uri: string, result: RegExpExecArray) => string;
-    constructor(regex: RegExp, optimizer: (uri: string, result: RegExpExecArray) => string) {
-        this.regex = regex;
-        this.optimizer = optimizer;
-    }
+    constructor(
+        private readonly regex: RegExp,
+        private readonly optimizer: (uri: string, result: RegExpExecArray) => string,
+        private readonly icon: string
+    ) { }
 
     canHandle(uri: string): boolean {
         return this.regex.test(uri);
@@ -17,28 +17,34 @@ class DelegateUriOptimizer implements IUriOptimizer {
     optimize(uri: string): string {
         return this.optimizer(uri, this.regex.exec(uri)!);
     }
+    getIcon(url: string) {
+        return this.icon;
+    }
 }
 
 const handler = [
-    new DelegateUriOptimizer(/^https:\/\/docs\.google\.com\//, (uri) => `${uri}?rm=minimal`),
-    new DelegateUriOptimizer(/^https:\/\/drive\.google\.com\/drive\/folders\/([^?]*)/, (_, result) => `https://drive.google.com/embeddedfolderview?id=${result[1]}#list`),
-    new DelegateUriOptimizer(/^https:\/\/app.diagrams.net\/#(.*)/, (uri, result) => `https://viewer.diagrams.net/?highlight=0000ff&edit=${encodeURIComponent(uri)}&layers=1&nav=1#${result[1]}`),
+    new DelegateUriOptimizer(/^https:\/\/docs\.google\.com\//, (uri) => `${uri}?rm=minimal`, "TextDocument"),
+    new DelegateUriOptimizer(/^https:\/\/drive\.google\.com\/drive\/folders\/([^?]*)/, (_, result) => `https://drive.google.com/embeddedfolderview?id=${result[1]}#list`, "FabricNetworkFolder"),
+    new DelegateUriOptimizer(/^https:\/\/app.diagrams.net\/#(.*)/, (uri, result) => `https://viewer.diagrams.net/?highlight=0000ff&edit=${encodeURIComponent(uri)}&layers=1&nav=1#${result[1]}`, "VisioDiagram"),
 ];
 
-export function validUrl(url: string): boolean {
-    for (let h of handler) {
-        if (h.canHandle(url)) {
-            return true;
+function foreachHandler<T>(uri: string, found: (handler: IUriOptimizer) => T, notFound: () => T): T {
+    for (const h of handler) {
+        if (h.canHandle(uri)) {
+            return found(h);
         }
     }
-    return false;
+    return notFound();
+}
+
+export function isValidUrl(url: string): boolean {
+    return foreachHandler(url, () => true, () => false);
 }
 
 export function optimizeUrl(url: string): string {
-    for (let h of handler) {
-        if (h.canHandle(url)) {
-            return h.optimize(url);
-        }
-    }
-    return url;
+    return foreachHandler(url, (h) => h.optimize(url), () => url);
+}
+
+export function getIcon(url: string): string {
+    return foreachHandler(url, (h) => h.getIcon(url), () => "NavigateExternalInline");
 }

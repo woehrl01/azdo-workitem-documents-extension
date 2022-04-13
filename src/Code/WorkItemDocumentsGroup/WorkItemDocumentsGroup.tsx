@@ -12,6 +12,7 @@ import { Ago } from "azure-devops-ui/Ago";
 import { showRootComponent } from "../../Common";
 import { ILinkedDocument, useLinkedDocuments } from "../../useLinkedDocument";
 import { AgoFormat } from "azure-devops-ui/Utilities/Date";
+import { getIcon } from "../../UriOptimizer";
 
 const Document: FC<{ document: ILinkedDocument, additionalData?: string }> = ({ document, additionalData }) => {
   return (
@@ -19,7 +20,7 @@ const Document: FC<{ document: ILinkedDocument, additionalData?: string }> = ({ 
       <div className="la-item-wrapper">
         <div className="la-artifact-data">
           <div className="la-primary-data">
-            <Icon iconName="NavigateExternalInline" className="la-primary-icon" />
+            <Icon iconName={getIcon(document.url)} className="la-primary-icon" />
             <Link href={document.url} target="_blank">
               {document.name}
             </Link>
