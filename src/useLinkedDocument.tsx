@@ -58,6 +58,30 @@ export const useLinkedDocuments = (): IUseLinkedDocument => {
     return { documents, isLoading };
 };
 
+
+
+const fetchCurrentDocuments = async (): Promise<ILinkedDocument[]> => {
+    const formService = await SDK.getService<IWorkItemFormService>(WorkItemTrackingServiceIds.WorkItemFormService);
+
+    var extractor = [
+        extractFromRelations,
+        extractFromDescriptionField
+    ];
+
+    var documents = await Promise.all(extractor.map(f => f(formService)));
+
+    var unique = new Set<string>();
+    var result = new Array<ILinkedDocument>();
+    for (let doc of documents.flat()) {
+        if (unique.has(doc.url)) {
+            continue;
+        }
+        result.push(doc);
+    }
+
+    return result;
+}
+
 const mapRelationToDocument = (rel: WorkItemRelation): ILinkedDocument => {
     var name = rel.attributes.comment || "";
     if (name.length == 0) {
@@ -66,24 +90,7 @@ const mapRelationToDocument = (rel: WorkItemRelation): ILinkedDocument => {
     return { name: name, url: rel.url, addedDate: rel.attributes.resourceCreatedDate as Date }
 };
 
-const regex = /(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/g;
-const unique = function <T>(arr: T[]): T[] { return [...new Set<T>(arr)] };
-
-const fetchCurrentDocuments = async (): Promise<ILinkedDocument[]> => {
-    const formService = await SDK.getService<IWorkItemFormService>(WorkItemTrackingServiceIds.WorkItemFormService);
-    const documents = await extractFromRelations(formService);
-    const crawled = await extractFromDescriptionField(formService);
-
-    return ([] as ILinkedDocument[])
-        .concat(documents)
-        .concat(removeAlreadyLinkedDocuments(crawled, documents));
-}
-
-function removeAlreadyLinkedDocuments(crawled: { name: string; url: string; }[], documents: ILinkedDocument[]): Array<ILinkedDocument> {
-    return crawled.filter(e => documents.findIndex(d => d.url == e.url) === -1);
-}
-
-async function extractFromRelations(formService: IWorkItemFormService) {
+async function extractFromRelations(formService: IWorkItemFormService): Promise<ILinkedDocument[]> {
     const relations = await formService.getWorkItemRelations();
 
     const documents = relations
@@ -92,11 +99,23 @@ async function extractFromRelations(formService: IWorkItemFormService) {
     return documents;
 }
 
-async function extractFromDescriptionField(formService: IWorkItemFormService) {
+const mapDomLinkToDocument = (link: HTMLAnchorElement): ILinkedDocument => {
+    var text = link.text;
+    if (text.trim().length == 0) {
+        text = link.href;
+    }
+    return { name: text, url: link.href };
+};
+
+async function extractFromDescriptionField(formService: IWorkItemFormService): Promise<ILinkedDocument[]> {
     const description = await formService.getFieldValue("System.Description", { returnOriginalValue: false }) as string;
 
-    const crawled = unique(description.match(regex) || [])
-        .filter(uri => validUrl(uri))
-        .map(uri => { return { name: uri, url: uri }; });
+    var parser = new DOMParser();
+    var document = parser.parseFromString(description, "text/html");
+    var links = document.querySelectorAll("a");
+
+    const crawled = Array.from(links)
+        .filter(link => validUrl(link.href))
+        .map(mapDomLinkToDocument);
     return crawled;
 }
