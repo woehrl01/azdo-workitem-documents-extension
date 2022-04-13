@@ -26,11 +26,13 @@
     "test": ""
   },
   "dependencies": {
+    "async": "^3.2.2",
     "azure-devops-extension-api": "^1.158.0",
     "azure-devops-extension-sdk": "^2.0.11",
     "azure-devops-ui": "^2.167.31",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
+    "tslib": "^2.3.1",
     "uuid": "^8.3.2"
   },
   "override": {
@@ -51,6 +53,12 @@
     },
     "npm:uuid": {
       "version": "$uuid"
+    },
+    "npm:tslib": {
+      "version": "$tslib"
+    },
+    "npm:async": {
+      "version": "$async"
     }
   },
   "devDependencies": {

@@ -14,7 +14,7 @@
         "strictNullChecks": true,
         "suppressImplicitAnyIndexErrors": true,
         "target": "es5",
-        "downlevelIteration": true,
+        "importHelpers": true,
         "rootDir": "src/",
         "outDir": "dist/",
         "jsx": "react",
