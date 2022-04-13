@@ -58,45 +58,77 @@ export const useLinkedDocuments = (): IUseLinkedDocument => {
     return { documents, isLoading };
 };
 
-const mapRelationToDocument = (rel: WorkItemRelation): ILinkedDocument => {
-    var name = rel.attributes.comment || "";
-    if (name.length == 0) {
-        name = rel.url;
-    }
-    return { name: name, url: rel.url, addedDate: rel.attributes.resourceCreatedDate as Date }
-};
-
-const regex = /(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/g;
-const unique = function <T>(arr: T[]): T[] { return [...new Set<T>(arr)] };
 
 const fetchCurrentDocuments = async (): Promise<ILinkedDocument[]> => {
     const formService = await SDK.getService<IWorkItemFormService>(WorkItemTrackingServiceIds.WorkItemFormService);
-    const documents = await extractFromRelations(formService);
-    const crawled = await extractFromDescriptionField(formService);
 
-    return ([] as ILinkedDocument[])
-        .concat(documents)
-        .concat(removeAlreadyLinkedDocuments(crawled, documents));
+    var extractor = [
+        new RelationBasedDocumentSource(formService),
+        new DescriptionBasedDocumentSource(formService),
+    ];
+
+    var documents = await Promise.all(extractor.map(f => f.readDocuments()));
+    return distinctBy(documents.flat(), d => d.url);
 }
 
-function removeAlreadyLinkedDocuments(crawled: { name: string; url: string; }[], documents: ILinkedDocument[]): Array<ILinkedDocument> {
-    return crawled.filter(e => documents.findIndex(d => d.url == e.url) === -1);
+function distinctBy<T, K>(arr: T[], key: (t: T) => K): T[] {
+    const map = new Set<K>();
+    const result: T[] = [];
+    for (let i = 0; i < arr.length; i++) {
+        const k = key(arr[i]);
+        if (!map.has(k)) {
+            map.add(k);
+            result.push(arr[i]);
+        }
+    }
+    return result;
 }
 
-async function extractFromRelations(formService: IWorkItemFormService) {
-    const relations = await formService.getWorkItemRelations();
-
-    const documents = relations
-        .filter(f => f.rel == "Hyperlink" && f.attributes.isDeleted == false)
-        .map(mapRelationToDocument);
-    return documents;
+interface ILinkedDocumentSource {
+    readDocuments: () => Promise<ILinkedDocument[]>;
 }
 
-async function extractFromDescriptionField(formService: IWorkItemFormService) {
-    const description = await formService.getFieldValue("System.Description", { returnOriginalValue: false }) as string;
+class RelationBasedDocumentSource implements ILinkedDocumentSource {
+    constructor(private readonly formService: IWorkItemFormService) { }
 
-    const crawled = unique(description.match(regex) || [])
-        .filter(uri => validUrl(uri))
-        .map(uri => { return { name: uri, url: uri }; });
-    return crawled;
+    async readDocuments(): Promise<ILinkedDocument[]> {
+        const relations = await this.formService.getWorkItemRelations();
+        const documents = relations
+            .filter(f => f.rel == "Hyperlink" && f.attributes.isDeleted == false)
+            .map(this.mapRelationToDocument);
+        return documents;
+    }
+
+    private mapRelationToDocument(rel: WorkItemRelation): ILinkedDocument {
+        var name = rel.attributes.comment || "";
+        if (/^\s*$/.test(name)) {
+            name = rel.url;
+        }
+        return { name: name, url: rel.url, addedDate: rel.attributes.resourceCreatedDate as Date }
+    };
+}
+
+class DescriptionBasedDocumentSource implements ILinkedDocumentSource {
+    constructor(private readonly formService: IWorkItemFormService) { }
+
+    async readDocuments(): Promise<ILinkedDocument[]> {
+        const description = await this.formService.getFieldValue("System.Description", { returnOriginalValue: false }) as string;
+
+        var parser = new DOMParser();
+        var document = parser.parseFromString(description, "text/html");
+        var links = document.querySelectorAll("a");
+
+        const crawled = Array.from(links)
+            .filter(link => validUrl(link.href))
+            .map(this.mapDomLinkToDocument);
+        return crawled;
+    }
+
+    private mapDomLinkToDocument(link: HTMLAnchorElement): ILinkedDocument {
+        var text = link.text;
+        if (/^\s*$/.test(text)) {
+            text = link.href;
+        }
+        return { name: text, url: link.href };
+    };
 }
