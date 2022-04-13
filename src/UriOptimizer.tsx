@@ -24,7 +24,7 @@ class DelegateUriOptimizer implements IUriOptimizer {
 
 const handler = [
     new DelegateUriOptimizer(/^https:\/\/docs\.google\.com\//, (uri) => `${uri}?rm=minimal`, "TextDocument"),
-    new DelegateUriOptimizer(/^https:\/\/drive\.google\.com\/drive\/folders\/([^?]*)/, (_, result) => `https://drive.google.com/embeddedfolderview?id=${result[1]}#list`, "FabricNetworkFolder"),
+    new DelegateUriOptimizer(/^https:\/\/drive\.google\.com\/drive\/folders\/([^?]*)/, (_, result) => `https://drive.google.com/embeddedfolderview?id=${result[1]}#list`, "FolderList"),
     new DelegateUriOptimizer(/^https:\/\/app.diagrams.net\/#(.*)/, (uri, result) => `https://viewer.diagrams.net/?highlight=0000ff&edit=${encodeURIComponent(uri)}&layers=1&nav=1#${result[1]}`, "GitGraph"),
 ];
 
