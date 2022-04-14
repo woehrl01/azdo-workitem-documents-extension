@@ -49,7 +49,7 @@ export const WorkItemFormGroupComponent: FC<{}> = ({ }) => {
   useEffect(() => {
     var t = setTimeout(() => {
       SDK.resize();
-    }, 2000);
+    }, 10000);
     return () => clearTimeout(t);
   }, [])
 
