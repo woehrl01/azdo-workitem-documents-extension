@@ -16,10 +16,7 @@ export interface IUseLinkedDocument {
 
 
 const registerSdk = async (callback: () => void) => {
-    await SDK.init({
-        loaded: false,
-        applyTheme: true
-    })
+    await SDK.init();
     SDK.register(SDK.getContributionId(), () => {
         return {
             onLoaded: function () {
@@ -37,9 +34,9 @@ const registerSdk = async (callback: () => void) => {
         };
     });
     SDK.notifyLoadSucceeded();
+    await SDK.ready();
     /* call the callback initally if events have 
      * been missed because of later loading */
-    await SDK.ready();
     callback();
 };
 
