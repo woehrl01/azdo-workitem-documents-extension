@@ -17,19 +17,19 @@ fs.readdirSync(codeDir).filter((dir) => {
 });
 
 const apmSource = fs.readFileSync(path.join(__dirname, './newrelic.apm.js'), 'utf8');
-const enableApm = false;
+const isEnableApm = false;
 
-const createHtmlWebpackPluginEntry = (name, env) => {
+const createHtmlWebpackPluginEntry = (name, isProd) => {
   return new HtmlWebpackPlugin({
     template: "./src/Code/index.ejs",
     filename: `${name}.html`,
     chunks: [name],
     publicPath: '',
-    apmSource: env === 'prod' && enableApm ? apmSource : ''
+    apmSource: isProd && isEnableApm ? apmSource : ''
   })
 };
 
-module.exports = (env) => {
+module.exports = ({isProd}) => {
   return {
     entry: entries,
     output: {
@@ -40,9 +40,11 @@ module.exports = (env) => {
     resolve: {
       extensions: [".ts", ".tsx", ".js"],
       alias: {
-        "azure-devops-extension-sdk": path.resolve(
-          "node_modules/azure-devops-extension-sdk"
-        ),
+        "azure-devops-extension-sdk": path.resolve("node_modules/azure-devops-extension-sdk"),
+        "react": "preact/compat",
+        "react-dom/test-utils": "preact/test-utils",
+        "react-dom": "preact/compat",     // Must be below test-utils
+        "react/jsx-runtime": "preact/jsx-runtime"
       },
     },
     stats: {
@@ -66,17 +68,13 @@ module.exports = (env) => {
         {
           test: /\.css$/,
           use: [
-            env === "prod" ? MiniCssExtractPlugin.loader : "style-loader", 
+            isProd ? MiniCssExtractPlugin.loader : "style-loader",
             "css-loader"
           ],
         },
         {
           test: /\.woff$/,
-          use: [
-            {
-              loader: "base64-inline-loader",
-            },
-          ],
+          type: "asset/resource",
         },
         {
           test: /\.png$/,
@@ -85,7 +83,7 @@ module.exports = (env) => {
       ],
     },
     plugins: [
-      ...Object.entries(entries).map(([name]) => createHtmlWebpackPluginEntry(name, env)),
+      ...Object.entries(entries).map(([name]) => createHtmlWebpackPluginEntry(name, isProd)),
       new webpack.ProvidePlugin({
         process: "process/browser",
       }),
