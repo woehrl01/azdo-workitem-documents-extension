@@ -46,6 +46,13 @@ export const WorkItemFormGroupComponent: FC<{}> = ({ }) => {
     SDK.resize()
   }, [documents, isLoading]);
 
+  useEffect(() => {
+    var t = setTimeout(() => {
+      SDK.resize();
+    }, 1000);
+    return () => clearTimeout(t);
+  }, [])
+
   return <>
     {documents.map(d => <Document key={d.url} document={d} />)}
   </>

@@ -17,7 +17,6 @@ export interface IUseLinkedDocument {
 
 const registerSdk = async (callback: () => void) => {
     await SDK.init();
-    SDK.resize(undefined, 0);
     SDK.register(SDK.getContributionId(), () => {
         return {
             onLoaded: function () {
