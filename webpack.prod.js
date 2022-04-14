@@ -23,12 +23,7 @@ module.exports = merge(common({ isProd: true }), {
           name: 'vendor',
           chunks: 'all',
         },
-        styles: {
-          name: 'styles',
-          test: /\.css$/,
-          chunks: 'all',
-          enforce: true,
-        }
+        
       },
     },
     minimize: true,
