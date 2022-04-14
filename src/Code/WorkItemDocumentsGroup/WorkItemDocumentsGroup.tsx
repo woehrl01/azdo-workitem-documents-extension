@@ -40,11 +40,11 @@ const Document: FC<{ document: ILinkedDocument, additionalData?: string }> = ({ 
 }
 
 export const WorkItemFormGroupComponent: FC<{}> = ({ }) => {
-  const { documents, isLoading } = useLinkedDocuments();
+  const { documents } = useLinkedDocuments();
 
   useEffect(() => {
     SDK.resize()
-  }, [documents, isLoading]);
+  }, [documents]);
 
   return <>
     {documents.map(d => <Document key={d.url} document={d} />)}

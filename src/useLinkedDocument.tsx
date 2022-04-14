@@ -33,6 +33,7 @@ const registerSdk = async (callback: () => void) => {
             }
         };
     });
+    await SDK.ready();
     /* call the callback initally if events have 
      * been missed because of later loading */
     callback();
