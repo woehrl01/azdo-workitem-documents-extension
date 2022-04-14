@@ -26,36 +26,30 @@
     "test": ""
   },
   "dependencies": {
+    "@preact/compat": "^17.0.3",
     "azure-devops-extension-api": "^1.158.0",
     "azure-devops-extension-sdk": "^2.0.11",
     "azure-devops-ui": "^2.167.31",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
+    "preact": "^10.7.1",
     "uuid": "^8.3.2"
   },
   "override": {
-    "npm:azure-devops-extension-api": {
+    "azure-devops-extension-api": {
       "version": "$azure-devops-extension-api"
     },
-    "npm:azure-devops-extension-sdk": {
+    "azure-devops-extension-sdk": {
       "version": "$azure-devops-extension-sdk"
     },
-    "npm:azure-devops-ui": {
+    "azure-devops-ui": {
       "version": "$azure-devops-ui"
     },
-    "npm:react": {
-      "version": "$react"
-    },
-    "npm:react-dom": {
-      "version": "$react-dom"
-    },
-    "npm:uuid": {
+    "uuid": {
       "version": "$uuid"
     },
-    "npm:tslib": {
+    "tslib": {
       "version": "$tslib"
     },
-    "npm:async": {
+    "async": {
       "version": "$async"
     }
   },

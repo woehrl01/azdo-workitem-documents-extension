@@ -5,7 +5,7 @@ const CompressionPlugin = require("compression-webpack-plugin")
 const TerserPlugin = require("terser-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
-module.exports = merge(common("prod"), {
+module.exports = merge(common({ isProd: true }), {
   plugins:
     [
       new CompressionPlugin({
@@ -23,6 +23,7 @@ module.exports = merge(common("prod"), {
           name: 'vendor',
           chunks: 'all',
         },
+        
       },
     },
     minimize: true,
@@ -42,7 +43,7 @@ module.exports = merge(common("prod"), {
           },
         },
         extractComments: false
-      })
+      }),
     ]
   }
 });
