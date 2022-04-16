@@ -45,13 +45,3 @@
     display: inline;
     vertical-align: top;
 }
-
-.root {
-    flex-direction: column;
-    font-size: 12px;
-    min-height: 1px; //we need at least one pixel to make auto-height work
-}
-
-body {
-    overflow: hidden;
-}

@@ -1,4 +1,5 @@
 import styles from "./WorkItemDocumentsGroup.module.scss";
+import "./Main.scss";
 
 import { useEffect, FC } from "react";
 import * as SDK from "azure-devops-extension-sdk";
@@ -46,9 +47,9 @@ export const WorkItemFormGroupComponent: FC<NoProps> = () => {
     SDK.resize()
   }, [documents]);
 
-  return <div className={styles.root}>
+  return <>
     {documents.map(d => <Document key={d.url} document={d} />)}
-  </div>
+  </>
 }
 
 SDK.init({ loaded: true });
