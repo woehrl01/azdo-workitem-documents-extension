@@ -1,5 +1,5 @@
 interface IUriOptimizer {
-    getIcon(url: string): any;
+    getIcon(url: string): string;
     canHandle(uri: string): boolean;
     optimize(uri: string): string;
 }
@@ -14,15 +14,22 @@ class DelegateUriOptimizer implements IUriOptimizer {
     canHandle(uri: string): boolean {
         return this.regex.test(uri);
     }
+
     optimize(uri: string): string {
-        return this.optimizer(uri, this.regex.exec(uri)!);
+        const result = this.regex.exec(uri);
+        if (result) {
+            return this.optimizer(uri, result);
+        }
+        return uri;
     }
-    getIcon(url: string) {
+
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+    getIcon(url: string): string {
         return this.icon;
     }
 }
 
-const handler = [
+const handlers = [
     new DelegateUriOptimizer(
         "TextDocument",
         /^https:\/\/docs\.google\.com\//, (uri) => `${uri}?rm=minimal`
@@ -40,7 +47,7 @@ const handler = [
 ];
 
 function foreachHandler<T>(uri: string, found: (handler: IUriOptimizer) => T, notFound: () => T): T {
-    for (const h of handler) {
+    for (const h of handlers) {
         if (h.canHandle(uri)) {
             return found(h);
         }

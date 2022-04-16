@@ -1,6 +1,4 @@
-import { IdentityServiceIds } from "azure-devops-extension-api/Identities";
 import { IWorkItemChangedArgs, IWorkItemFieldChangedArgs, IWorkItemLoadedArgs, WorkItemTrackingServiceIds } from "azure-devops-extension-api/WorkItemTracking";
-import { IHostContext, IUserContext } from "azure-devops-extension-sdk";
 
 /** 
  * This is a minimal mock version to test WorkItemFormGroup
@@ -12,13 +10,13 @@ import { IHostContext, IUserContext } from "azure-devops-extension-sdk";
  * Mocked Init Function to return resolve
  */
 export function init(): Promise<void> {
-    return new Promise((resolve, reject) => resolve());
+    return new Promise((resolve) => resolve());
 }
 
 /**
  * Mocked getContributionId returns some Id
  */
-export function getContributionId() { return "someContributionId" }
+export function getContributionId(): string { return "someContributionId" }
 
 
 /**
@@ -45,7 +43,7 @@ export let spyWorkItemCallBackAccessor: workItemCallBackType;
 /**
  * Mocked register returns empty data structure
  */
-export function register(instanceId: string, instance: workItemCallBackType) {
+export function register(instanceId: string, instance: workItemCallBackType):void {
     spyWorkItemCallBackAccessor = instance;
 }
 
@@ -58,7 +56,7 @@ export const mockSetFieldValue = jest.fn();
 /**
  * Mocked getService returns mocked methods
  */
-export function getService(contributionId: string) {
+export function getService(contributionId: string): unknown {
 
     switch (contributionId) {
         case WorkItemTrackingServiceIds.WorkItemFormService:
