@@ -16,7 +16,7 @@ export function init(): Promise<void> {
 /**
  * Mocked getContributionId returns some Id
  */
-export function getContributionId() { return "someContributionId" }
+export function getContributionId(): string { return "someContributionId" }
 
 
 /**
@@ -43,7 +43,7 @@ export let spyWorkItemCallBackAccessor: workItemCallBackType;
 /**
  * Mocked register returns empty data structure
  */
-export function register(instanceId: string, instance: workItemCallBackType) {
+export function register(instanceId: string, instance: workItemCallBackType):void {
     spyWorkItemCallBackAccessor = instance;
 }
 
@@ -56,7 +56,7 @@ export const mockSetFieldValue = jest.fn();
 /**
  * Mocked getService returns mocked methods
  */
-export function getService(contributionId: string) {
+export function getService(contributionId: string): unknown {
 
     switch (contributionId) {
         case WorkItemTrackingServiceIds.WorkItemFormService:

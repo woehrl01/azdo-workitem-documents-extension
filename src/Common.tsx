@@ -6,6 +6,6 @@ import "./Common.scss";
 
 export type NoProps = Record<string, never>;
 
-export function showRootComponent(component: React.ReactElement<unknown>) {
+export function showRootComponent(component: React.ReactElement<unknown>): void {
     ReactDOM.render(component, document.getElementById("root"));
 }

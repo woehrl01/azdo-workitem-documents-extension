@@ -15,19 +15,19 @@ export interface IUseLinkedDocument {
 }
 
 
-const registerSdk = async (callback: () => void) => {
+const registerSdk = async (callback: () => void): Promise<void> => {
     await SDK.init({ loaded: true });
     SDK.register(SDK.getContributionId(), () => ({
-        onLoaded() {
+        onLoaded(): void {
             callback();
         },
-        onFieldChanged() {
+        onFieldChanged(): void {
             callback();
         },
-        onReset() {
+        onReset(): void {
             callback();
         },
-        onRefresh() {
+        onRefresh(): void {
             callback();
         }
     }));

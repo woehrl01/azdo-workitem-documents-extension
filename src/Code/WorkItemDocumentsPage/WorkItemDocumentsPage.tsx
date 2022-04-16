@@ -14,7 +14,7 @@ import { Empty } from "./Empty";
 
 type NoProps = Record<string, never>
 
-const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocument[]) => {
+const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocument[]): string => {
     if (existingDocuments.findIndex(d => d.url === url) === -1) {
         return existingDocuments.map(d => d.url)?.find(() => true) || "";
     }
