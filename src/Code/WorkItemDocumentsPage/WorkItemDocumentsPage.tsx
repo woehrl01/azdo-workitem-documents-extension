@@ -48,5 +48,5 @@ const HubContent: FC<NoProps> = () => {
     );
 }
 
-SDK.init({ loaded: true });
+//SDK.init({ loaded: true });
 showRootComponent(<HubContent />);

@@ -52,5 +52,5 @@ export const WorkItemFormGroupComponent: FC<NoProps> = () => {
   </>
 }
 
-SDK.init({ loaded: true });
+//SDK.init({ loaded: true });
 showRootComponent(<WorkItemFormGroupComponent />);
