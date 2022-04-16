@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-env node */
 
@@ -5,7 +6,7 @@ const path = require("path");
 const fs = require("fs");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const PreloadPlugin = require("@vue/preload-webpack-plugin");
 
@@ -21,7 +22,7 @@ fs.readdirSync(codeDir).filter((dir) => {
   }
 });
 
-const apmSource = fs.readFileSync(path.join(__dirname, './newrelic.apm.js'), 'utf8');
+const apmSource = fs.readFileSync(path.join(__dirname, "./newrelic.apm.js"), "utf8");
 const isEnableApm = false;
 
 const createHtmlWebpackPluginEntry = (name, isProd) => {
@@ -29,9 +30,9 @@ const createHtmlWebpackPluginEntry = (name, isProd) => {
     template: "./src/Code/index.ejs",
     filename: `${name}.html`,
     chunks: [name],
-    publicPath: '',
-    apmSource: isProd && isEnableApm ? apmSource : '',
-    scriptLoading: 'defer'
+    publicPath: "",
+    apmSource: isProd && isEnableApm ? apmSource : "",
+    scriptLoading: "defer"
   })
 };
 
@@ -95,13 +96,13 @@ module.exports = ({ isProd }) => {
         process: "process/browser",
       }),
       new PreloadPlugin({
-        rel: 'preload',
-        include: 'allAssets',
+        rel: "preload",
+        include: "allAssets",
         fileWhitelist: [/\.woff$/, /\.png$/],
         as(entry) {
-          if (/\.woff$/.test(entry)) return 'font';
-          if (/\.png$/.test(entry)) return 'image';
-          return 'script';
+          if (/\.woff$/.test(entry)) return "font";
+          if (/\.png$/.test(entry)) return "image";
+          return "script";
         }
       }),
       new MiniCssExtractPlugin({
