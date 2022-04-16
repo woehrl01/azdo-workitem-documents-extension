@@ -74,8 +74,8 @@ module.exports = ({ isProd }) => {
                   exportLocalsConvention: "dashesOnly",
                   mode: "local",
                   auto: true,
+                  exportGlobals: true,
                 }
-
               }
             },
             "azure-devops-ui/buildScripts/css-variables-loader",

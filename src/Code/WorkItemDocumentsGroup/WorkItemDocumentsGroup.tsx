@@ -46,9 +46,9 @@ export const WorkItemFormGroupComponent: FC<NoProps> = () => {
     SDK.resize()
   }, [documents]);
 
-  return <>
+  return <div className={styles.root}>
     {documents.map(d => <Document key={d.url} document={d} />)}
-  </>
+  </div>
 }
 
 SDK.init({ loaded: true });
