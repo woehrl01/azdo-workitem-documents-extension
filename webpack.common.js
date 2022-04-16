@@ -7,6 +7,7 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ESLintPlugin = require("eslint-webpack-plugin");
+const PreloadPlugin = require("@vue/preload-webpack-plugin");
 
 // Webpack entry points. Mapping from resulting bundle name to the source file entry.
 const entries = {};
@@ -29,7 +30,8 @@ const createHtmlWebpackPluginEntry = (name, isProd) => {
     filename: `${name}.html`,
     chunks: [name],
     publicPath: '',
-    apmSource: isProd && isEnableApm ? apmSource : ''
+    apmSource: isProd && isEnableApm ? apmSource : '',
+    scriptLoading: 'defer'
   })
 };
 
@@ -87,9 +89,20 @@ module.exports = ({ isProd }) => {
       ],
     },
     plugins: [
-      ...Object.entries(entries).map(([name]) => createHtmlWebpackPluginEntry(name, isProd)),
+      ...Object.entries(entries)
+        .map(([name]) => createHtmlWebpackPluginEntry(name, isProd)),
       new webpack.ProvidePlugin({
         process: "process/browser",
+      }),
+      new PreloadPlugin({
+        rel: 'preload',
+        include: 'allAssets',
+        fileWhitelist: [/\.woff$/, /\.png$/],
+        as(entry) {
+          if (/\.woff$/.test(entry)) return 'font';
+          if (/\.png$/.test(entry)) return 'image';
+          return 'script';
+        }
       }),
       new MiniCssExtractPlugin({
         filename: "[name].css",
