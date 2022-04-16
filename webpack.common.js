@@ -66,7 +66,7 @@ module.exports = ({ isProd }) => {
         {
           test: /\.scss$/,
           use: [
-            "style-loader",
+            isProd ? MiniCssExtractPlugin.loader : "style-loader",
             "css-loader",
             "azure-devops-ui/buildScripts/css-variables-loader",
             "sass-loader",

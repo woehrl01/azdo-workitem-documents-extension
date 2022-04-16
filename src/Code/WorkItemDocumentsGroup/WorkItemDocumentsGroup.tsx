@@ -1,4 +1,4 @@
-import styles from "./WorkItemDocumentsGroup.scss";
+import styles from "./WorkItemDocumentsGroup.module.scss";
 
 import { useEffect, FC } from "react";
 import * as SDK from "azure-devops-extension-sdk";
