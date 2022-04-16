@@ -4,8 +4,7 @@ import doDocuments from './no_documents.png';
 import { NoProps } from "../../Common";
 
 
-export const Empty: FC<NoProps> = () => {
-    return <ZeroData
+export const Empty: FC<NoProps> = () => <ZeroData
         primaryText="No documents linked"
         className="empty-data"
         secondaryText={<span>
@@ -14,4 +13,3 @@ export const Empty: FC<NoProps> = () => {
         </span>}
         imageAltText="No documents"
         imagePath={doDocuments} />;
-};

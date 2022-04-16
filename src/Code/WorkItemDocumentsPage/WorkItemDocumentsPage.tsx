@@ -15,7 +15,7 @@ import { Empty } from "./Empty";
 type NoProps = Record<string, never>
 
 const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocument[]) => {
-    if (existingDocuments.findIndex(d => d.url == url) == -1) {
+    if (existingDocuments.findIndex(d => d.url === url) === -1) {
         return existingDocuments.map(d => d.url)?.find(() => true) || "";
     }
     return url
@@ -33,7 +33,7 @@ const HubContent: FC<NoProps> = () => {
         return <Loading />
     }
 
-    if (documents.length == 0) {
+    if (documents.length === 0) {
         return <Empty />;
     }
 

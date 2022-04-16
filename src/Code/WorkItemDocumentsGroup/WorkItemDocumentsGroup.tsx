@@ -7,17 +7,16 @@ import { Link } from "azure-devops-ui/Link"
 import { Icon } from "azure-devops-ui/Icon";
 import { Ago } from "azure-devops-ui/Ago";
 
+import { AgoFormat } from "azure-devops-ui/Utilities/Date";
 import { NoProps, showRootComponent } from "../../Common";
 import { ILinkedDocument, useLinkedDocuments } from "../../useLinkedDocument";
-import { AgoFormat } from "azure-devops-ui/Utilities/Date";
 import { getIcon } from "../../UriOptimizer";
 
 type DocumentProps = {
     document: ILinkedDocument;
 }
 
-const Document: FC<DocumentProps> = ({ document }) => {
-  return (
+const Document: FC<DocumentProps> = ({ document }) => (
     <div className="la-item">
       <div className="la-item-wrapper">
         <div className="la-artifact-data">
@@ -39,7 +38,6 @@ const Document: FC<DocumentProps> = ({ document }) => {
       </div>
     </div>
   )
-}
 
 export const WorkItemFormGroupComponent: FC<NoProps> = () => {
   const { documents } = useLinkedDocuments();
