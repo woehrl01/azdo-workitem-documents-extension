@@ -12,6 +12,7 @@ import { PageContent } from "./PageContent";
 import { Tabs } from "./Tabs";
 import { Empty } from "./Empty";
 
+type NoProps = Record<string, never>
 
 const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocument[]) => {
     if (existingDocuments.findIndex(d => d.url == url) == -1) {
@@ -20,9 +21,10 @@ const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocu
     return url
 }
 
-const Loading: FC<{}> = () => <Spinner size={SpinnerSize.large} className="loading" label="Loading..." />;
 
-const HubContent: FC<{}> = ({ }) => {
+const Loading: FC<NoProps> = () => <Spinner size={SpinnerSize.large} className="loading" label="Loading..." />;
+
+const HubContent: FC<NoProps> = () => {
     const [selectedDocumentUrl, setSelectedDocumentUrl] = useState<string>("");
     const { documents, isLoading } = useLinkedDocuments();
     const documentUrlToShow = fallbackToFirstPageIfNeeded(selectedDocumentUrl, documents);

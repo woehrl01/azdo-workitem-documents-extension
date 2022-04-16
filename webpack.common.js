@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-env node */
+
 const path = require("path");
 const fs = require("fs");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ESLintPlugin = require("eslint-webpack-plugin");
 
 // Webpack entry points. Mapping from resulting bundle name to the source file entry.
 const entries = {};
@@ -29,7 +33,7 @@ const createHtmlWebpackPluginEntry = (name, isProd) => {
   })
 };
 
-module.exports = ({isProd}) => {
+module.exports = ({ isProd }) => {
   return {
     entry: entries,
     output: {
@@ -89,8 +93,15 @@ module.exports = ({isProd}) => {
       }),
       new MiniCssExtractPlugin({
         filename: "[name].css",
-        chunkFilename: "[id].css"
-      })
+        chunkFilename: "[id].css",
+      }),
+      new ESLintPlugin({
+        emitError: true,
+        emitWarning: true,
+        failOnError: true,
+        failOnWarning: true,
+        extensions: ["ts", "tsx", "js", "jsx"],
+      }),
     ],
   }
 };

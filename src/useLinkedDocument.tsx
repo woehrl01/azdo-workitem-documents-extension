@@ -16,7 +16,7 @@ export interface IUseLinkedDocument {
 
 
 const registerSdk = async (callback: () => void) => {
-    await SDK.init();
+    await SDK.init({loaded: false});
     SDK.register(SDK.getContributionId(), () => {
         return {
             onLoaded: function () {
@@ -33,6 +33,7 @@ const registerSdk = async (callback: () => void) => {
             }
         };
     });
+    await SDK.notifyLoadSucceeded();
     await SDK.ready();
     /* call the callback initally if events have 
      * been missed because of later loading */
@@ -40,8 +41,8 @@ const registerSdk = async (callback: () => void) => {
 };
 
 export const useLinkedDocuments = (): IUseLinkedDocument => {
-    var [documents, setDocuments] = useState<ILinkedDocument[]>([]);
-    var [isLoading, setIsLoading] = useState<boolean>(true);
+    const [documents, setDocuments] = useState<ILinkedDocument[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const updateCurrentDocuments = useCallback(async () => {
         setIsLoading(true);
@@ -63,12 +64,12 @@ export const useLinkedDocuments = (): IUseLinkedDocument => {
 const fetchCurrentDocuments = async (): Promise<ILinkedDocument[]> => {
     const formService = await SDK.getService<IWorkItemFormService>(WorkItemTrackingServiceIds.WorkItemFormService);
 
-    var extractor = [
+    const extractor = [
         new RelationBasedDocumentSource(formService),
         new DescriptionBasedDocumentSource(formService),
     ];
 
-    var documents = await Promise.all(extractor.map(f => f.readDocuments()));
+    const documents = await Promise.all(extractor.map(f => f.readDocuments()));
     return distinctBy(documents.flat(), d => d.url);
 }
 
@@ -101,12 +102,12 @@ class RelationBasedDocumentSource implements ILinkedDocumentSource {
     }
 
     private mapRelationToDocument(rel: WorkItemRelation): ILinkedDocument {
-        var name = rel.attributes.comment || "";
+        let name = rel.attributes.comment || "";
         if (/^\s*$/.test(name)) {
             name = rel.url;
         }
         return { name: name, url: rel.url, addedDate: rel.attributes.resourceCreatedDate as Date }
-    };
+    }
 }
 
 class DescriptionBasedDocumentSource implements ILinkedDocumentSource {
@@ -115,9 +116,9 @@ class DescriptionBasedDocumentSource implements ILinkedDocumentSource {
     async readDocuments(): Promise<ILinkedDocument[]> {
         const description = await this.formService.getFieldValue("System.Description", { returnOriginalValue: false }) as string;
 
-        var parser = new DOMParser();
-        var document = parser.parseFromString(description, "text/html");
-        var links = document.querySelectorAll("a");
+        const parser = new DOMParser();
+        const document = parser.parseFromString(description, "text/html");
+        const links = document.querySelectorAll("a");
 
         const crawled = Array.from(links)
             .filter(link => isValidUrl(link.href))
@@ -126,10 +127,10 @@ class DescriptionBasedDocumentSource implements ILinkedDocumentSource {
     }
 
     private mapDomLinkToDocument(link: HTMLAnchorElement): ILinkedDocument {
-        var text = link.text;
+        let text = link.text;
         if (/^\s*$/.test(text)) {
             text = link.href;
         }
         return { name: text, url: link.href };
-    };
+    }
 }

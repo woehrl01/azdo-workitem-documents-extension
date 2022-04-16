@@ -10,7 +10,7 @@ import { IWorkItemChangedArgs, IWorkItemFieldChangedArgs, IWorkItemLoadedArgs, W
  * Mocked Init Function to return resolve
  */
 export function init(): Promise<void> {
-    return new Promise((resolve, reject) => resolve());
+    return new Promise((resolve) => resolve());
 }
 
 /**

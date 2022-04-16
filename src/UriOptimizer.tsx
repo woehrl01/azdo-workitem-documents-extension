@@ -1,5 +1,5 @@
 interface IUriOptimizer {
-    getIcon(url: string): any;
+    getIcon(url: string): string;
     canHandle(uri: string): boolean;
     optimize(uri: string): string;
 }
@@ -15,8 +15,13 @@ class DelegateUriOptimizer implements IUriOptimizer {
         return this.regex.test(uri);
     }
     optimize(uri: string): string {
-        return this.optimizer(uri, this.regex.exec(uri)!);
+        const result = this.regex.exec(uri);
+        if (result) {
+            return this.optimizer(uri, result);
+        }
+        return uri;
     }
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     getIcon(url: string): string {
         return this.icon;
     }
