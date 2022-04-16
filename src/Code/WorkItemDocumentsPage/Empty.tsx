@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { ZeroData } from "azure-devops-ui/ZeroData";
-import React from "react";
 import doDocuments from './no_documents.png';
 
 export const Empty: FC<{}> = () => {

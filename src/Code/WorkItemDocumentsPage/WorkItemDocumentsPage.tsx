@@ -6,7 +6,7 @@ import { Page } from "azure-devops-ui/Page";
 import { Spinner, SpinnerSize } from "azure-devops-ui/Spinner";
 
 import { showRootComponent } from "../../Common";
-import React from "react";
+
 import { ILinkedDocument, useLinkedDocuments } from "../../useLinkedDocument";
 import { PageContent } from "./PageContent";
 import { Tabs } from "./Tabs";

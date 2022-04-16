@@ -17,7 +17,7 @@ class DelegateUriOptimizer implements IUriOptimizer {
     optimize(uri: string): string {
         return this.optimizer(uri, this.regex.exec(uri)!);
     }
-    getIcon(url: string) {
+    getIcon(url: string): string {
         return this.icon;
     }
 }

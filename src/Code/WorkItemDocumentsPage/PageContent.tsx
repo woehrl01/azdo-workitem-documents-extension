@@ -1,5 +1,4 @@
 import { FC } from "react";
-import React from "react";
 import { optimizeUrl } from "../../UriOptimizer";
 
 export const PageContent: FC<{ url: string; }> = ({ url }) => {

@@ -1,9 +1,7 @@
 import "./WorkItemDocumentsGroup.scss";
 
-import React from "react";
-import { useEffect } from "react";
+import { useEffect, FC } from "react";
 import * as SDK from "azure-devops-extension-sdk";
-import { FC } from "react";
 
 import { Link } from "azure-devops-ui/Link"
 import { Icon } from "azure-devops-ui/Icon";

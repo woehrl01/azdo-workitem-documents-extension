@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { Tab, TabBar, TabSize } from "azure-devops-ui/Tabs";
-import React from "react";
 import { ILinkedDocument } from "../../useLinkedDocument";
 import { getIcon } from "../../UriOptimizer";
 
