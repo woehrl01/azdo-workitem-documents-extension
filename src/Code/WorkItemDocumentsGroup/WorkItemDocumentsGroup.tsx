@@ -13,31 +13,31 @@ import { ILinkedDocument, useLinkedDocuments } from "../../useLinkedDocument";
 import { getIcon } from "../../UriOptimizer";
 
 type DocumentProps = {
-    document: ILinkedDocument;
+  document: ILinkedDocument;
 }
 
 const Document: FC<DocumentProps> = ({ document }) => (
-    <div className="la-item">
-      <div className="la-item-wrapper">
-        <div className="la-artifact-data">
-          <div className="la-primary-data">
-            <Icon iconName={getIcon(document.url)} className="la-primary-icon" />
-            <Link href={document.url} target="_blank">
-              {document.name}
-            </Link>
-          </div>
-          {
-            document.addedDate &&
-            <div className="la-additional-data">
-              <div className="la-additional-data-item">
-                <span className="la-text">Added <Ago date={document.addedDate} format={AgoFormat.Extended} /></span>
-              </div>
-            </div>
-          }
+  <div className="la-item">
+    <div className="la-item-wrapper">
+      <div className="la-artifact-data">
+        <div className="la-primary-data">
+          <Icon iconName={getIcon(document.url)} className="la-primary-icon" />
+          <Link href={document.url} target="_blank">
+            {document.name}
+          </Link>
         </div>
+        {
+          document.addedDate &&
+          <div className="la-additional-data">
+            <div className="la-additional-data-item">
+              <span className="la-text">Added <Ago date={document.addedDate} format={AgoFormat.Extended} /></span>
+            </div>
+          </div>
+        }
       </div>
     </div>
-  )
+  </div>
+)
 
 export const WorkItemFormGroupComponent: FC<NoProps> = () => {
   const { documents } = useLinkedDocuments();
