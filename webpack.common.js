@@ -9,6 +9,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const PreloadPlugin = require("@vue/preload-webpack-plugin");
+const HtmlInlineScriptPlugin = require("html-inline-script-webpack-plugin");
 
 // Webpack entry points. Mapping from resulting bundle name to the source file entry.
 const entries = {};
@@ -95,6 +96,7 @@ module.exports = ({ isProd }) => {
       new webpack.ProvidePlugin({
         process: "process/browser",
       }),
+      new HtmlInlineScriptPlugin(),
       new PreloadPlugin({
         rel: "preload",
         include: "allAssets",
