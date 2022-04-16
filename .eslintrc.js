@@ -17,5 +17,6 @@ module.exports = {
         'no-shadow': 'error',
         'no-restricted-syntax': 'error',
         'react/react-in-jsx-scope': 'off',
+        'no-var': 'error',
     }
 };
