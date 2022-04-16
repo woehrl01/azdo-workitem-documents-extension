@@ -7,6 +7,8 @@ import { Spinner, SpinnerSize } from "azure-devops-ui/Spinner";
 
 import { showRootComponent } from "../../Common";
 
+import * as SDK from "azure-devops-extension-sdk";
+
 import { ILinkedDocument, useLinkedDocuments } from "../../useLinkedDocument";
 import { PageContent } from "./PageContent";
 import { Tabs } from "./Tabs";
@@ -45,4 +47,5 @@ const HubContent: FC<NoProps> = () => {
     );
 }
 
+SDK.init({ loaded: true });
 showRootComponent(<HubContent />);

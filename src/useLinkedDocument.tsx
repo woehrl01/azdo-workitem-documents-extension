@@ -16,7 +16,7 @@ export interface IUseLinkedDocument {
 
 
 const registerSdk = async (callback: () => void): Promise<void> => {
-    await SDK.init({ loaded: true });
+    await SDK.ready();
     SDK.register(SDK.getContributionId(), () => ({
         onLoaded(): void {
             callback();
@@ -31,7 +31,6 @@ const registerSdk = async (callback: () => void): Promise<void> => {
             callback();
         }
     }));
-    await SDK.ready();
     /* call the callback initally if events have 
      * been missed because of later loading */
     callback();
