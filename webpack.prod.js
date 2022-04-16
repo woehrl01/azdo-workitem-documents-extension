@@ -21,8 +21,8 @@ module.exports = merge(common({ isProd: true }), {
       chunks: "all",
       cacheGroups: {
         vendor: {
-          test: /[\\/]node_modules[\\/](preact)[\\/]/,
-          name: "preact",
+          test: /[\\/]node_modules[\\/](react|reactdom)[\\/]/,
+          name: "vendor",
           chunks: "all",
         },
       },
