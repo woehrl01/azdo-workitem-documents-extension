@@ -67,7 +67,17 @@ module.exports = ({ isProd }) => {
           test: /\.scss$/,
           use: [
             isProd ? MiniCssExtractPlugin.loader : "style-loader",
-            "css-loader",
+            {
+              loader: "css-loader",
+              options: {
+                modules: {
+                  exportLocalsConvention: "dashesOnly",
+                  mode: "local",
+                  auto: true,
+                }
+
+              }
+            },
             "azure-devops-ui/buildScripts/css-variables-loader",
             "sass-loader",
           ],

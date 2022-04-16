@@ -1,4 +1,4 @@
-import styles from "./WorkItemDocumentsPage.scss";
+import styles from "./WorkItemDocumentsPage.module.scss";
 
 import { useState, FC } from "react";
 

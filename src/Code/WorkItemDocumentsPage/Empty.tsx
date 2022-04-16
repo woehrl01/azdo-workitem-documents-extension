@@ -2,7 +2,7 @@ import { FC } from "react";
 import { ZeroData } from "azure-devops-ui/ZeroData";
 import noDocuments from "./no_documents.png";
 import { NoProps } from "../../Common";
-import styles from "./WorkItemDocumentsPage.scss";
+import styles from "./WorkItemDocumentsPage.module.scss";
 
 
 export const Empty: FC<NoProps> = () => <ZeroData
