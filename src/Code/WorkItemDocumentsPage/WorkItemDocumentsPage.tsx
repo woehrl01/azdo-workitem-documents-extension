@@ -1,4 +1,4 @@
-import "./WorkItemDocumentsPage.scss";
+import styles from "./WorkItemDocumentsPage.scss";
 
 import { useState, FC } from "react";
 
@@ -24,7 +24,7 @@ const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocu
 }
 
 
-const Loading: FC<NoProps> = () => <Spinner size={SpinnerSize.large} className="loading" label="Loading..." />;
+const Loading: FC<NoProps> = () => <Spinner size={SpinnerSize.large} className={styles.loading} label="Loading..." />;
 
 const HubContent: FC<NoProps> = () => {
     const [selectedDocumentUrl, setSelectedDocumentUrl] = useState<string>("");
@@ -40,7 +40,7 @@ const HubContent: FC<NoProps> = () => {
     }
 
     return (
-        <Page className="document-hub flex-grow" >
+        <Page className={styles.documentHub} >
             <Tabs documents={documents} onTabChanged={setSelectedDocumentUrl} selectedTab={documentUrlToShow} />
             <PageContent url={documentUrlToShow} />
         </Page>

@@ -9,7 +9,9 @@
     margin-right: 20px;
 }
 
-.la-artifact-data {}
+.la-artifact-data {
+    -custom-noop: noop;
+}
 
 .la-primary-data {
     overflow: hidden;

@@ -25,7 +25,6 @@ module.exports = merge(common({ isProd: true }), {
           name: "preact",
           chunks: "all",
         },
-        
       },
     },
     minimize: true,

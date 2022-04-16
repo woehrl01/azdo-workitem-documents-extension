@@ -1,4 +1,4 @@
-import "./WorkItemDocumentsGroup.scss";
+import styles from "./WorkItemDocumentsGroup.scss";
 
 import { useEffect, FC } from "react";
 import * as SDK from "azure-devops-extension-sdk";
@@ -17,20 +17,20 @@ type DocumentProps = {
 }
 
 const Document: FC<DocumentProps> = ({ document }) => (
-  <div className="la-item">
-    <div className="la-item-wrapper">
-      <div className="la-artifact-data">
-        <div className="la-primary-data">
-          <Icon iconName={getIcon(document.url)} className="la-primary-icon" />
+  <div className={styles.laItem}>
+    <div className={styles.laItemWrapper}>
+      <div className={styles.laArtifactData}>
+        <div className={styles.laPrimaryData}>
+          <Icon iconName={getIcon(document.url)} className={styles.laPrimaryIcon} />
           <Link href={document.url} target="_blank">
             {document.name}
           </Link>
         </div>
         {
           document.addedDate &&
-          <div className="la-additional-data">
-            <div className="la-additional-data-item">
-              <span className="la-text">Added <Ago date={document.addedDate} format={AgoFormat.Extended} /></span>
+          <div className={styles.laAdditionalData}>
+            <div className={styles.laAdditionalDataItem}>
+              <span className={styles.laText}>Added <Ago date={document.addedDate} format={AgoFormat.Extended} /></span>
             </div>
           </div>
         }
