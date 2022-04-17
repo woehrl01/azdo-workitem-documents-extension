@@ -1,5 +1,4 @@
-import styles from './WorkItemDocumentsGroup.module.scss';
-import './Main.scss';
+import styles from './style.module.scss';
 
 import { useEffect, FC } from 'react';
 import * as SDK from 'azure-devops-extension-sdk';
@@ -9,9 +8,9 @@ import { Icon } from 'azure-devops-ui/Icon';
 import { Ago } from 'azure-devops-ui/Ago';
 
 import { AgoFormat } from 'azure-devops-ui/Utilities/Date';
-import { NoProps, showRootComponent } from '../../Common';
-import { ILinkedDocument, useLinkedDocuments } from '../../useLinkedDocument';
-import { getIcon } from '../../UriOptimizer';
+import { NoProps } from 'components/Common';
+import { ILinkedDocument, useLinkedDocuments } from 'hooks/useLinkedDocument';
+import { getIcon } from 'services/UriOptimizer';
 
 type DocumentProps = {
   document: ILinkedDocument;
@@ -49,7 +48,7 @@ const Document: FC<DocumentProps> = ({ document }) => (
   </div>
 )
 
-export const WorkItemFormGroupComponent: FC<NoProps> = () => {
+export const LinkedDocumentList: FC<NoProps> = () => {
   const { documents } = useLinkedDocuments();
 
   useEffect(() => {
@@ -61,4 +60,4 @@ export const WorkItemFormGroupComponent: FC<NoProps> = () => {
   </>
 }
 
-showRootComponent(<WorkItemFormGroupComponent />);
+

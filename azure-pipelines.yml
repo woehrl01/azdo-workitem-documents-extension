@@ -1,10 +1,13 @@
 variables:
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
-  version: $[format('1.1.{0}', variables['Build.BuildId'])]
+  major: 1
+  minor: 2
+  patch: $[counter(variables['minor'], 0)]
+  version: $[format('{0}.{1}.{2}', variables['major'], variables['minor'], variables['patch'])]
   npm_config_cache: $(Pipeline.Workspace)/.npm
 
 pool:
-    vmImage: 'ubuntu-18.04'
+  vmImage: 'ubuntu-latest'
 
 stages:
 - stage: Dev
@@ -15,9 +18,7 @@ stages:
     - template: azure-pipelines.template.yml
       parameters:
         buildPostfix: ':dev'
-        PAT: $(PUBLISH_TOKEN)
         AdditionalCommandArgs: '--share-with $(DEV_TEAM)'
-        Version: $(version)
         BaseUri: $(DEV_BASE_URI)
 
 - stage: Prod
@@ -26,6 +27,4 @@ stages:
   - job: Publish
     steps:
     - template: azure-pipelines.template.yml
-      parameters:
-        PAT: $(PUBLISH_TOKEN)
-        Version: $(version)
+      

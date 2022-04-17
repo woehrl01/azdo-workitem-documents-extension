@@ -1,19 +1,16 @@
-import styles from './WorkItemDocumentsPage.module.scss';
-import './Main.scss';
+import styles from './style.module.scss';
 
 import { useState, FC } from 'react';
 
 import { Page } from 'azure-devops-ui/Page';
-import { Spinner, SpinnerSize } from 'azure-devops-ui/Spinner';
 
-import { showRootComponent } from '../../Common';
+import { NoProps } from 'components/Common';
 
-import { ILinkedDocument, useLinkedDocuments } from '../../useLinkedDocument';
-import { PageContent } from './PageContent';
-import { Tabs } from './Tabs';
-import { Empty } from './Empty';
-
-type NoProps = Record<string, never>
+import { ILinkedDocument, useLinkedDocuments } from 'hooks/useLinkedDocument';
+import { PageContent } from '../PageContent';
+import { Tabs } from '../Tabs/component';
+import { Empty } from '../Empty';
+import { Loading } from 'components/Loading';
 
 const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocument[]): string => {
     if (existingDocuments.findIndex(d => d.url === url) === -1) {
@@ -22,10 +19,7 @@ const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocu
     return url
 }
 
-
-const Loading: FC<NoProps> = () => <Spinner size={SpinnerSize.large} className={styles.loading} label="Loading..." />;
-
-const HubContent: FC<NoProps> = () => {
+export const DocumentPage: FC<NoProps> = () => {
     const [selectedDocumentUrl, setSelectedDocumentUrl] = useState<string>('');
     const { documents, isLoading } = useLinkedDocuments();
     const documentUrlToShow = fallbackToFirstPageIfNeeded(selectedDocumentUrl, documents);
@@ -45,5 +39,3 @@ const HubContent: FC<NoProps> = () => {
         </Page>
     );
 }
-
-showRootComponent(<HubContent />);

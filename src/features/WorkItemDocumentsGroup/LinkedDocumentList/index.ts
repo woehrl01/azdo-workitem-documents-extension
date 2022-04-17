@@ -1,0 +1,1 @@
+export { LinkedDocumentList } from './component';

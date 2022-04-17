@@ -2,13 +2,9 @@ parameters:
 - name: buildPostfix 
   type: string
   default: ''
-- name: PAT 
-  type: string
 - name: AdditionalCommandArgs 
   type: string
   default: ''
-- name: Version 
-  type: string
 - name: BaseUri 
   type: string
   default: ''
@@ -22,14 +18,6 @@ steps:
 - script: npm install -g npm@8.7
   displayName: 'Use NPM@8.7.x'
 
-- task: Cache@2
-  inputs:
-    key: 'npm | "$(Agent.OS)" | package-lock.json'
-    restoreKeys: |
-       npm | "$(Agent.OS)"
-    path: $(npm_config_cache)
-  displayName: Cache npm
-
 - script: npm ci
   displayName: 'Install dependencies'
 
@@ -37,8 +25,5 @@ steps:
   displayName: 'Run build'
 
 - script: |
-    npm run publish-extension${{ parameters.buildPostfix }} -- -t "${{ parameters.PAT }}" --override '{"version":"${{ parameters.Version }}","baseUri":"${{ parameters.BaseUri }}"}' ${{ parameters.AdditionalCommandArgs }}
+    npm run publish-extension${{ parameters.buildPostfix }} -- -t "$(PUBLISH_TOKEN)" --override '{"version":"$(version)","baseUri":"${{ parameters.BaseUri }}"}' ${{ parameters.AdditionalCommandArgs }}
   displayName: 'Publish extension'
-
-  
-    

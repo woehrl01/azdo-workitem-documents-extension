@@ -3,7 +3,7 @@ declare module '*.png' {
   export default value;
 }
 
-declare module '*.scss' {
+declare module '*.module.scss' {
   const classes: { [key: string]: string };
   export default classes;
 }

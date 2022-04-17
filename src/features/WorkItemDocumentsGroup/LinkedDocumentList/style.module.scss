@@ -38,3 +38,17 @@
     display: inline;
     vertical-align: top;
 }
+
+:global(#root) {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    /*we need at least one pixel to make 'SDK.resize()' work */
+    min-height: 1px;
+}
+
+:global(body) {
+    overflow: hidden;
+}

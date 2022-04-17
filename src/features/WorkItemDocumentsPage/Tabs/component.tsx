@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { Tab, TabBar, TabSize } from 'azure-devops-ui/Tabs';
-import { ILinkedDocument } from '../../useLinkedDocument';
-import { getIcon } from '../../UriOptimizer';
-import styles from './WorkItemDocumentsPage.module.scss';
+import { ILinkedDocument } from 'hooks/useLinkedDocument';
+import { getIcon } from 'services/UriOptimizer';
+import styles from './style.module.scss';
 
 /* important: needs to be a function and not a (function-) component.
  * otherwise the selection does not work */

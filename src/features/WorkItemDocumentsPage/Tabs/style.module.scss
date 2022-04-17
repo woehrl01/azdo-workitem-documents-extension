@@ -1,0 +1,8 @@
+@import "node_modules/azure-devops-ui/Core/_platformCommon.scss";
+
+.document-tab {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 250px;
+}
