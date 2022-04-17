@@ -17,26 +17,35 @@ type DocumentProps = {
   document: ILinkedDocument;
 }
 
-const Document: FC<DocumentProps> = ({ document }) => (
-  <div className={styles.laItem}>
-    <div className={styles.laItemWrapper}>
-      <div className={styles.laArtifactData}>
-        <div className={styles.laPrimaryData}>
-          <Icon iconName={getIcon(document.url)} className={styles.laPrimaryIcon} />
-          <Link href={document.url} target="_blank">
-            {document.name}
-          </Link>
-        </div>
-        {
-          document.addedDate &&
-          <div className={styles.laAdditionalData}>
-            <div className={styles.laAdditionalDataItem}>
-              <span className={styles.laText}>Added <Ago date={document.addedDate} format={AgoFormat.Extended} /></span>
-            </div>
-          </div>
-        }
+const PrimaryData: FC<DocumentProps> = ({ document }) => {
+  return (
+    <div className={styles.laPrimaryData}>
+      <Icon iconName={getIcon(document.url)} className={styles.laPrimaryIcon} />
+      <Link href={document.url} target="_blank">
+        {document.name}
+      </Link>
+    </div>
+  );
+}
+
+const AdditionalData: FC<DocumentProps> = ({ document }) => {
+  if (!document.addedDate) {
+    return <></>
+  }
+
+  return (
+    <div className={styles.laAdditionalData}>
+      <div className={styles.laAdditionalDataItem}>
+        <span className={styles.laText}>Added <Ago date={document.addedDate} format={AgoFormat.Extended} /></span>
       </div>
     </div>
+  );
+}
+
+const Document: FC<DocumentProps> = ({ document }) => (
+  <div className={styles.laItem}>
+    <PrimaryData document={document} />
+    <AdditionalData document={document} />
   </div>
 )
 
