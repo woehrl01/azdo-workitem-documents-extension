@@ -13,9 +13,6 @@ parameters:
   type: string
   default: ''
 
-variables:
-  npm_config_cache: $(Pipeline.Workspace)/.npm
-
 steps:
 - task: NodeTool@0
   inputs:

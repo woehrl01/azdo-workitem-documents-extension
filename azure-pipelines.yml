@@ -1,6 +1,7 @@
 variables:
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
   version: $[format('1.1.{0}', variables['Build.BuildId'])]
+  npm_config_cache: $(Pipeline.Workspace)/.npm
 
 pool:
     vmImage: 'ubuntu-18.04'
