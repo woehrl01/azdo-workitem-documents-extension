@@ -13,6 +13,8 @@ parameters:
   type: string
   default: ''
 
+variables:
+  npm_config_cache: $(Pipeline.Workspace)/.npm
 
 steps:
 - task: NodeTool@0
@@ -22,6 +24,14 @@ steps:
 
 - script: npm install -g npm@8
   displayName: 'Use NPM@8.x'
+
+- task: Cache@2
+  inputs:
+    key: 'npm | "$(Agent.OS)" | package-lock.json'
+    restoreKeys: |
+       npm | "$(Agent.OS)"
+    path: $(npm_config_cache)
+  displayName: Cache npm
 
 - script: npm ci
   displayName: 'Install dependencies'
