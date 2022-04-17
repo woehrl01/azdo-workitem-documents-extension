@@ -16,11 +16,11 @@ parameters:
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '12.x'
-  displayName: 'Use Node.js@12.x'
+    versionSpec: '16.x'
+  displayName: 'Use Node.js@16.x'
 
-- script: npm install -g npm@8
-  displayName: 'Use NPM@8.x'
+- script: npm install -g npm@8.7
+  displayName: 'Use NPM@8.7.x'
 
 - task: Cache@2
   inputs:
