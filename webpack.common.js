@@ -23,7 +23,7 @@ fs.readdirSync(codeDir).filter((dir) => {
 });
 
 const apmSource = fs.readFileSync(path.join(__dirname, './newrelic.apm.js'), 'utf8');
-const isEnableApm = true;
+const isEnableApm = false;
 
 const createHtmlWebpackPluginEntry = (name, isProd) => {
   return new HtmlWebpackPlugin({
@@ -66,7 +66,7 @@ module.exports = ({ isProd }) => {
         {
           test: /\.scss$/,
           use: [
-            isProd ? MiniCssExtractPlugin.loader : 'style-loader',
+            MiniCssExtractPlugin.loader,
             {
               loader: 'css-loader',
               options: {
@@ -85,7 +85,7 @@ module.exports = ({ isProd }) => {
         {
           test: /\.css$/,
           use: [
-            isProd ? MiniCssExtractPlugin.loader : 'style-loader',
+            MiniCssExtractPlugin.loader,
             'css-loader'
           ],
         },

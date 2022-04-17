@@ -5,7 +5,7 @@
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 
-module.exports = merge(common({isProd: false}), {
+module.exports = merge(common({ isProd: false }), {
   devtool: 'source-map',
   devServer: {
     watchFiles: ['src/**/*', 'dist/**/*'],
