@@ -23,7 +23,7 @@ fs.readdirSync(codeDir).filter((dir) => {
 });
 
 const apmSource = fs.readFileSync(path.join(__dirname, './newrelic.apm.js'), 'utf8');
-const isEnableApm = false;
+const isEnableApm = true;
 
 const createHtmlWebpackPluginEntry = (name, isProd) => {
   return new HtmlWebpackPlugin({
