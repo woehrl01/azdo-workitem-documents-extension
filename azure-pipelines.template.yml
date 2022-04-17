@@ -38,7 +38,7 @@ steps:
 
 - script: |
     npm run publish-extension${{ parameters.buildPostfix }} -- -t "${{ parameters.PAT }}" --override '{"version":"${{ parameters.Version }}","baseUri":"${{ parameters.BaseUri }}"}' ${{ parameters.AdditionalCommandArgs }}
-  displayName: 'publish build'
+  displayName: 'Publish extension'
 
   
     
