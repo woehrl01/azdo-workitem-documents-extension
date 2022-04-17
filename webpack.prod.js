@@ -20,11 +20,6 @@ module.exports = merge(common({ isProd: true }), {
     splitChunks: {
       chunks: 'all',
       cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/](react|reactdom)[\\/]/,
-          name: 'vendor',
-          chunks: 'all',
-        },
       },
     },
     minimize: true,

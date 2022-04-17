@@ -12,7 +12,7 @@ module.exports = {
         'prettier',
     ],
     rules: {
-        // 'eqeqeq': ['error', 'smart'],
+        'eqeqeq': ['error', 'smart'],
         'class-methods-use-this': 'warn',
         'no-shadow': 'error',
         'no-restricted-syntax': 'error',
