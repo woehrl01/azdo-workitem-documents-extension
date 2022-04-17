@@ -1,17 +1,17 @@
-import styles from "./WorkItemDocumentsGroup.module.scss";
-import "./Main.scss";
+import styles from './WorkItemDocumentsGroup.module.scss';
+import './Main.scss';
 
-import { useEffect, FC } from "react";
-import * as SDK from "azure-devops-extension-sdk";
+import { useEffect, FC } from 'react';
+import * as SDK from 'azure-devops-extension-sdk';
 
-import { Link } from "azure-devops-ui/Link"
-import { Icon } from "azure-devops-ui/Icon";
-import { Ago } from "azure-devops-ui/Ago";
+import { Link } from 'azure-devops-ui/Link'
+import { Icon } from 'azure-devops-ui/Icon';
+import { Ago } from 'azure-devops-ui/Ago';
 
-import { AgoFormat } from "azure-devops-ui/Utilities/Date";
-import { NoProps, showRootComponent } from "../../Common";
-import { ILinkedDocument, useLinkedDocuments } from "../../useLinkedDocument";
-import { getIcon } from "../../UriOptimizer";
+import { AgoFormat } from 'azure-devops-ui/Utilities/Date';
+import { NoProps, showRootComponent } from '../../Common';
+import { ILinkedDocument, useLinkedDocuments } from '../../useLinkedDocument';
+import { getIcon } from '../../UriOptimizer';
 
 type DocumentProps = {
   document: ILinkedDocument;

@@ -1,4 +1,4 @@
-import { IWorkItemChangedArgs, IWorkItemFieldChangedArgs, IWorkItemLoadedArgs, WorkItemTrackingServiceIds } from "azure-devops-extension-api/WorkItemTracking";
+import { IWorkItemChangedArgs, IWorkItemFieldChangedArgs, IWorkItemLoadedArgs, WorkItemTrackingServiceIds } from 'azure-devops-extension-api/WorkItemTracking';
 
 /** 
  * This is a minimal mock version to test WorkItemFormGroup
@@ -16,7 +16,7 @@ export function init(): Promise<void> {
 /**
  * Mocked getContributionId returns some Id
  */
-export function getContributionId(): string { return "someContributionId" }
+export function getContributionId(): string { return 'someContributionId' }
 
 
 /**
