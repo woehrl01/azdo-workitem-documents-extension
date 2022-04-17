@@ -1,23 +1,30 @@
-# Azure Pipelines configuration that builds and packages the extension.
-# To learn more about Azure Pipelines: https://aka.ms/learn-azure-pipelines
+variables:
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  version: $[format('1.1.{0}', variables['Build.BuildId'])]
 
-jobs:
-- job: Linux
-  pool:
+pool:
     vmImage: 'ubuntu-18.04'
-  steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '12.x'
-    displayName: 'Install Node.js'
 
-  - script: |
-      npm ci
-    displayName: 'Install dependencies'
+stages:
+- stage: Dev
+  condition: eq(variables.isMain, 'false')
+  jobs:
+  - job: Publish
+    steps:
+    - template: azure-pipelines.template.yml
+      parameters:
+        buildPostfix: ':dev'
+        PAT: $(PUBLISH_TOKEN)
+        AdditionalCommandArgs: '--share-with $(DEV_TEAM)'
+        Version: $(version)
+        BaseUri: $(DEV_BASE_URI)
 
-  - script: |
-      npm run build:dev
-    displayName: 'Compile and package'
-
-  
-    
+- stage: Prod
+  condition: eq(variables.isMain, 'true')
+  jobs:
+  - job: Publish
+    steps:
+    - template: azure-pipelines.template.yml
+      parameters:
+        PAT: $(PUBLISH_TOKEN)
+        Version: $(version)
