@@ -1,0 +1,21 @@
+diff --git a/node_modules/azure-devops-ui/Components/MouseWithin/MouseWithin.js b/node_modules/azure-devops-ui/Components/MouseWithin/MouseWithin.js
+index 871fd62..5516458 100644
+--- a/node_modules/azure-devops-ui/Components/MouseWithin/MouseWithin.js
++++ b/node_modules/azure-devops-ui/Components/MouseWithin/MouseWithin.js
+@@ -27,14 +27,11 @@ var MouseWithin = /** @class */ (function (_super) {
+                 }
+                 if (_this.props.enterDelay) {
+                     event.persist();
++                    var currentEvent = new event.constructor(event.type, event)
+                     // persist does not preserve the currentTarget so we do that manually
+-                    var currentTarget_1 = event.currentTarget;
+                     _this.enterTimeout = window.setTimeout(function () {
+                         _this.enterTimeout = 0;
+-                        var newCurrentTarget = event.currentTarget;
+-                        event.currentTarget = currentTarget_1;
+-                        _this.mouseEntered(event);
+-                        event.currentTarget = newCurrentTarget;
++                        _this.mouseEntered(currentEvent);
+                     }, _this.props.enterDelay);
+                 }
+                 else {
