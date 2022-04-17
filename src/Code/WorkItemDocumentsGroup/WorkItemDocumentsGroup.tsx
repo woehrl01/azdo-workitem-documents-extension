@@ -1,41 +1,51 @@
-import "./WorkItemDocumentsGroup.scss";
+import styles from './WorkItemDocumentsGroup.module.scss';
+import './Main.scss';
 
-import { useEffect, FC } from "react";
-import * as SDK from "azure-devops-extension-sdk";
+import { useEffect, FC } from 'react';
+import * as SDK from 'azure-devops-extension-sdk';
 
-import { Link } from "azure-devops-ui/Link"
-import { Icon } from "azure-devops-ui/Icon";
-import { Ago } from "azure-devops-ui/Ago";
+import { Link } from 'azure-devops-ui/Link'
+import { Icon } from 'azure-devops-ui/Icon';
+import { Ago } from 'azure-devops-ui/Ago';
 
-import { AgoFormat } from "azure-devops-ui/Utilities/Date";
-import { NoProps, showRootComponent } from "../../Common";
-import { ILinkedDocument, useLinkedDocuments } from "../../useLinkedDocument";
-import { getIcon } from "../../UriOptimizer";
+import { AgoFormat } from 'azure-devops-ui/Utilities/Date';
+import { NoProps, showRootComponent } from '../../Common';
+import { ILinkedDocument, useLinkedDocuments } from '../../useLinkedDocument';
+import { getIcon } from '../../UriOptimizer';
 
 type DocumentProps = {
   document: ILinkedDocument;
 }
 
-const Document: FC<DocumentProps> = ({ document }) => (
-  <div className="la-item">
-    <div className="la-item-wrapper">
-      <div className="la-artifact-data">
-        <div className="la-primary-data">
-          <Icon iconName={getIcon(document.url)} className="la-primary-icon" />
-          <Link href={document.url} target="_blank">
-            {document.name}
-          </Link>
-        </div>
-        {
-          document.addedDate &&
-          <div className="la-additional-data">
-            <div className="la-additional-data-item">
-              <span className="la-text">Added <Ago date={document.addedDate} format={AgoFormat.Extended} /></span>
-            </div>
-          </div>
-        }
+const PrimaryData: FC<DocumentProps> = ({ document }) => {
+  return (
+    <div className={styles.laPrimaryData}>
+      <Icon iconName={getIcon(document.url)} className={styles.laPrimaryIcon} />
+      <Link href={document.url} target="_blank">
+        {document.name}
+      </Link>
+    </div>
+  );
+}
+
+const AdditionalData: FC<DocumentProps> = ({ document }) => {
+  if (!document.addedDate) {
+    return <></>
+  }
+
+  return (
+    <div className={styles.laAdditionalData}>
+      <div className={styles.laAdditionalDataItem}>
+        <span className={styles.laText}>Added <Ago date={document.addedDate} format={AgoFormat.Extended} /></span>
       </div>
     </div>
+  );
+}
+
+const Document: FC<DocumentProps> = ({ document }) => (
+  <div className={styles.laItem}>
+    <PrimaryData document={document} />
+    <AdditionalData document={document} />
   </div>
 )
 

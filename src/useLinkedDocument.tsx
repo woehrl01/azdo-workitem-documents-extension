@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
-import * as SDK from "azure-devops-extension-sdk";
-import { IWorkItemFormService, WorkItemRelation, WorkItemTrackingServiceIds } from "azure-devops-extension-api/WorkItemTracking";
-import { isValidUrl } from "./UriOptimizer";
+import { useState, useEffect, useCallback } from 'react';
+import * as SDK from 'azure-devops-extension-sdk';
+import { IWorkItemFormService, WorkItemRelation, WorkItemTrackingServiceIds } from 'azure-devops-extension-api/WorkItemTracking';
+import { isValidUrl } from './UriOptimizer';
 
 export interface ILinkedDocument {
     name: string;
@@ -55,7 +55,7 @@ export const useLinkedDocuments = (): IUseLinkedDocument => {
 
     const updateCurrentDocuments = useCallback(async () => {
         setIsLoading(true);
-        console.log("fetching and refreshing current documents");
+        console.log('fetching and refreshing current documents');
         const fetchedDocuments = await fetchCurrentDocuments();
         console.log(`received ${fetchedDocuments.length} documents`);
         setDocuments(fetchedDocuments);
@@ -95,13 +95,13 @@ class RelationBasedDocumentSource implements ILinkedDocumentSource {
     async readDocuments(): Promise<ILinkedDocument[]> {
         const relations = await this.formService.getWorkItemRelations();
         const documents = relations
-            .filter(f => f.rel === "Hyperlink" && f.attributes.isDeleted === false)
+            .filter(f => f.rel === 'Hyperlink' && f.attributes.isDeleted === false)
             .map(RelationBasedDocumentSource.mapRelationToDocument);
         return documents;
     }
 
     private static mapRelationToDocument(rel: WorkItemRelation): ILinkedDocument {
-        let name = rel.attributes.comment || "";
+        let name = rel.attributes.comment || '';
         if (/^\s*$/.test(name)) {
             name = rel.url;
         }
@@ -113,11 +113,11 @@ class DescriptionBasedDocumentSource implements ILinkedDocumentSource {
     constructor(private readonly formService: IWorkItemFormService) { }
 
     async readDocuments(): Promise<ILinkedDocument[]> {
-        const description = await this.formService.getFieldValue("System.Description", { returnOriginalValue: false }) as string;
+        const description = await this.formService.getFieldValue('System.Description', { returnOriginalValue: false }) as string;
 
         const parser = new DOMParser();
-        const document = parser.parseFromString(description, "text/html");
-        const links = document.querySelectorAll("a");
+        const document = parser.parseFromString(description, 'text/html');
+        const links = document.querySelectorAll('a');
 
         const crawled = Array.from(links)
             .filter(link => isValidUrl(link.href))

@@ -31,16 +31,16 @@ class DelegateUriOptimizer implements IUriOptimizer {
 
 const handlers = [
     new DelegateUriOptimizer(
-        "TextDocument",
+        'TextDocument',
         /^https:\/\/docs\.google\.com\//, (uri) => `${uri}?rm=minimal`
     ),
     new DelegateUriOptimizer(
-        "FolderList",
+        'FolderList',
         /^https:\/\/drive\.google\.com\/drive\/folders\/([^?]*)/,
         (_, result) => `https://drive.google.com/embeddedfolderview?id=${result[1]}#list`
     ),
     new DelegateUriOptimizer(
-        "ViewDashboard",
+        'ViewDashboard',
         /^https:\/\/app.diagrams.net\/#(.*)/,
         (uri, result) => `https://viewer.diagrams.net/?highlight=0000ff&edit=${encodeURIComponent(uri)}&layers=1&nav=1#${result[1]}`
     ),
@@ -64,5 +64,5 @@ export function optimizeUrl(url: string): string {
 }
 
 export function getIcon(url: string): string {
-    return foreachHandler(url, (h) => h.getIcon(url), () => "NavigateExternalInline");
+    return foreachHandler(url, (h) => h.getIcon(url), () => 'NavigateExternalInline');
 }

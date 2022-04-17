@@ -3,13 +3,8 @@
 .la-item {
     padding: 4px 0;
     position: relative;
-}
-
-.la-item-wrapper {
     margin-right: 20px;
 }
-
-.la-artifact-data {}
 
 .la-primary-data {
     overflow: hidden;
@@ -42,14 +37,4 @@
 .la-additional-data-item .la-text {
     display: inline;
     vertical-align: top;
-}
-
-#root {
-    flex-direction: column;
-    font-size: 12px;
-    min-height: 1px; //we need at least one pixel to make auto-height work
-}
-
-body {
-    overflow: hidden;
 }

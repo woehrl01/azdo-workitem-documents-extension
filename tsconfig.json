@@ -1,32 +1,38 @@
 {
-    "compilerOptions": {
-        "charset": "utf8",
-        "experimentalDecorators": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "strict": true,
-        "strictFunctionTypes": true,
-        "forceConsistentCasingInFileNames": true,
-        "noImplicitReturns": true,
-        "noImplicitThis": true,
-        "noImplicitAny": true,
-        "noImplicitOverride": true,
-        "strictNullChecks": true,
-        "noUnusedLocals": true,
-        "noFallthroughCasesInSwitch": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "target": "es5",
-        "downlevelIteration": true,
-        "importHelpers": true,
-        "rootDir": "src/",
-        "outDir": "dist/",
-        "jsx": "react-jsx",
-        "skipLibCheck": true,
-        "esModuleInterop": true
-    },
-    "include": [
-        "src",
-        "index.d.ts"
+  "compilerOptions": {
+    "charset": "utf8",
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "strict": true,
+    "strictFunctionTypes": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noFallthroughCasesInSwitch": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es5",
+    "downlevelIteration": true,
+    "importHelpers": true,
+    "rootDir": "src/",
+    "outDir": "dist/",
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules",
+        "options": {
+          "classnameTransform": "dashesOnly",
+          "customMatcher": "\\.scss$"
+        }
+      }
     ]
+  },
+  "include": ["src", "index.d.ts"]
 }
