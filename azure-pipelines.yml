@@ -1,8 +1,8 @@
 variables:
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
   major: 1
-  minor: 2
-  patch: $[counter(variables['minor'], 0)]
+  minor: 3
+  patch: $[counter(format('{0}.{1}', variables['major'], variables['minor']), 0)]
   version: $[format('{0}.{1}.{2}', variables['major'], variables['minor'], variables['patch'])]
   npm_config_cache: $(Pipeline.Workspace)/.npm
 
