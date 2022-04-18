@@ -47,11 +47,11 @@ module.exports = ({ isProd }) => {
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
       alias: {
-        'azure-devops-extension-sdk': path.resolve('node_modules/azure-devops-extension-sdk'),
         'react': 'preact/compat',
         'react-dom/test-utils': 'preact/test-utils',
         'react-dom': 'preact/compat',     // Must be below test-utils
         'react/jsx-runtime': 'preact/jsx-runtime',
+        /* the following, need to be in-sync with tsconfig.json:"compilerOptions.paths" */
         'hooks': path.resolve(__dirname, 'src/hooks'),
         'services': path.resolve(__dirname, 'src/services'),
         'components': path.resolve(__dirname, 'src/components'),
