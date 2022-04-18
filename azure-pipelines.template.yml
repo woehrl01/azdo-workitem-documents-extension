@@ -2,10 +2,10 @@ parameters:
 - name: buildPostfix 
   type: string
   default: ''
-- name: AdditionalCommandArgs 
+- name: additionalCommandArgs 
   type: string
   default: ''
-- name: BaseUri 
+- name: baseUri 
   type: string
   default: ''
 
@@ -25,5 +25,5 @@ steps:
   displayName: 'Run build'
 
 - script: |
-    npm run publish-extension${{ parameters.buildPostfix }} -- -t "$(PUBLISH_TOKEN)" --override '{"version":"$(version)","baseUri":"${{ parameters.BaseUri }}"}' ${{ parameters.AdditionalCommandArgs }}
+    npm run publish-extension${{ parameters.buildPostfix }} -- -t "$(PUBLISH_TOKEN)" --override '{"version":"$(version)","baseUri":"${{ parameters.baseUri }}"}' ${{ parameters.additionalCommandArgs }}
   displayName: 'Publish extension'

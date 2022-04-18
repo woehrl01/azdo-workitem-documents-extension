@@ -18,8 +18,8 @@ stages:
     - template: azure-pipelines.template.yml
       parameters:
         buildPostfix: ':dev'
-        AdditionalCommandArgs: '--share-with $(DEV_TEAM)'
-        BaseUri: $(DEV_BASE_URI)
+        additionalCommandArgs: '--share-with $(DEV_TEAM)'
+        baseUri: $(DEV_BASE_URI)
 
 - stage: Prod
   condition: eq(variables.isMain, 'true')
