@@ -23,8 +23,7 @@ export class DelegateUriOptimizer implements IUriOptimizer {
         return uri;
     }
 
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    getIcon(url: string): string {
+    getIcon(_url: string): string {
         return this.icon;
     }
 }

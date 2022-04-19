@@ -3,8 +3,6 @@ import * as SDK from 'azure-devops-extension-sdk';
 import { IWorkItemChangedArgs, IWorkItemFieldChangedArgs, IWorkItemLoadedArgs, IWorkItemNotificationListener } from 'azure-devops-extension-api/WorkItemTracking';
 import { Noop } from 'components/Common';
 
-
-
 export const registerSdk = async (callback: () => void): Promise<void> => {
     await SDK.init({ loaded: true });
     SDK.register(SDK.getContributionId(), () => ({
