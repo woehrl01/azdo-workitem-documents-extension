@@ -14,11 +14,12 @@ module.exports = {
     rules: {
         'eqeqeq': ['error', 'smart'],
         'class-methods-use-this': 'warn',
-        'no-shadow': 'error',
+        '@typescript-eslint/no-shadow': 'error',
         'no-restricted-syntax': 'error',
         'react/react-in-jsx-scope': 'off',
         'no-var': 'error',
         '@typescript-eslint/explicit-function-return-type': 'error',
-        'quotes': ['error', 'single'],
+        '@typescript-eslint/quotes': ['warn', 'single'],
+        '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }]
     }
 };

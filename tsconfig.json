@@ -29,10 +29,25 @@
         "name": "typescript-plugin-css-modules",
         "options": {
           "classnameTransform": "dashesOnly",
-          "customMatcher": "\\.scss$"
+          "customMatcher": "module\\.scss$"
         }
       }
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "hooks/*": [
+        "src/hooks/*"
+      ],
+      "services/*": [
+        "src/services/*"
+      ],
+      "components/*": [
+        "src/components/*"
+      ],
+    }
   },
-  "include": ["src", "index.d.ts"]
+  "include": [
+    "src",
+    "index.d.ts"
+  ]
 }

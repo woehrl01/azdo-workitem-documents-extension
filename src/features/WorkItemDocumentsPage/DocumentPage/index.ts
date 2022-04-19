@@ -1,0 +1,1 @@
+export { DocumentPage } from './component';

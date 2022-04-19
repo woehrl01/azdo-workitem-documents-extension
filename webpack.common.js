@@ -13,21 +13,21 @@ const PreloadPlugin = require('@vue/preload-webpack-plugin');
 // Webpack entry points. Mapping from resulting bundle name to the source file entry.
 const entries = {};
 
-// Loop through subfolders in the "Code" folder and add an entry for each one
-const codeDir = path.join(__dirname, 'src/Code');
+// Loop through subfolders in the "features" folder and add an entry for each one
+const codeDir = path.join(__dirname, 'src/features');
 fs.readdirSync(codeDir).filter((dir) => {
   if (fs.statSync(path.join(codeDir, dir)).isDirectory()) {
     entries[dir] =
-      './' + path.relative(process.cwd(), path.join(codeDir, dir, dir));
+      './' + path.relative(process.cwd(), path.join(codeDir, dir));
   }
 });
 
-const apmSource = fs.readFileSync(path.join(__dirname, './newrelic.apm.js'), 'utf8');
+const apmSource = fs.readFileSync(path.join(__dirname, './src/services/NewRelic/snippet.html'), 'utf8');
 const isEnableApm = false;
 
 const createHtmlWebpackPluginEntry = (name, isProd) => {
   return new HtmlWebpackPlugin({
-    template: './src/Code/index.ejs',
+    template: './src/features/index.ejs',
     filename: `${name}.html`,
     chunks: [name],
     publicPath: '',
@@ -47,11 +47,14 @@ module.exports = ({ isProd }) => {
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
       alias: {
-        'azure-devops-extension-sdk': path.resolve('node_modules/azure-devops-extension-sdk'),
         'react': 'preact/compat',
         'react-dom/test-utils': 'preact/test-utils',
         'react-dom': 'preact/compat',     // Must be below test-utils
-        'react/jsx-runtime': 'preact/jsx-runtime'
+        'react/jsx-runtime': 'preact/jsx-runtime',
+        /* the following, need to be in-sync with tsconfig.json:"compilerOptions.paths" */
+        'hooks': path.resolve(__dirname, 'src/hooks'),
+        'services': path.resolve(__dirname, 'src/services'),
+        'components': path.resolve(__dirname, 'src/components'),
       },
     },
     stats: {

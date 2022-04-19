@@ -1,0 +1,46 @@
+{
+    "manifestVersion": 1,
+    "publisher": "lukaswoehrl",
+    "description": "Display linked documents on an additional tab at the work item form for direct viewing.",
+    "categories": [
+        "Azure Boards"
+    ],
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "scopes": [
+        "vso.work"
+    ],
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/woehrl01/azdo-workitem-documents-extension/"
+    },
+    "links": {
+        "support": {
+            "uri": "https://github.com/woehrl01/azdo-workitem-documents-extension/issues"
+        },
+        "license": {
+            "uri": "https://github.com/woehrl01/azdo-workitem-documents-extension/blob/main/LICENSE"
+        }
+    },
+    "icons": {
+        "default": "logo.png"
+    },
+    "content": {
+        "details": {
+            "path": "README.md"
+        }
+    },
+    "files": [
+        {
+            "path": "static",
+            "addressable": true
+        },
+        {
+            "path": "dist",
+            "addressable": true
+        }
+    ]
+}

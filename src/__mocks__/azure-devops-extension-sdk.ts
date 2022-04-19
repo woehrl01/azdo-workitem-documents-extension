@@ -43,7 +43,7 @@ export let spyWorkItemCallBackAccessor: workItemCallBackType;
 /**
  * Mocked register returns empty data structure
  */
-export function register(instanceId: string, instance: workItemCallBackType):void {
+export function register(instanceId: string, instance: workItemCallBackType): void {
     spyWorkItemCallBackAccessor = instance;
 }
 
