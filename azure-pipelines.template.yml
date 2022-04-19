@@ -27,3 +27,4 @@ steps:
 - script: |
     npm run publish-extension${{ parameters.buildPostfix }} -- -t "$(PUBLISH_TOKEN)" --override '{"version":"$(version)","baseUri":"${{ parameters.baseUri }}"}' ${{ parameters.additionalCommandArgs }}
   displayName: 'Publish extension'
+  condition: eq(variables.isDependabot, 'false')
