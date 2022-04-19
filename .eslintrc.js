@@ -20,5 +20,6 @@ module.exports = {
         'no-var': 'error',
         '@typescript-eslint/explicit-function-return-type': 'error',
         'quotes': ['error', 'single'],
+        '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }]
     }
 };

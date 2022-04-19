@@ -1,21 +1,32 @@
 import * as SDK from 'azure-devops-extension-sdk';
 
+import { IWorkItemChangedArgs, IWorkItemFieldChangedArgs, IWorkItemLoadedArgs, IWorkItemNotificationListener } from 'azure-devops-extension-api/WorkItemTracking';
+import { Noop } from 'components/Common';
+
+
+
 export const registerSdk = async (callback: () => void): Promise<void> => {
     await SDK.init({ loaded: true });
     SDK.register(SDK.getContributionId(), () => ({
-        onLoaded(): void {
+        onLoaded(_: IWorkItemLoadedArgs): void {
+            Noop();
+        },
+        onFieldChanged(_: IWorkItemFieldChangedArgs): void {
             callback();
         },
-        onFieldChanged(): void {
+        onSaved(_: IWorkItemChangedArgs): void {
             callback();
         },
-        onReset(): void {
+        onReset(_: IWorkItemChangedArgs): void {
             callback();
         },
-        onRefresh(): void {
+        onRefreshed(_: IWorkItemChangedArgs): void {
             callback();
+        },
+        onUnloaded(_: IWorkItemChangedArgs): void {
+            Noop();
         }
-    }));
+    } as IWorkItemNotificationListener));
     await SDK.ready();
     /* call the callback initally if events have
      * been missed because of later loading */
