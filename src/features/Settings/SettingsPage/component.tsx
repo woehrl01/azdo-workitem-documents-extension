@@ -5,15 +5,14 @@ import { Page } from 'azure-devops-ui/Page';
 import { Header, TitleSize } from 'azure-devops-ui/Header';
 import { TextField, TextFieldWidth } from 'azure-devops-ui/TextField';
 import styles from './style.module.scss';
-import * as SDK from 'azure-devops-extension-sdk';
-import { CommonServiceIds, IExtensionDataManager, IExtensionDataService } from 'azure-devops-extension-api';
 import { useStoredValue } from 'hooks/useStoredValue';
+import { Loading } from 'components/Loading';
 
 export const SettingsPage: FC<NoProps> = () => {
-  const { isLoading, value, setValue } = useStoredValue('settings', '0');
+  const { isLoading, value, setValue } = useStoredValue<string>('settings', '0');
 
   if (isLoading) {
-    return <></>
+    return <Loading />
   }
 
   return (
@@ -23,7 +22,7 @@ export const SettingsPage: FC<NoProps> = () => {
         <div>{value}</div>
         <TextField
           value={value}
-          onChange={(e, newValue): void => setValue(newValue)}
+          onChange={(_, newValue): void => setValue(newValue)}
           placeholder="Value"
           width={TextFieldWidth.standard}
         />
@@ -32,9 +31,4 @@ export const SettingsPage: FC<NoProps> = () => {
   );
 };
 
-export async function getDataManager(): Promise<IExtensionDataManager> {
-  const service = await SDK.getService<IExtensionDataService>(CommonServiceIds.ExtensionDataService);
-  const manager = await service.getExtensionDataManager(SDK.getContributionId(), await SDK.getAccessToken());
-  return manager;
-}
 
