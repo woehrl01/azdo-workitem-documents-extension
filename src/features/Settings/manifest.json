@@ -1,0 +1,16 @@
+{
+    "contributions": [
+        {
+            "id": "workitem-documents-settings",
+            "type": "ms.vss-web.hub",
+            "description": "Settings hub to display linked documents",
+            "targets": [
+                "ms.vss-web.project-admin-hub-group"
+            ],
+            "properties": {
+                "name": "Embedded Documents",
+                "uri": "dist/Settings.html"
+            }
+        }
+    ]
+}
