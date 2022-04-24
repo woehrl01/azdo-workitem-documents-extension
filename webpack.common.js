@@ -81,7 +81,6 @@ module.exports = ({ isProd }) => {
                 }
               }
             },
-            'azure-devops-ui/buildScripts/css-variables-loader',
             'sass-loader',
           ],
         },

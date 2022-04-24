@@ -1,5 +1,5 @@
-import { showRootComponent } from 'components/Common';
+import { showRootComponentAfterSDKInit } from 'components/Common';
 import { LinkedDocumentList } from './LinkedDocumentList/component';
 import './styles.scss';
 
-showRootComponent(<LinkedDocumentList />);
+showRootComponentAfterSDKInit(<LinkedDocumentList />);

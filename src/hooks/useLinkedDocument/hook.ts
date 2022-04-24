@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { fetchCurrentDocuments, ILinkedDocument } from 'services/DocumentSource';
-import { registerSdk } from './registerSdk';
+import { registerWorkItemChangeHandler } from './registerWorkItemChangeHandler';
 
 export interface IUseLinkedDocument {
     documents: ILinkedDocument[];
@@ -21,7 +21,7 @@ export const useLinkedDocuments = (): IUseLinkedDocument => {
     }, []);
 
     useEffect(() => {
-        registerSdk(updateCurrentDocuments);
+        registerWorkItemChangeHandler(updateCurrentDocuments);
     }, []);
 
     return { documents, isLoading };
