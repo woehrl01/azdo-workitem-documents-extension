@@ -13,7 +13,6 @@ interface IConfigurationState {
 
 const useConfiguration = (): IConfigurationState => {
     const config = SDK.getConfiguration();
-
     return {
         confirmDialog: (): void => { config.dialog.close(); },
         abortDialog: (): void => { config.dialog.close(); }
