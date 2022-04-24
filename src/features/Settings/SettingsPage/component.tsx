@@ -18,11 +18,11 @@ export const SettingsPage: FC<NoProps> = () => {
   }, [rules]);
 
   const deleteItem = useCallback((target: ITableItem): void => {
-    setRules([...rules.filter(d => d !== target)]);
+    setRules([...rules.filter(r => r !== target)]);
   }, [rules]);
 
   const changeItem = useCallback((rowIndex: number, target: ITableItem): void => {
-    setRules([...rules.map((d, i) => i === rowIndex ? target : d)]);
+    setRules([...rules.map((r, i) => i === rowIndex ? target : r)]);
   }, [rules]);
 
   return (

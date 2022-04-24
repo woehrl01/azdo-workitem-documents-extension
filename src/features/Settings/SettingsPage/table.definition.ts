@@ -2,10 +2,23 @@ import styles from './style.module.scss';
 import { ColumnMore, ITableColumn } from 'azure-devops-ui/Table';
 import { IHeaderCommandBarItem } from 'azure-devops-ui/HeaderCommandBar';
 import { ArrayItemProvider } from 'azure-devops-ui/Utilities/Provider';
-import { DropdownCell } from './DropdownCell';
-import { InputCell } from './InputCell';
+import { DropdownCell } from './Controls/DropdownCell';
+import { InputCell } from './Controls/InputCell';
 import { IReadonlyObservableValue, ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { ITableItem } from './types';
+
+function isValidRegex(value: string): boolean {
+    if (value.length === 0) {
+        return false;
+    }
+
+    try {
+        new RegExp(value);
+        return true;
+    } catch {
+        return false;
+    }
+}
 
 const ruleTypeItems = [
     {
@@ -25,13 +38,15 @@ export const columns = (onDelete: (target: ITableItem) => void, onChange: (rowIn
             id: 'rule',
             name: 'Rule (RegEx)',
             width: -60,
-            onChange: onChange
+            onEdit: onChange,
+            hasError: (value: string) => !isValidRegex(value),
+            hasErrorMessage: 'Invalid regular expression'
         }),
         new DropdownCell({
             id: 'type',
             name: 'Type',
             width: -30,
-            onChange: onChange,
+            onEdit: onChange,
             items: ruleTypeItems
         }),
         new ColumnMore(target => {
@@ -60,6 +75,7 @@ export const commandBar = (disabled: boolean, onActivate: () => void): IHeaderCo
             isPrimary: true,
             disabled: disabled,
             onActivate: onActivate,
+            text: 'Add rule',
             tooltipProps: {
                 text: 'Add new rule'
             },

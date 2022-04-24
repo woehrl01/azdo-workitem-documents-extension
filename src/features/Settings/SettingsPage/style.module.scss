@@ -4,16 +4,12 @@
     background-color: inherit;
 }
 
-.rule-input {
-    font-family: monospace;
-}
-
 .blocked {
-    color: #c62828;
+    color: $status-error-text;
 }
 
 .allowed {
-    color: #388e3c;
+    color: $status-success-text;
 }
 
 .explaination {
