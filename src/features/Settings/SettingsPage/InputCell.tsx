@@ -1,14 +1,20 @@
 import { TextField, TextFieldWidth } from 'azure-devops-ui/TextField';
 import styles from './style.module.scss';
 import { ITableColumn, SimpleTableCell } from 'azure-devops-ui/Table';
-import { ChangeHandler, ITableItem } from './component';
+import { ChangeHandler, ITableItem } from './types';
 
+type InputCellProps = {
+    id: string;
+    name: string;
+    width: number;
+    onChange: ChangeHandler;
+}
 export class InputCell {
     private onChange: ChangeHandler;
     public id: string;
     public width: number;
     public name: string;
-    public constructor(id: string, name: string, width: number, onChange: ChangeHandler) {
+    public constructor({ id, name, width, onChange }: InputCellProps) {
         this.onChange = onChange;
         this.id = id;
         this.width = width;

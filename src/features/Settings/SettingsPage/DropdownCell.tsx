@@ -1,19 +1,30 @@
-import styles from './style.module.scss';
 import { ITableColumn, SimpleTableCell } from 'azure-devops-ui/Table';
 import { Dropdown } from 'azure-devops-ui/Dropdown';
 import { DropdownSelection } from 'azure-devops-ui/Utilities/DropdownSelection';
-import { ChangeHandler, ITableItem } from './component';
+import { ChangeHandler, ITableItem } from './types';
+import { IListBoxItem } from 'azure-devops-ui/ListBox';
 
+type DropdownCellProps = {
+    id: string;
+    name: string;
+    width: number;
+    onChange: ChangeHandler;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    items: IListBoxItem<{}>[];
+}
 export class DropdownCell {
     private onChange: ChangeHandler;
     public id: string;
     public width: number;
     public name: string;
-    public constructor(id: string, name: string, width: number, onChange: ChangeHandler) {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    private items: IListBoxItem<{}>[];
+    public constructor({ id, name, width, onChange, items }: DropdownCellProps) {
         this.onChange = onChange;
         this.id = id;
         this.width = width;
         this.name = name;
+        this.items = items;
     }
 
     public renderCell(rowIndex: number, columnIndex: number, tableColumn: ITableColumn<ITableItem>, tableItem: ITableItem, _ariaRowIndex?: number): JSX.Element {
@@ -23,20 +34,7 @@ export class DropdownCell {
         };
 
         const selection = new DropdownSelection();
-        selection.select(tableItem[tableColumn.id]);
-
-        const items = [
-            {
-                id: '0',
-                text: 'Allow',
-                iconProps: { iconName: 'Accept', className: styles.allowed }
-            },
-            {
-                id: '1',
-                text: 'Block',
-                iconProps: { iconName: 'Blocked', className: styles.blocked }
-            }
-        ];
+        selection.select(this.items.findIndex(item => item.id === tableItem[tableColumn.id]));
 
         return <SimpleTableCell key={'col-' + columnIndex}
             columnIndex={columnIndex}
@@ -46,7 +44,7 @@ export class DropdownCell {
                 ariaLabel="Basic"
                 className="example-dropdown"
                 placeholder="Select an Option"
-                items={items}
+                items={this.items}
                 onSelect={(_, item): void => setValue(item.id)}
                 enforceSingleSelect={true}
                 minCalloutWidth={150}
