@@ -2,30 +2,29 @@ variables:
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
   isDependabot: $[contains(variables['Build.SourceBranch'], 'dependabot/')]
   major: 1
-  minor: 4
+  minor: 5
   patch: $[counter(format('{0}.{1}-{2}', variables['major'], variables['minor'], variables['isMain']), 0)]
   version: $[format('{0}.{1}.{2}', variables['major'], variables['minor'], variables['patch'])]
   npm_config_cache: $(Pipeline.Workspace)/.npm
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 
 stages:
-- stage: Dev
-  condition: eq(variables.isMain, 'false')
-  jobs:
-  - job: Publish
-    steps:
-    - template: azure-pipelines.template.yml
-      parameters:
-        buildPostfix: ':dev'
-        additionalCommandArgs: '--share-with $(DEV_TEAM)'
-        baseUri: $(DEV_BASE_URI)
+  - stage: Dev
+    condition: eq(variables.isMain, 'false')
+    jobs:
+      - job: Publish
+        steps:
+          - template: azure-pipelines.template.yml
+            parameters:
+              buildPostfix: ":dev"
+              additionalCommandArgs: "--share-with $(DEV_TEAM)"
+              baseUri: $(DEV_BASE_URI)
 
-- stage: Prod
-  condition: eq(variables.isMain, 'true')
-  jobs:
-  - job: Publish
-    steps:
-    - template: azure-pipelines.template.yml
-      
+  - stage: Prod
+    condition: eq(variables.isMain, 'true')
+    jobs:
+      - job: Publish
+        steps:
+          - template: azure-pipelines.template.yml

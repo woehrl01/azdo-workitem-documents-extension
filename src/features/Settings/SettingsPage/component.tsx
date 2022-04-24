@@ -43,9 +43,9 @@ export const SettingsPage: FC<NoProps> = () => {
         />
 
         <Card className={styles.explaination}>
-          Blocking rules will hide the documents from showing up in the embedded documents list.
-          <br />
           Allow rules will include the documents in the list if they are referenced inside the 'Description' field.
+          <br />
+          Blocking rules will hide the documents from showing up in the embedded documents list. Blocking overrides allow.
         </Card>
       </div>
 

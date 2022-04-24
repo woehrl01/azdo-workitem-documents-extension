@@ -36,7 +36,7 @@ You can hide the tab or group by [modifing your process](https://docs.microsoft.
 
 To reduce clutter and embedding incompatible documents, we only crawl for supported documents inside the _Description_ field. If you still want to embed them, add them via a _Hyperlink_ relation.
 
-If you want to generally allow these kind of documents, specify an _Allow_ rule in the settings.
+If you want to generally allow these kind of documents, specify an _Allow rule_ in the settings.
 
 ### Why are some documents, defined via an _Allow rule_, not shown?
 
