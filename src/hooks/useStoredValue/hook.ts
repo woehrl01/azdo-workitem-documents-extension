@@ -35,12 +35,13 @@ export const useStoredValue = <T>(name: string, defaultValue: T): UseStoredValue
   }, [name]);
 
   /* store the data in the datamanager in a debounced way */
-  const debouncedValue = useDebounce(value, 750);
+  const debouncedValue = useDebounce(value, 500);
   useEffect(() => {
     let isSetData = true;
     const storeValue = async (): Promise<void> => {
       const manager = await getDataManager();
       if (isSetData) {
+        console.debug(JSON.stringify(debouncedValue));
         await manager.setValue(name, debouncedValue);
       }
     };
