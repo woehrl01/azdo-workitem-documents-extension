@@ -6,19 +6,8 @@ import { DropdownCell } from './Controls/DropdownCell';
 import { InputCell } from './Controls/InputCell';
 import { IReadonlyObservableValue, ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { ITableItem } from './types';
+import { isValidRule } from 'services/Rules';
 
-function isValidRegex(value: string): boolean {
-    if (value.length === 0) {
-        return false;
-    }
-
-    try {
-        new RegExp(value);
-        return true;
-    } catch {
-        return false;
-    }
-}
 
 const ruleTypeItems = [
     {
@@ -39,7 +28,7 @@ export const columns = (onDelete: (target: ITableItem) => void, onChange: (rowIn
             name: 'Rule (RegEx)',
             width: -60,
             onEdit: onChange,
-            hasError: (value: string) => !isValidRegex(value),
+            hasError: (value: string) => !isValidRule(value),
             hasErrorMessage: 'Invalid regular expression'
         }),
         new DropdownCell({

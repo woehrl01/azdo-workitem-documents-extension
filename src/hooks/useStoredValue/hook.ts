@@ -1,13 +1,6 @@
 import { useEffect, useState } from 'react';
-import * as SDK from 'azure-devops-extension-sdk';
-import { CommonServiceIds, IExtensionDataManager, IExtensionDataService } from 'azure-devops-extension-api';
 import { useDebounce } from 'usehooks-ts';
-
-export async function getDataManager(): Promise<IExtensionDataManager> {
-  const service = await SDK.getService<IExtensionDataService>(CommonServiceIds.ExtensionDataService);
-  const manager = await service.getExtensionDataManager(SDK.getContributionId(), await SDK.getAccessToken());
-  return manager;
-}
+import { getDataManager } from 'services/DataManager';
 
 export type UseStoredValueState<T> = {
   value: T;
