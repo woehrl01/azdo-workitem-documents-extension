@@ -4,6 +4,7 @@ import { IHostPageLayoutService, CommonServiceIds } from 'azure-devops-extension
 
 export async function openAddDocumentDialog(): Promise<void> {
     const dialogService = await SDK.getService<IHostPageLayoutService>(CommonServiceIds.HostPageLayoutService);
-    const contributionId = await SDK.getContributionId();
-    dialogService.openCustomDialog(`${contributionId}.add-document-dialog`);
+    dialogService.openCustomDialog('.add-document-dialog', {
+        title: 'Add Document',
+    });
 }

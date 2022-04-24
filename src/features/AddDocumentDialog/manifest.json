@@ -2,7 +2,7 @@
     "contributions": [
         {
             "id": "add-document-dialog",
-            "type": "ms.vss-web.external-content",
+            "type": "ms.vss-web.control",
             "properties": {
                 "uri": "dist/AddDocumentDialog.html"
             }

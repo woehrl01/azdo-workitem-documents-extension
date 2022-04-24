@@ -12,7 +12,14 @@ const dismiss = (): void => {
 export const Dialog: FC<NoProps> = () => {
 
     useEffect(() => {
-        SDK.resize()
+        const register = async (): Promise<void> => {
+            await SDK.init();
+            await SDK.ready();
+            const config = SDK.getConfiguration();
+            console.log(JSON.stringify(config))
+            SDK.resize(400, 400);
+        }
+        register();
     }, []);
 
     return <div className="sample-panel flex-column flex-grow">
