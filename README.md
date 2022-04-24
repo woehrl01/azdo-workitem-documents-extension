@@ -36,6 +36,12 @@ You can hide the tab or group by [modifing your process](https://docs.microsoft.
 
 To reduce clutter and embedding incompatible documents, we only crawl for supported documents inside the _Description_ field. If you still want to embed them, add them via a _Hyperlink_ relation.
 
+If you want to generally allow these kind of documents, specify an _Allow rule_ in the settings.
+
+### Why are some documents, defined via an _Allow rule_, not shown?
+
+To ensure proper rendering inside an iframe, the extension requires that the URI needs to match the https scheme. If you think this should be changed, please let me know.
+
 ---
 
 In some scenarios, this extension might be treated as a must-have feature. I hope that it will be useful for you and your team. The extension is available on the [Azure DevOps Marketplace](https://marketplace.visualstudio.com/items?itemName=lukaswoehrl.azdo-workitem-documents) and on [GitHub](https://github.com/woehrl01/azdo-workitem-documents-extension) under MIT license!

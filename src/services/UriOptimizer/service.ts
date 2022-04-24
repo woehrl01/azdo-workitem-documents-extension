@@ -14,7 +14,7 @@ const handlers = [
         'ViewDashboard',
         /^https:\/\/app.diagrams.net\/#(.*)/,
         (uri, result) => `https://viewer.diagrams.net/?highlight=0000ff&edit=${encodeURIComponent(uri)}&layers=1&nav=1#${result[1]}`
-    ),
+    )
 ];
 
 function foreachHandler<T>(uri: string, found: (handler: IUriOptimizer) => T, notFound: () => T): T {
