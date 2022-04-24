@@ -13,7 +13,7 @@ export interface IValidRule {
 
 async function getRules(): Promise<IStoredRule[]> {
     const datamanager = await getDataManager();
-    return await datamanager.getValue<IStoredRule[]>('rules');
+    return await datamanager.getValue<IStoredRule[]>('rules') || [];
 }
 
 export function isValidRule(value: string): boolean {

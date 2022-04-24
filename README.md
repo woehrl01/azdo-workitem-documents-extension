@@ -38,7 +38,7 @@ To reduce clutter and embedding incompatible documents, we only crawl for suppor
 
 If you want to generally allow these kind of documents, specify an _Allow rule_ in the settings.
 
-### Why are some documents, defined via an _Allow rule_, not shown?
+#### Why are some documents, defined via an _Allow rule_, not shown?
 
 To ensure proper rendering inside an iframe, the extension requires that the URI needs to match the https scheme. If you think this should be changed, please let me know.
 
