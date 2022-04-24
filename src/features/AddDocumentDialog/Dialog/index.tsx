@@ -7,19 +7,21 @@ import { FormItem } from 'azure-devops-ui/FormItem';
 import styles from './style.module.scss'
 
 interface IConfigurationState {
-    dismissDialog: () => void;
+    confirmDialog: () => void;
+    abortDialog: () => void;
 }
 
 const useConfiguration = (): IConfigurationState => {
     const config = SDK.getConfiguration();
 
     return {
-        dismissDialog: config.dialog.close
+        confirmDialog: (): void => { config.dialog.close(); },
+        abortDialog: (): void => { config.dialog.close(); }
     }
 }
 
 export const Dialog: FC<NoProps> = () => {
-    const config = useConfiguration();
+    const { abortDialog, confirmDialog } = useConfiguration();
     const [url, setUrl] = useState<string>('');
     const [description, setDescription] = useState<string>('');
 
@@ -44,8 +46,8 @@ export const Dialog: FC<NoProps> = () => {
             </FormItem>
         </div>
         <div className={styles.footer}>
-            <Button onClick={config.dismissDialog} primary={true}>OK</Button>
-            <Button onClick={config.dismissDialog}>Cancel</Button>
+            <Button onClick={confirmDialog} primary={true}>OK</Button>
+            <Button onClick={abortDialog}>Cancel</Button>
         </div>
     </div >
 }
