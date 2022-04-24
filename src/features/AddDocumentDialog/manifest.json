@@ -1,0 +1,11 @@
+{
+    "contributions": [
+        {
+            "id": "add-document-dialog",
+            "type": "ms.vss-web.external-content",
+            "properties": {
+                "uri": "dist/AddDocumentDialog.html"
+            }
+        }
+    ]
+}
