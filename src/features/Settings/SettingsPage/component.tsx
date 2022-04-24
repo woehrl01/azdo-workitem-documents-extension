@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback } from 'react';
 
 import { NoProps } from 'components/Common';
 import { Page } from 'azure-devops-ui/Page';
@@ -67,31 +67,21 @@ const loadingList = new ArrayItemProvider<IReadonlyObservableValue<ITableItem | 
   new Array(3).fill(new ObservableValue<ITableItem | undefined>(undefined)));
 
 export const SettingsPage: FC<NoProps> = () => {
-  const { isLoading, value: storedValue, setValue: setStoredValue } = useStoredValue<Array<ITableItem>>('rules', []);
-  const [itemProvider, setItemProvider] = useState<ArrayItemProvider<ITableItem>>(new ArrayItemProvider<ITableItem>(storedValue));
-
-  const updateItems = (data: Array<ITableItem>): void => {
-    setItemProvider(new ArrayItemProvider<ITableItem>(data));
-    setStoredValue(data);
-  };
+  const { isLoading, value: rules, setValue: setRules } = useStoredValue<Array<ITableItem>>('rules', []);
 
   const addNewItem = useCallback((): void => {
-    updateItems([...itemProvider.value, { rule: '', type: 0 }]);
-  }, [itemProvider]);
+    setRules([...rules, { rule: '', type: 0 }]);
+  }, [rules]);
 
   const deleteItem = useCallback((target: ITableItem): void => {
-    updateItems([...itemProvider.value.filter(d => d !== target)]);
-  }, [itemProvider]);
+    setRules([...rules.filter(d => d !== target)]);
+  }, [rules]);
 
   const changeItem = useCallback((rowIndex: number, target: ITableItem): void => {
-    updateItems([...itemProvider.value.map((d, i) => i === rowIndex ? target : d)]);
-  }, [itemProvider]);
+    setRules([...rules.map((d, i) => i === rowIndex ? target : d)]);
+  }, [rules]);
 
-  useEffect(() => {
-    if (!isLoading) {
-      setItemProvider(new ArrayItemProvider(storedValue));
-    }
-  }, [isLoading]);
+  const itemProvider = new ArrayItemProvider<ITableItem>(rules)
 
   return (
     <Page className={styles.page}>
