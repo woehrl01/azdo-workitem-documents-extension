@@ -5,13 +5,13 @@ import { Page } from 'azure-devops-ui/Page';
 import { Header, TitleSize } from 'azure-devops-ui/Header';
 import styles from './style.module.scss';
 import { useStoredValue } from 'hooks/useStoredValue';
-import { Loading } from 'components/Loading';
 import { ColumnMore, ITableColumn, Table } from 'azure-devops-ui/Table';
 import { IHeaderCommandBarItem } from 'azure-devops-ui/HeaderCommandBar';
 import { ArrayItemProvider } from 'azure-devops-ui/Utilities/Provider';
 import { DropdownCell } from './DropdownCell';
 import { InputCell } from './InputCell';
 import { Card } from 'azure-devops-ui/Card';
+import { IReadonlyObservableValue, ObservableValue } from 'azure-devops-ui/Core/Observable';
 
 export type ITableItem = {
   rule: string;
@@ -45,7 +45,7 @@ const columns = (onDelete: (target: ITableItem) => void, onChange: (rowIndex: nu
   ]
 };
 
-const commandBar = (onActivate: () => void): IHeaderCommandBarItem[] => {
+const commandBar = (disabled: boolean, onActivate: () => void): IHeaderCommandBarItem[] => {
   return [
     {
       iconProps: {
@@ -54,6 +54,7 @@ const commandBar = (onActivate: () => void): IHeaderCommandBarItem[] => {
       id: 'create',
       important: true,
       isPrimary: true,
+      disabled: disabled,
       onActivate: onActivate,
       tooltipProps: {
         text: 'Add new rule'
@@ -62,44 +63,42 @@ const commandBar = (onActivate: () => void): IHeaderCommandBarItem[] => {
   ]
 };
 
+const loadingList = new ArrayItemProvider<IReadonlyObservableValue<ITableItem | undefined>>(
+  new Array(3).fill(new ObservableValue<ITableItem | undefined>(undefined)));
 
 export const SettingsPage: FC<NoProps> = () => {
-  const { isLoading, value, setValue } = useStoredValue<Array<ITableItem>>('rules', []);
-  const [itemProvider, setItemProvider] = useState<ArrayItemProvider<ITableItem>>(new ArrayItemProvider<ITableItem>(value));
+  const { isLoading, value: storedValue, setValue: setStoredValue } = useStoredValue<Array<ITableItem>>('rules', []);
+  const [itemProvider, setItemProvider] = useState<ArrayItemProvider<ITableItem>>(new ArrayItemProvider<ITableItem>(storedValue));
 
-  const storeValue = (): void => setValue([...itemProvider.value as ITableItem[]]);
+  const updateItems = (data: Array<ITableItem>): void => {
+    setItemProvider(new ArrayItemProvider<ITableItem>(data));
+    setStoredValue(data);
+  };
 
   const addNewItem = useCallback((): void => {
-    setItemProvider(new ArrayItemProvider([...itemProvider.value, { rule: '', type: 0 }]));
-    storeValue();
+    updateItems([...itemProvider.value, { rule: '', type: 0 }]);
   }, [itemProvider]);
 
   const deleteItem = useCallback((target: ITableItem): void => {
-    setItemProvider(new ArrayItemProvider([...itemProvider.value.filter(d => d !== target)]));
-    storeValue();
+    updateItems([...itemProvider.value.filter(d => d !== target)]);
   }, [itemProvider]);
 
   const changeItem = useCallback((rowIndex: number, target: ITableItem): void => {
-    setItemProvider(new ArrayItemProvider([...itemProvider.value.map((d, i) => i === rowIndex ? target : d)]));
-    storeValue();
+    updateItems([...itemProvider.value.map((d, i) => i === rowIndex ? target : d)]);
   }, [itemProvider]);
 
   useEffect(() => {
     if (!isLoading) {
-      setItemProvider(new ArrayItemProvider(value));
+      setItemProvider(new ArrayItemProvider(storedValue));
     }
   }, [isLoading]);
-
-  if (isLoading) {
-    return <Loading />
-  }
 
   return (
     <Page className={styles.page}>
       <Header
         title="Embedded Documents"
         titleSize={TitleSize.Large}
-        commandBarItems={commandBar(addNewItem)}
+        commandBarItems={commandBar(isLoading, addNewItem)}
       />
       <div className="page-content">
         <Table<ITableItem>
@@ -107,7 +106,7 @@ export const SettingsPage: FC<NoProps> = () => {
           className="table-example"
           columns={columns(deleteItem, changeItem)}
           containerClassName="h-scroll-auto"
-          itemProvider={itemProvider}
+          itemProvider={isLoading ? loadingList : itemProvider}
           role="table"
         />
 
