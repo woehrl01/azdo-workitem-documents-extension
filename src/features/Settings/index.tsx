@@ -1,5 +1,8 @@
-import { showRootComponentAfterSDKInit } from 'components/Common';
+import { showRootComponent } from 'components/Common';
 import { SettingsPage } from './SettingsPage';
 import './styles.scss';
+import * as SDK from 'azure-devops-extension-sdk';
 
-showRootComponentAfterSDKInit(<SettingsPage />);
+SDK.init({ loaded: true }).then(() => {
+    showRootComponent(<SettingsPage />);
+});

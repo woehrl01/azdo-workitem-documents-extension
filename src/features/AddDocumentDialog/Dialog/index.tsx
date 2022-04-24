@@ -13,7 +13,6 @@ export const Dialog: FC<NoProps> = () => {
 
     useEffect(() => {
         const register = async (): Promise<void> => {
-            await SDK.init();
             await SDK.ready();
             const config = SDK.getConfiguration();
             console.log(JSON.stringify(config))
