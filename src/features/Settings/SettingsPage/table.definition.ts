@@ -25,7 +25,7 @@ export const columns = (onDelete: (target: ITableItem) => void, onChange: (rowIn
     return [
         new InputCell({
             id: 'rule',
-            name: 'Rule (RegEx)',
+            name: 'Rule (Regular Expression)',
             width: -60,
             onEdit: onChange,
             hasError: (value: string) => !isValidRule(value),

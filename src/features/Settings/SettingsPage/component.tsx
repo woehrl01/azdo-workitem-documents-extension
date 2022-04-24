@@ -9,6 +9,8 @@ import { Table } from 'azure-devops-ui/Table';
 import { Card } from 'azure-devops-ui/Card';
 import { ITableItem } from './types';
 import { commandBar, columns, buildTableItems } from './table.definition';
+import { Link } from 'azure-devops-ui/Link';
+import { Icon } from 'azure-devops-ui/Icon';
 
 export const SettingsPage: FC<NoProps> = () => {
   const { isLoading, value: rules, setValue: setRules } = useStoredValue<Array<ITableItem>>('rules', []);
@@ -41,11 +43,17 @@ export const SettingsPage: FC<NoProps> = () => {
           itemProvider={buildTableItems(isLoading, rules)}
           role="table"
         />
-
         <Card className={styles.explaination}>
-          Allow rules will include the documents in the list if they are referenced inside the 'Description' field.
-          <br />
-          Blocking rules will hide the documents from showing up in the embedded documents list. Blocking overrides allow.
+          <div>
+            Rules needs to be formulated in regular expression format. You can use <Link href="https://regex101.com/" target="_blank">regex101</Link> to test your regular expression.
+            <p>
+              Example: <code>^https:\/\/somedomain\.com/embedded</code>.
+            </p>
+            <p>
+              <Icon iconName='Accept' className={styles.allowed} /> Allow rules will include the documents in the list if they are referenced inside the <em>Description</em> field.
+            </p>
+            <Icon iconName='Blocked' className={styles.blocked} /> Block rules will hide the documents from showing up in the embedded documents list. <em>Blocking overrides allow.</em>
+          </div>
         </Card>
       </div>
 
