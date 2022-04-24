@@ -2,7 +2,7 @@
     "contributions": [
         {
             "id": "add-document-dialog",
-            "type": "ms.vss-web.control",
+            "type": "ms.vss-web.external-content",
             "description": "Add Document Dialog",
             "targets": [],
             "properties": {

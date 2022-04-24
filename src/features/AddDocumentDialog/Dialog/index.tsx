@@ -8,7 +8,6 @@ const dismiss = (): void => {
     config.dialog.close();
 }
 
-
 export const Dialog: FC<NoProps> = () => {
 
     useEffect(() => {
