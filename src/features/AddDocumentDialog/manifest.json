@@ -3,6 +3,8 @@
         {
             "id": "add-document-dialog",
             "type": "ms.vss-web.control",
+            "description": "Add Document Dialog",
+            "targets": [],
             "properties": {
                 "uri": "dist/AddDocumentDialog.html"
             }
