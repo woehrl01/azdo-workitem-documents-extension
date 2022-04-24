@@ -18,8 +18,8 @@ export class DropdownCell {
 
     public renderCell(rowIndex: number, columnIndex: number, tableColumn: ITableColumn<ITableItem>, tableItem: ITableItem, _ariaRowIndex?: number): JSX.Element {
         const setValue = (val: string): void => {
-            tableItem[tableColumn.id] = val;
-            this.onChange(rowIndex, tableItem);
+            const newItem = { ...tableItem, [tableColumn.id]: val };
+            this.onChange(rowIndex, newItem);
         };
 
         const selection = new DropdownSelection();
@@ -49,6 +49,7 @@ export class DropdownCell {
                 items={items}
                 onSelect={(_, item): void => setValue(item.id)}
                 enforceSingleSelect={true}
+                minCalloutWidth={150}
                 selection={selection} />
         </SimpleTableCell>;
     }
