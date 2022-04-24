@@ -25,6 +25,7 @@ export const Dialog: FC<NoProps> = () => {
 
     useEffect(() => {
         SDK.resize();
+        SDK.notifyLoadSucceeded();
     }, []);
 
     return <div className={styles.dialog}>
