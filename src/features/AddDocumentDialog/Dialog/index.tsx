@@ -1,37 +1,65 @@
 import { NoProps } from 'components/Common'
-import { FC, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 import * as SDK from 'azure-devops-extension-sdk'
 import { Button } from 'azure-devops-ui/Button';
 import { TextField } from 'azure-devops-ui/TextField';
 import { FormItem } from 'azure-devops-ui/FormItem';
 import styles from './style.module.scss'
+import { IWorkItemFormService, WorkItemTrackingServiceIds } from 'azure-devops-extension-api/WorkItemTracking';
 
 interface IConfigurationState {
-    confirmDialog: () => void;
-    abortDialog: () => void;
+    closeDialog: () => void;
+}
+
+interface IDocument {
+    url: string;
+    description: string;
+}
+
+const storeDocument = async ({ url, description }: IDocument): Promise<void> => {
+    const workItemService = await SDK.getService<IWorkItemFormService>(WorkItemTrackingServiceIds.WorkItemFormService);
+    await workItemService.addWorkItemRelations([
+        {
+            rel: 'Hyperlink',
+            url: url,
+            attributes: {
+                comment: description,
+            }
+        }
+    ])
 }
 
 const useConfiguration = (): IConfigurationState => {
     const config = SDK.getConfiguration();
     return {
-        confirmDialog: (): void => { config.dialog.close(); },
-        abortDialog: (): void => { config.dialog.close(); }
+        closeDialog: (): void => { config.dialog.close(); }
     }
 }
 
 export const Dialog: FC<NoProps> = () => {
-    const { abortDialog, confirmDialog } = useConfiguration();
+    const { closeDialog } = useConfiguration();
     const [url, setUrl] = useState<string>('');
     const [description, setDescription] = useState<string>('');
+    const hasError = url.length === 0;
+
+    const handleSubmit = useCallback(() => {
+        storeDocument({ url, description }).then(() => {
+            closeDialog();
+        });
+    }, [url, description]);
 
     useEffect(() => {
         SDK.resize();
         SDK.notifyLoadSucceeded();
+
+        /* resize after a delay to 'fix' an edgecase behaviour on host frame side */
+        const timeout = setTimeout(() => { SDK.resize() }, 1000);
+        return () => clearTimeout(timeout);
     }, []);
 
     return <div className={styles.dialog}>
         <div className={styles.content}>
-            <FormItem label="Document URL" className={styles.label}>
+            <FormItem label="Document URL" className={styles.label} error={hasError} >
                 <TextField
                     value={url}
                     onChange={(_, value): void => setUrl(value)}
@@ -45,8 +73,8 @@ export const Dialog: FC<NoProps> = () => {
             </FormItem>
         </div>
         <div className={styles.footer}>
-            <Button onClick={confirmDialog} primary={true}>OK</Button>
-            <Button onClick={abortDialog}>Cancel</Button>
+            <Button onClick={handleSubmit} primary={true} disabled={hasError}>OK</Button>
+            <Button onClick={closeDialog}>Cancel</Button>
         </div>
     </div >
 }
