@@ -63,7 +63,7 @@ export const LinkedDocumentList: FC<NoProps> = () => {
         className={styles.addDocument}
         onClick={(): void => { openAddDocumentDialog() }}
       >
-        <i className={styles.addDocumentIcon}></i>
+        
         <span>Add document</span>
       </button>
     </div>
