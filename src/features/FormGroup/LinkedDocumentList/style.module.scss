@@ -39,12 +39,11 @@
     vertical-align: top;
 }
 
-.buttonContainer {
+.button-container {
     margin-bottom: 5px;
 }
 
-
-.addDocument {
+.add-document {
     border: none;
     background-color: transparent;
     margin: 0;
@@ -63,31 +62,10 @@
     writing-mode: horizontal-tb !important;
 }
 
-.addDocument:hover {
+.add-document:hover {
     background-color: $communication-tint-30;
 }
 
-@font-face {
-    font-family: 'Bowtie';
-    src: url('./Bowtie.woff') format('woff');
-}
-
-.addDocumentIcon {
+.add-document i {
     color: rgba(16, 124, 16, 1);
-    margin-right: 5px;
-    font-family: 'Bowtie';
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    font-size: 14px;
-    /* Better Font Rendering =========== */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-.addDocumentIcon:before {
-    content: "\e64c";
 }
