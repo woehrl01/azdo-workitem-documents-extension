@@ -1,12 +1,9 @@
 import styles from './style.module.scss';
 import './bowtie.css';
 
-import { NoProps } from 'components/Common';
 import { openAddDocumentDialog } from 'services/OpenDialog';
-import { FC } from 'react';
 
-export const AddButton: FC<NoProps> = () => {
-
+export const AddButton = (): JSX.Element => {
     return <div className={styles.buttonContainer}>
         <button
             className={styles.addDocument}

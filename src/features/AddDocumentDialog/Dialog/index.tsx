@@ -1,12 +1,11 @@
-import { NoProps } from 'components/Common'
-import { FC, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import * as SDK from 'azure-devops-extension-sdk'
 import { Button } from 'azure-devops-ui/Button';
 import { TextField } from 'azure-devops-ui/TextField';
 import { FormItem } from 'azure-devops-ui/FormItem';
 import styles from './style.module.scss'
 import { IWorkItemFormService, WorkItemTrackingServiceIds } from 'azure-devops-extension-api/WorkItemTracking';
-import { useWindowSize } from 'usehooks-ts';
+import { useEffectOnce, useWindowSize } from 'usehooks-ts';
 
 interface IConfigurationState {
     closeDialog: () => void;
@@ -37,12 +36,12 @@ const useConfiguration = (): IConfigurationState => {
     }
 }
 
-export const Dialog: FC<NoProps> = () => {
+export const Dialog = (): JSX.Element => {
     const { closeDialog } = useConfiguration();
     const [url, setUrl] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const hasError = url.length === 0;
-    const { width, height } = useWindowSize()
+    const { width, height } = useWindowSize();
 
     const handleSubmit = useCallback(() => {
         storeDocument({ url, description }).then(() => {
@@ -50,14 +49,14 @@ export const Dialog: FC<NoProps> = () => {
         });
     }, [url, description, closeDialog]);
 
-    useEffect(() => {
+    useEffectOnce(() => {
         SDK.resize();
         SDK.notifyLoadSucceeded();
 
         /* resize after a delay to 'fix' an edgecase behaviour on host frame side */
         const timeout = setTimeout(() => { SDK.resize() }, 1000);
         return () => clearTimeout(timeout);
-    }, []);
+    });
 
     useEffect(() => {
         SDK.resize();

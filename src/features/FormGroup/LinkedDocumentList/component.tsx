@@ -1,24 +1,18 @@
 import styles from './style.module.scss';
 
-import { FC, useEffect } from 'react';
-import * as SDK from 'azure-devops-extension-sdk';
-
 import { Link } from 'azure-devops-ui/Link'
 import { Icon } from 'azure-devops-ui/Icon';
 import { Ago } from 'azure-devops-ui/Ago';
 
 import { AgoFormat } from 'azure-devops-ui/Utilities/Date';
-import { NoProps } from 'components/Common';
 import { ILinkedDocument, useLinkedDocuments } from 'hooks/useLinkedDocument';
 import { getIcon } from 'services/UriOptimizer';
-import { AddButton } from '../AddButton';
-import { useWindowSize } from 'usehooks-ts';
 
 type DocumentProps = {
   document: ILinkedDocument;
 }
 
-const PrimaryData: FC<DocumentProps> = ({ document }) => {
+const PrimaryData = ({ document }: DocumentProps): JSX.Element => {
   return (
     <div className={styles.laPrimaryData}>
       <Icon iconName={getIcon(document.url)} className={styles.laPrimaryIcon} />
@@ -29,7 +23,7 @@ const PrimaryData: FC<DocumentProps> = ({ document }) => {
   );
 }
 
-const AdditionalData: FC<DocumentProps> = ({ document }) => {
+const AdditionalData = ({ document }: DocumentProps): JSX.Element => {
   if (!document.addedDate) {
     return <></>
   }
@@ -43,23 +37,16 @@ const AdditionalData: FC<DocumentProps> = ({ document }) => {
   );
 }
 
-const Document: FC<DocumentProps> = ({ document }) => (
+const Document = ({ document }: DocumentProps): JSX.Element => (
   <div className={styles.laItem}>
     <PrimaryData document={document} />
     <AdditionalData document={document} />
   </div>
 )
 
-export const LinkedDocumentList: FC<NoProps> = () => {
+export const LinkedDocumentList = (): JSX.Element => {
   const { documents } = useLinkedDocuments();
-  const { width, height } = useWindowSize()
-
-  useEffect(() => {
-    SDK.resize()
-  }, [documents, width, height]);
-
   return <>
-    <AddButton />
     {documents.map(d => <Document key={d.url} document={d} />)}
   </>
 }
