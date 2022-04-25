@@ -63,12 +63,14 @@ export const Dialog: FC<NoProps> = () => {
                 <TextField
                     value={url}
                     onChange={(_, value): void => setUrl(value)}
+                    placeholder="https://..."
                 />
             </FormItem>
-            <FormItem label="Description" className={styles.label}>
+            <FormItem label="Title" className={styles.label}>
                 <TextField
                     value={description}
                     onChange={(_, value): void => setDescription(value)}
+                    placeholder="Optional"
                 />
             </FormItem>
         </div>
