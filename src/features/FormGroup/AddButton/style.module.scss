@@ -1,0 +1,32 @@
+@import "azure-devops-ui/Core/_platformCommon.scss";
+
+.button-container {
+    margin-bottom: 5px;
+}
+
+.add-document {
+    border: none;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    height: auto;
+    width: auto;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    text-align: initial;
+    border-radius: 0;
+    outline: none;
+    padding: 3px 3px 3px 3px;
+    cursor: pointer;
+    display: inline-block;
+    writing-mode: horizontal-tb !important;
+}
+
+.add-document:hover {
+    background-color: $communication-tint-30;
+}
+
+.add-document i {
+    color: rgba(16, 124, 16, 1);
+}

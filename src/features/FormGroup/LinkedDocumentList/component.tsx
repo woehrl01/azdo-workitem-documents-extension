@@ -1,7 +1,6 @@
 import styles from './style.module.scss';
-import './bowtie.css';
 
-import { useEffect, FC } from 'react';
+import { FC, useEffect } from 'react';
 import * as SDK from 'azure-devops-extension-sdk';
 
 import { Link } from 'azure-devops-ui/Link'
@@ -12,7 +11,8 @@ import { AgoFormat } from 'azure-devops-ui/Utilities/Date';
 import { NoProps } from 'components/Common';
 import { ILinkedDocument, useLinkedDocuments } from 'hooks/useLinkedDocument';
 import { getIcon } from 'services/UriOptimizer';
-import { openAddDocumentDialog } from 'services/OpenDialog';
+import { AddButton } from '../AddButton';
+import { useWindowSize } from 'usehooks-ts';
 
 type DocumentProps = {
   document: ILinkedDocument;
@@ -52,21 +52,14 @@ const Document: FC<DocumentProps> = ({ document }) => (
 
 export const LinkedDocumentList: FC<NoProps> = () => {
   const { documents } = useLinkedDocuments();
+  const { width, height } = useWindowSize()
 
   useEffect(() => {
     SDK.resize()
-  }, [documents]);
+  }, [documents, width, height]);
 
   return <>
-    <div className={styles.buttonContainer}>
-      <button
-        className={styles.addDocument}
-        onClick={(): void => { openAddDocumentDialog() }}
-      >
-        <i className="bowtie-icon bowtie-math-plus"></i>
-        <span>Add document</span>
-      </button>
-    </div>
+    <AddButton />
     {documents.map(d => <Document key={d.url} document={d} />)}
   </>
 }
