@@ -40,10 +40,18 @@ async function RulesByType(type: RuleType): Promise<IValidRule[]> {
         });
 }
 
+let cachedBlockRules: IValidRule[] | null = null
 export async function BlockRules(): Promise<IValidRule[]> {
-    return await RulesByType('block');
+    if (cachedBlockRules !== null) {
+        return cachedBlockRules;
+    }
+    return (cachedBlockRules = await RulesByType('block'));
 }
 
+let cachedAllowRules: IValidRule[] | null = null
 export async function AllowRules(): Promise<IValidRule[]> {
-    return await RulesByType('allow');
+    if (cachedAllowRules !== null) {
+        return cachedAllowRules;
+    }
+    return (cachedAllowRules = await RulesByType('allow'));
 }
