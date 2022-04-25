@@ -6,6 +6,7 @@ import { TextField } from 'azure-devops-ui/TextField';
 import { FormItem } from 'azure-devops-ui/FormItem';
 import styles from './style.module.scss'
 import { IWorkItemFormService, WorkItemTrackingServiceIds } from 'azure-devops-extension-api/WorkItemTracking';
+import { useWindowSize } from 'usehooks-ts';
 
 interface IConfigurationState {
     closeDialog: () => void;
@@ -41,6 +42,7 @@ export const Dialog: FC<NoProps> = () => {
     const [url, setUrl] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const hasError = url.length === 0;
+    const { width, height } = useWindowSize()
 
     const handleSubmit = useCallback(() => {
         storeDocument({ url, description }).then(() => {
@@ -56,6 +58,10 @@ export const Dialog: FC<NoProps> = () => {
         const timeout = setTimeout(() => { SDK.resize() }, 1000);
         return () => clearTimeout(timeout);
     }, []);
+
+    useEffect(() => {
+        SDK.resize();
+    }, [width, height]);
 
     return <div className={styles.dialog}>
         <div className={styles.content}>
