@@ -22,7 +22,7 @@ export const useLinkedDocuments = (): IUseLinkedDocument => {
 
     useEffect(() => {
         registerWorkItemChangeHandler(updateCurrentDocuments);
-    }, []);
+    }, [updateCurrentDocuments]);
 
     return { documents, isLoading };
 };

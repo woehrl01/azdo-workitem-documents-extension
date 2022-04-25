@@ -17,15 +17,15 @@ export const SettingsPage: FC<NoProps> = () => {
 
   const addNewItem = useCallback((): void => {
     setRules([...rules, { rule: '', type: 'allow' }]);
-  }, [rules]);
+  }, [rules, setRules]);
 
   const deleteItem = useCallback((target: ITableItem): void => {
     setRules([...rules.filter(r => r !== target)]);
-  }, [rules]);
+  }, [rules, setRules]);
 
   const changeItem = useCallback((rowIndex: number, target: ITableItem): void => {
     setRules([...rules.map((r, i) => i === rowIndex ? target : r)]);
-  }, [rules]);
+  }, [rules, setRules]);
 
   return (
     <Page className={styles.page}>

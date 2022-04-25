@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDebounce } from 'usehooks-ts';
 import { getDataManager } from 'services/DataManager';
 
@@ -29,20 +29,17 @@ export const useStoredValue = <T>(name: string, defaultValue: T): UseStoredValue
 
   /* store the data in the datamanager in a debounced way */
   const debouncedValue = useDebounce(value, 500);
+  const storeValue = useCallback(async (): Promise<void> => {
+    const manager = await getDataManager();
+    console.debug(JSON.stringify(debouncedValue));
+    await manager.setValue(name, debouncedValue);
+  }, [name, debouncedValue]);
+
   useEffect(() => {
-    let isSetData = true;
-    const storeValue = async (): Promise<void> => {
-      const manager = await getDataManager();
-      if (isSetData) {
-        console.debug(JSON.stringify(debouncedValue));
-        await manager.setValue(name, debouncedValue);
-      }
-    };
     if (!loading) {
       storeValue().catch(console.error);
     }
-    return (): void => { isSetData = false };
-  }, [name, debouncedValue]);
+  }, [storeValue, loading]);
 
   return { isLoading: loading, value, setValue };
 };

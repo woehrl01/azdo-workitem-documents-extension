@@ -32,6 +32,7 @@
     "azure-devops-extension-api": "^1.158.0",
     "azure-devops-extension-sdk": "^2.0.11",
     "azure-devops-ui": "^2.167.31",
+    "eslint-plugin-react-hooks": "^4.4.0",
     "preact": "^10.7.1",
     "usehooks-ts": "^2.5.1",
     "uuid": "^8.3.2"

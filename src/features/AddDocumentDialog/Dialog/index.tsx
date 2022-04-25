@@ -48,7 +48,7 @@ export const Dialog: FC<NoProps> = () => {
         storeDocument({ url, description }).then(() => {
             closeDialog();
         });
-    }, [url, description]);
+    }, [url, description, closeDialog]);
 
     useEffect(() => {
         SDK.resize();
