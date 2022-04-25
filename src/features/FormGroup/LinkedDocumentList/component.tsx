@@ -11,6 +11,7 @@ import { AgoFormat } from 'azure-devops-ui/Utilities/Date';
 import { NoProps } from 'components/Common';
 import { ILinkedDocument, useLinkedDocuments } from 'hooks/useLinkedDocument';
 import { getIcon } from 'services/UriOptimizer';
+import { openAddDocumentDialog } from 'services/OpenDialog';
 
 type DocumentProps = {
   document: ILinkedDocument;
@@ -56,6 +57,16 @@ export const LinkedDocumentList: FC<NoProps> = () => {
   }, [documents]);
 
   return <>
+    <div className={styles.buttonContainer}>
+      <button
+
+        className={styles.addDocument}
+        onClick={(): void => { openAddDocumentDialog() }}
+      >
+        <i className={styles.addDocumentIcon}></i>
+        <span>Add document</span>
+      </button>
+    </div>
     {documents.map(d => <Document key={d.url} document={d} />)}
   </>
 }

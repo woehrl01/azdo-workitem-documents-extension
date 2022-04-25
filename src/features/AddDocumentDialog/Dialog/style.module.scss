@@ -1,0 +1,29 @@
+@import "azure-devops-ui/Core/_platformCommon.scss";
+
+.dialog {
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100vh;
+    display: flex;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.label {
+    margin-bottom: 10px;
+    color: $neutral-70;
+}
+
+.dialog .footer {
+    justify-content: flex-end;
+    display: flex;
+}
+
+.dialog .footer button {
+    margin-left: 10px;
+}
+
+.content {
+    -no-op: noop;
+}

@@ -4,6 +4,7 @@ import { IWorkItemChangedArgs, IWorkItemFieldChangedArgs, IWorkItemLoadedArgs, I
 import { Noop } from 'components/Common';
 
 export const registerWorkItemChangeHandler = async (callback: () => void): Promise<void> => {
+    await SDK.init({ loaded: false });
     SDK.register(SDK.getContributionId(), () => ({
         onLoaded(_: IWorkItemLoadedArgs): void {
             Noop();
@@ -24,6 +25,7 @@ export const registerWorkItemChangeHandler = async (callback: () => void): Promi
             Noop();
         }
     } as IWorkItemNotificationListener));
+    await SDK.notifyLoadSucceeded();
     await SDK.ready();
     /* call the callback initally if events have
      * been missed because of later loading */

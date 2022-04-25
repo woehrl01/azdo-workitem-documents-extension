@@ -38,3 +38,56 @@
     display: inline;
     vertical-align: top;
 }
+
+.buttonContainer {
+    margin-bottom: 5px;
+}
+
+
+.addDocument {
+    border: none;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    height: auto;
+    width: auto;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    text-align: initial;
+    border-radius: 0;
+    outline: none;
+    padding: 3px 3px 3px 3px;
+    cursor: pointer;
+    display: inline-block;
+    writing-mode: horizontal-tb !important;
+}
+
+.addDocument:hover {
+    background-color: $communication-tint-30;
+}
+
+@font-face {
+    font-family: 'Bowtie';
+    src: url('./Bowtie.woff') format('woff');
+}
+
+.addDocumentIcon {
+    color: rgba(16, 124, 16, 1);
+    margin-right: 5px;
+    font-family: 'Bowtie';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    font-size: 14px;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.addDocumentIcon:before {
+    content: "\e64c";
+}
