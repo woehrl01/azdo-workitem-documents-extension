@@ -8,8 +8,14 @@ parameters:
 - name: baseUri 
   type: string
   default: ''
+- name: setGitTag 
+  type: boolean
+  default: false
 
 steps:
+- checkout: self
+  persistCredentials: true
+
 - task: NodeTool@0
   inputs:
     versionSpec: '16.x'
@@ -27,4 +33,10 @@ steps:
 - script: |
     npm run publish-extension${{ parameters.buildPostfix }} -- -t "$(PUBLISH_TOKEN)" --override '{"version":"$(version)","baseUri":"${{ parameters.baseUri }}"}' ${{ parameters.additionalCommandArgs }}
   displayName: 'Publish extension'
-  condition: eq(variables.isDependabot, 'false')
+  condition: and(succeeded(), eq(variables.isDependabot, 'false'))
+
+- script: |
+     git tag $(version)
+     git push origin $(version)
+  workingDirectory: $(Build.SourcesDirectory)
+  condition: and(succeeded(), eq('${{ parameters.setGitTag }}', 'true'))
