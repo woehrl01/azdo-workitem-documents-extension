@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { fetchCurrentDocuments, ILinkedDocument } from 'services/DocumentSource';
-import { useWorkItemChangeHandler } from './registerWorkItemChangeHandler';
+import { useWorkItemChangedHandler } from 'hooks/useWorkItemChangedHandler';
 
 export interface IUseLinkedDocument {
     documents: ILinkedDocument[];
@@ -20,7 +20,7 @@ export const useLinkedDocuments = (): IUseLinkedDocument => {
         setIsLoading(false);
     }, [setIsLoading, setDocuments]);
 
-    useWorkItemChangeHandler(updateCurrentDocuments);
+    useWorkItemChangedHandler(updateCurrentDocuments);
 
     return { documents, isLoading };
 };

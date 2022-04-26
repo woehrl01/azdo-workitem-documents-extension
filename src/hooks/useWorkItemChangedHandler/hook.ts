@@ -2,26 +2,26 @@ import * as SDK from 'azure-devops-extension-sdk';
 
 import { IWorkItemChangedArgs, IWorkItemFieldChangedArgs, IWorkItemLoadedArgs, IWorkItemNotificationListener } from 'azure-devops-extension-api/WorkItemTracking';
 import { Noop } from 'components/Common';
-import React, { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useEffectOnce } from 'usehooks-ts';
 
-const registerWorkItemChangeHandler = async (callbackRef: React.MutableRefObject<() => void>): Promise<void> => {
+const registerWorkItemChangeHandler = async (callback: () => void): Promise<void> => {
     await SDK.init({ loaded: false });
     SDK.register(SDK.getContributionId(), () => ({
         onLoaded(_: IWorkItemLoadedArgs): void {
             Noop();
         },
         onFieldChanged(_: IWorkItemFieldChangedArgs): void {
-            callbackRef.current();
+            callback();
         },
         onSaved(_: IWorkItemChangedArgs): void {
-            callbackRef.current();
+            callback();
         },
         onReset(_: IWorkItemChangedArgs): void {
-            callbackRef.current();
+            callback();
         },
         onRefreshed(_: IWorkItemChangedArgs): void {
-            callbackRef.current();
+            callback();
         },
         onUnloaded(_: IWorkItemChangedArgs): void {
             Noop();
@@ -29,18 +29,22 @@ const registerWorkItemChangeHandler = async (callbackRef: React.MutableRefObject
     } as IWorkItemNotificationListener));
     await SDK.notifyLoadSucceeded();
     await SDK.ready();
-    /* call the callback initally if events have
+    /* call the callback initially if events have
      * been missed because of later loading */
-    callbackRef.current();
+    callback();
 };
 
-export const useWorkItemChangeHandler = (handler: () => void): void => {
+export const useWorkItemChangedHandler = (handler: () => void): void => {
     const savedHandler = useRef(handler);
     useEffect(() => {
         savedHandler.current = handler;
     }, [handler]);
 
+    const callback = useCallback(() => {
+        savedHandler.current();
+    }, [savedHandler]);
+
     useEffectOnce(() => {
-        registerWorkItemChangeHandler(savedHandler);
+        registerWorkItemChangeHandler(callback);
     });
 }
