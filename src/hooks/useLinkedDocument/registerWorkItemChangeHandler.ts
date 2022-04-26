@@ -2,26 +2,26 @@ import * as SDK from 'azure-devops-extension-sdk';
 
 import { IWorkItemChangedArgs, IWorkItemFieldChangedArgs, IWorkItemLoadedArgs, IWorkItemNotificationListener } from 'azure-devops-extension-api/WorkItemTracking';
 import { Noop } from 'components/Common';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useEffectOnce } from 'usehooks-ts';
 
-const registerWorkItemChangeHandler = async (callback: () => void): Promise<void> => {
+const registerWorkItemChangeHandler = async (callbackRef: React.MutableRefObject<() => void>): Promise<void> => {
     await SDK.init({ loaded: false });
     SDK.register(SDK.getContributionId(), () => ({
         onLoaded(_: IWorkItemLoadedArgs): void {
             Noop();
         },
         onFieldChanged(_: IWorkItemFieldChangedArgs): void {
-            callback();
+            callbackRef.current();
         },
         onSaved(_: IWorkItemChangedArgs): void {
-            callback();
+            callbackRef.current();
         },
         onReset(_: IWorkItemChangedArgs): void {
-            callback();
+            callbackRef.current();
         },
         onRefreshed(_: IWorkItemChangedArgs): void {
-            callback();
+            callbackRef.current();
         },
         onUnloaded(_: IWorkItemChangedArgs): void {
             Noop();
@@ -31,18 +31,16 @@ const registerWorkItemChangeHandler = async (callback: () => void): Promise<void
     await SDK.ready();
     /* call the callback initally if events have
      * been missed because of later loading */
-    callback();
+    callbackRef.current();
 };
 
 export const useWorkItemChangeHandler = (handler: () => void): void => {
-
-    const saveHandler = useRef(handler);
-
+    const savedHandler = useRef(handler);
     useEffect(() => {
-        saveHandler.current = handler;
+        savedHandler.current = handler;
     }, [handler]);
 
     useEffectOnce(() => {
-        registerWorkItemChangeHandler(saveHandler.current);
+        registerWorkItemChangeHandler(savedHandler);
     });
 }
