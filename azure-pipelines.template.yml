@@ -39,4 +39,4 @@ steps:
      git tag $(version)
      git push origin $(version)
   workingDirectory: $(Build.SourcesDirectory)
-  condition: eq('${{ parameters.setGitTag }}', 'true')
+  condition: eq(succeeded(), '${{ parameters.setGitTag }}', 'true')
