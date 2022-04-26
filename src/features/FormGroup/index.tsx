@@ -1,5 +1,5 @@
 import { showRootComponent } from 'components/Common';
-import { LinkedDocumentList } from './LinkedDocumentList/component';
+import { Group } from './Group';
 import './styles.scss';
 
-showRootComponent(<LinkedDocumentList />);
+showRootComponent(<Group />);

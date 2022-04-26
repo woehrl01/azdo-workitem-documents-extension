@@ -10,6 +10,8 @@ module.exports = {
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
         'prettier',
+        'plugin:react-hooks/recommended',
+        'plugin:react/recommended',
     ],
     rules: {
         'eqeqeq': ['error', 'smart'],
@@ -20,6 +22,18 @@ module.exports = {
         'no-var': 'error',
         '@typescript-eslint/explicit-function-return-type': 'error',
         '@typescript-eslint/quotes': ['warn', 'single'],
-        '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }]
+        '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
+        'react/hook-use-state': 'warn',
+        'react/no-typos': 'warn',
+        'react/prefer-stateless-function': 'warn',
+        'react/void-dom-elements-no-children': 'error',
+    }
+    , 'settings': {
+        'react': {
+            'createClass': 'createReactClass',
+            'pragma': 'React',
+            'fragment': 'Fragment',
+            'version': 'detect',
+        },
     }
 };
