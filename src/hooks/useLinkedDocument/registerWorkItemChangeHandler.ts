@@ -2,8 +2,10 @@ import * as SDK from 'azure-devops-extension-sdk';
 
 import { IWorkItemChangedArgs, IWorkItemFieldChangedArgs, IWorkItemLoadedArgs, IWorkItemNotificationListener } from 'azure-devops-extension-api/WorkItemTracking';
 import { Noop } from 'components/Common';
+import { useEffect, useRef } from 'react';
+import { useEffectOnce } from 'usehooks-ts';
 
-export const registerWorkItemChangeHandler = async (callback: () => void): Promise<void> => {
+const registerWorkItemChangeHandler = async (callback: () => void): Promise<void> => {
     await SDK.init({ loaded: false });
     SDK.register(SDK.getContributionId(), () => ({
         onLoaded(_: IWorkItemLoadedArgs): void {
@@ -31,3 +33,16 @@ export const registerWorkItemChangeHandler = async (callback: () => void): Promi
      * been missed because of later loading */
     callback();
 };
+
+export const useWorkItemChangeHandler = (handler: () => void): void => {
+
+    const saveHandler = useRef(handler);
+
+    useEffect(() => {
+        saveHandler.current = handler;
+    }, [handler]);
+
+    useEffectOnce(() => {
+        registerWorkItemChangeHandler(saveHandler.current);
+    });
+}

@@ -1,18 +1,19 @@
 import { useEffect } from 'react';
-import { useElementSize } from 'usehooks-ts';
+import { useWindowSize } from 'usehooks-ts';
 import { AddButton } from '../AddButton';
 import * as SDK from 'azure-devops-extension-sdk';
 import { LinkedDocumentList } from '../LinkedDocumentList';
 
 export const Group = (): JSX.Element => {
-    const [ref, { width, height }] = useElementSize();
-
-    useEffect(() => {
+    const { width, height } = useWindowSize();
+    const resize = (): void => {
         SDK.resize()
-    }, [width, height]);
+        console.log('resize')
+    }
+    useEffect(resize, [width, height]);
 
-    return <div ref={ref}>
+    return <div>
         <AddButton />
-        <LinkedDocumentList />
+        <LinkedDocumentList onDocuments={resize} />
     </div>
 }

@@ -7,6 +7,7 @@ import { Ago } from 'azure-devops-ui/Ago';
 import { AgoFormat } from 'azure-devops-ui/Utilities/Date';
 import { ILinkedDocument, useLinkedDocuments } from 'hooks/useLinkedDocument';
 import { getIcon } from 'services/UriOptimizer';
+import { useEffect } from 'react';
 
 type DocumentProps = {
   document: ILinkedDocument;
@@ -44,8 +45,15 @@ const Document = ({ document }: DocumentProps): JSX.Element => (
   </div>
 )
 
-export const LinkedDocumentList = (): JSX.Element => {
+interface LinkedDocumentListProps {
+  onDocuments: () => void;
+}
+
+export const LinkedDocumentList = ({ onDocuments }: LinkedDocumentListProps): JSX.Element => {
   const { documents } = useLinkedDocuments();
+
+  useEffect(onDocuments), [onDocuments, documents];
+
   return <>
     {documents.map(d => <Document key={d.url} document={d} />)}
   </>
