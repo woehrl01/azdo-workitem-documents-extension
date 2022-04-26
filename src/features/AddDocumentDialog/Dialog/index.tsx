@@ -64,7 +64,7 @@ export const Dialog = (): JSX.Element => {
 
     return <div className={styles.dialog}>
         <div className={styles.content}>
-            <FormItem label="Document URL" className={styles.label} error={hasError} >
+            <FormItem label="Document" className={styles.label} error={hasError} >
                 <TextField
                     value={url}
                     onChange={(_, value): void => setUrl(value)}
