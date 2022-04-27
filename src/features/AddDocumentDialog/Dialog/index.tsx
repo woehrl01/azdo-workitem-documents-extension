@@ -6,6 +6,7 @@ import { FormItem } from 'azure-devops-ui/FormItem';
 import styles from './style.module.scss'
 import { IWorkItemFormService, WorkItemTrackingServiceIds } from 'azure-devops-extension-api/WorkItemTracking';
 import { useEffectOnce, useWindowSize } from 'usehooks-ts';
+import { Measure, trackEvent } from 'components/AppInsights';
 
 interface IConfigurationState {
     closeDialog: () => void;
@@ -44,10 +45,18 @@ export const Dialog = (): JSX.Element => {
     const { width, height } = useWindowSize();
 
     const handleSubmit = useCallback(() => {
+        trackEvent('addDocumentDialog', { action: 'submit' });
+        const measure = new Measure('storeDocument');
         storeDocument({ url, description }).then(() => {
+            measure.stop();
             closeDialog();
         });
     }, [url, description, closeDialog]);
+
+    const handleCancel = useCallback(() => {
+        trackEvent('addDocumentDialog', { action: 'cancel' });
+        closeDialog();
+    }, [closeDialog]);
 
     useEffectOnce(() => {
         SDK.resize();
@@ -81,7 +90,7 @@ export const Dialog = (): JSX.Element => {
         </div>
         <div className={styles.footer}>
             <Button onClick={handleSubmit} primary={true} disabled={hasError}>OK</Button>
-            <Button onClick={closeDialog}>Cancel</Button>
+            <Button onClick={handleCancel}>Cancel</Button>
         </div>
     </div >
 }
