@@ -42,7 +42,7 @@ export const useStoredValue = <T>(name: string, defaultValue: T): UseStoredValue
       const manager = await getDataManager();
       await manager.setValue(name, debouncedValue);
     }
-    measure.stop({ size: stringedValue.length });
+    measure.stop({ dataSize: stringedValue.length });
   }, [name, debouncedValue]);
 
   useEffect(() => {
