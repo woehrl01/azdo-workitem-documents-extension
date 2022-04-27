@@ -5,14 +5,30 @@ import { Noop } from 'components/Common';
 import { useCallback, useEffect, useRef } from 'react';
 import { useEffectOnce } from 'usehooks-ts';
 
+const isRelevantChange = (arg: IWorkItemFieldChangedArgs): boolean => {
+    if ('System.HyperLinkCount' in arg.changedFields) {
+        return true; /* hyperlink added, edited or removed */
+    }
+
+    if (!('System.Description' in arg.changedFields)) {
+        return false; /* description field hasn't changed */
+    }
+
+    const description = arg.changedFields['System.Description'];
+    const containsUrl = description.match(/https?:\/\/[^\s]+/g);
+    return containsUrl;
+}
+
 const registerWorkItemChangeHandler = async (callback: () => void): Promise<void> => {
     await SDK.init({ loaded: false });
     SDK.register(SDK.getContributionId(), () => ({
         onLoaded(_: IWorkItemLoadedArgs): void {
             callback();
         },
-        onFieldChanged(_: IWorkItemFieldChangedArgs): void {
-            callback();
+        onFieldChanged(arg: IWorkItemFieldChangedArgs): void {
+            if (isRelevantChange(arg)) {
+                callback();
+            }
         },
         onSaved(_: IWorkItemChangedArgs): void {
             callback();
