@@ -9,7 +9,7 @@ const registerWorkItemChangeHandler = async (callback: () => void): Promise<void
     await SDK.init({ loaded: false });
     SDK.register(SDK.getContributionId(), () => ({
         onLoaded(_: IWorkItemLoadedArgs): void {
-            Noop();
+            callback();
         },
         onFieldChanged(_: IWorkItemFieldChangedArgs): void {
             callback();
@@ -36,13 +36,20 @@ const registerWorkItemChangeHandler = async (callback: () => void): Promise<void
 
 export const useWorkItemChangedHandler = (handler: () => void): void => {
     const savedHandler = useRef(handler);
+    const lastExecuted = useRef<number>(0);
+    const interval = 500;
+
     useEffect(() => {
         savedHandler.current = handler;
     }, [handler]);
 
     const callback = useCallback(() => {
-        savedHandler.current();
-    }, [savedHandler]);
+        const now = Date.now();
+        if (now >= lastExecuted.current + interval) {
+            lastExecuted.current = now;
+            savedHandler.current();
+        }
+    }, [savedHandler, lastExecuted]);
 
     useEffectOnce(() => {
         registerWorkItemChangeHandler(callback);
