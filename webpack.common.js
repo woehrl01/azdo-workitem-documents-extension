@@ -2,6 +2,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-env node */
 
+const optionalRequire = (name) => {
+  try {
+    return require(name);
+  } catch (e) {
+    return {};
+  }
+};
+
 const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
@@ -9,7 +17,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const PreloadPlugin = require('@vue/preload-webpack-plugin');
-const customDefines = require(path.join(__dirname, './defines.js'));
+const customDefines = optionalRequire('./defines.js');
 
 // Webpack entry points. Mapping from resulting bundle name to the source file entry.
 const entries = {};
