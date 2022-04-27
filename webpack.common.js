@@ -2,6 +2,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-env node */
 
+const optionalRequire = (name) => {
+  try {
+    return require(name);
+  } catch (e) {
+    return {};
+  }
+};
+
 const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
@@ -9,6 +17,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const PreloadPlugin = require('@vue/preload-webpack-plugin');
+const customDefines = optionalRequire('./defines.js');
 
 // Webpack entry points. Mapping from resulting bundle name to the source file entry.
 const entries = {};
@@ -22,16 +31,13 @@ fs.readdirSync(codeDir).filter((dir) => {
   }
 });
 
-const apmSource = fs.readFileSync(path.join(__dirname, './src/services/NewRelic/snippet.html'), 'utf8');
-const isEnableApm = false;
-
-const createHtmlWebpackPluginEntry = (name, isProd) => {
+const createHtmlWebpackPluginEntry = (name) => {
   return new HtmlWebpackPlugin({
     template: './src/features/index.ejs',
     filename: `${name}.html`,
     chunks: [name],
     publicPath: '',
-    apmSource: isProd && isEnableApm ? apmSource : '',
+    title: name,
     scriptLoading: 'defer'
   })
 };
@@ -102,8 +108,11 @@ module.exports = ({ isProd }) => {
       ],
     },
     plugins: [
+      new webpack.DefinePlugin({
+        __APP_INSIGHTS__: JSON.stringify(customDefines.APP_INSIGHTS || process.env.APP_INSIGHTS),
+      }),
       ...Object.entries(entries)
-        .map(([name]) => createHtmlWebpackPluginEntry(name, isProd)),
+        .map(([name]) => createHtmlWebpackPluginEntry(name)),
       new webpack.ProvidePlugin({
         process: 'process/browser',
       }),

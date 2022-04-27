@@ -47,6 +47,7 @@ To ensure proper rendering inside an iframe, the extension requires that the URI
 In some scenarios, this extension might be treated as a must-have feature. I hope that it will be useful for you and your team. The extension is available on the [Azure DevOps Marketplace](https://marketplace.visualstudio.com/items?itemName=lukaswoehrl.azdo-workitem-documents) and on [GitHub](https://github.com/woehrl01/azdo-workitem-documents-extension) under MIT license!
 
 ---
+_This extension uses Application Insights for telemetry._
 
 _[Document icons created by Driss Lebbat - Flaticon](https://www.flaticon.com/free-icons/document)_
 _[Cancel icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/cancel)_

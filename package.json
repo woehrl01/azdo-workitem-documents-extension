@@ -28,6 +28,7 @@
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@microsoft/applicationinsights-web": "^2.8.1",
     "@preact/compat": "^17.0.3",
     "azure-devops-extension-api": "^1.158.0",
     "azure-devops-extension-sdk": "^2.0.11",
