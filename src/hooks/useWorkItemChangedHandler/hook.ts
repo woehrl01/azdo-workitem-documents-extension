@@ -52,20 +52,14 @@ const registerWorkItemChangeHandler = async (callback: () => void): Promise<void
 
 export const useWorkItemChangedHandler = (handler: () => void): void => {
     const savedHandler = useRef(handler);
-    const lastExecuted = useRef<number>(0);
-    const interval = 500;
 
     useEffect(() => {
         savedHandler.current = handler;
     }, [handler]);
 
     const callback = useCallback(() => {
-        const now = Date.now();
-        if (now >= lastExecuted.current + interval) {
-            lastExecuted.current = now;
-            savedHandler.current();
-        }
-    }, [savedHandler, lastExecuted]);
+        savedHandler.current();
+    }, [savedHandler]);
 
     useEffectOnce(() => {
         registerWorkItemChangeHandler(callback);
