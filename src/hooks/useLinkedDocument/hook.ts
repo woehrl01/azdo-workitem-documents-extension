@@ -21,7 +21,7 @@ export const useLinkedDocuments = (): IUseLinkedDocument => {
         const fetchedDocuments = await fetchCurrentDocuments();
         if (documentsFetchedCount.current !== fetchedDocuments.length) {
             documentsFetchedCount.current = fetchedDocuments.length;
-            measure.stop({ count: fetchedDocuments.length });
+            measure.stop({ documentsCount: fetchedDocuments.length });
         }
         console.log(`received ${fetchedDocuments.length} documents`);
         setDocuments(fetchedDocuments);
