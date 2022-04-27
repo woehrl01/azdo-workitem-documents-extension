@@ -17,6 +17,7 @@
 	"extensions": [
 		"dbaeumer.vscode-eslint"
 	],
+	"postStartCommand": "npm install && (gh extension install seachicken/gh-poi || true)",
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
