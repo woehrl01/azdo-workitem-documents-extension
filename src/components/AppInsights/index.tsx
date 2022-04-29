@@ -2,15 +2,20 @@ import { ApplicationInsights } from '@microsoft/applicationinsights-web'
 
 declare const __APP_INSIGHTS__: string;
 
+const IsAppInsightDisabled = !__APP_INSIGHTS__;
+
 const appInsights = new ApplicationInsights({
     config: {
         connectionString: __APP_INSIGHTS__,
     }
 });
 
-appInsights.loadAppInsights();
+if (!IsAppInsightDisabled) {
+    appInsights.loadAppInsights();
+}
 
 export const trackPageView = (): void => {
+    if (IsAppInsightDisabled) { return }
     appInsights.trackPageView();
 }
 
@@ -26,6 +31,8 @@ export class Measure {
 }
 
 export const trackEvent = (name: string, properties?: { [key: string]: unknown }): void => {
+    if (IsAppInsightDisabled) { return }
+
     appInsights.trackEvent({ name }, properties);
 }
 
