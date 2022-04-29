@@ -3,11 +3,8 @@
 .dialog {
     justify-content: space-between;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
     display: flex;
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-bottom: 5px;
 }
 
 .label {

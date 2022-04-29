@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import * as SDK from 'azure-devops-extension-sdk'
 import { Button } from 'azure-devops-ui/Button';
 import { TextField } from 'azure-devops-ui/TextField';
 import { FormItem } from 'azure-devops-ui/FormItem';
 import styles from './style.module.scss'
 import { IWorkItemFormService, WorkItemTrackingServiceIds } from 'azure-devops-extension-api/WorkItemTracking';
-import { useEffectOnce, useWindowSize } from 'usehooks-ts';
+import { useEffectOnce } from 'usehooks-ts';
 import { Measure, trackEvent } from 'components/AppInsights';
 
 interface IConfigurationState {
@@ -42,7 +42,6 @@ export const Dialog = (): JSX.Element => {
     const [url, setUrl] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const hasError = url.length === 0;
-    const { width, height } = useWindowSize();
 
     const handleSubmit = useCallback(() => {
         trackEvent('addDocumentDialog', { action: 'submit' });
@@ -59,17 +58,11 @@ export const Dialog = (): JSX.Element => {
     }, [closeDialog]);
 
     useEffectOnce(() => {
-        SDK.resize();
+        /* the containing div is of size 480px (medium)
+         * it also has a padding of 20px left and right */
+        SDK.resize(440, 180);
         SDK.notifyLoadSucceeded();
-
-        /* resize after a delay to 'fix' an edgecase behaviour on host frame side */
-        const timeout = setTimeout(() => { SDK.resize() }, 1000);
-        return () => clearTimeout(timeout);
     });
-
-    useEffect(() => {
-        SDK.resize();
-    }, [width, height]);
 
     return <div className={styles.dialog}>
         <div className={styles.content}>
