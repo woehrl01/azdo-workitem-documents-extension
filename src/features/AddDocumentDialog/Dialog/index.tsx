@@ -5,7 +5,6 @@ import { TextField } from 'azure-devops-ui/TextField';
 import { FormItem } from 'azure-devops-ui/FormItem';
 import styles from './style.module.scss'
 import { IWorkItemFormService, WorkItemTrackingServiceIds } from 'azure-devops-extension-api/WorkItemTracking';
-import { useEffectOnce } from 'usehooks-ts';
 import { Measure, trackEvent } from 'components/AppInsights';
 
 interface IConfigurationState {
@@ -56,13 +55,6 @@ export const Dialog = (): JSX.Element => {
         trackEvent('addDocumentDialog', { action: 'cancel' });
         closeDialog();
     }, [closeDialog]);
-
-    useEffectOnce(() => {
-        /* the containing div is of size 480px (medium)
-         * it also has a padding of 20px left and right */
-        SDK.resize(440, 180);
-        SDK.notifyLoadSucceeded();
-    });
 
     return <div className={styles.dialog}>
         <div className={styles.content}>
