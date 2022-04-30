@@ -1,0 +1,1 @@
+export { RulesHeader } from './component';

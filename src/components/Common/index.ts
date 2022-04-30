@@ -8,8 +8,6 @@ if (__DEV__) {
     require('preact/debug');
 }
 
-export type NoProps = Record<string, never>;
-
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const Noop = (): void => { };
 

@@ -1,0 +1,9 @@
+@import "azure-devops-ui/Core/_platformCommon.scss";
+
+.blocked {
+    color: $status-error-text;
+}
+
+.allowed {
+    color: $status-success-text;
+}

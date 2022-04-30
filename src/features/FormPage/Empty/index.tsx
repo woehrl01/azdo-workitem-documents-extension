@@ -1,12 +1,10 @@
-import { FC } from 'react';
 import { ZeroData, ZeroDataActionType } from 'azure-devops-ui/ZeroData';
 import noDocuments from './no_documents.png';
-import { NoProps } from 'components/Common';
 import styles from './style.module.scss';
 import { openAddDocumentDialog } from 'services/OpenDialog';
 
 
-export const Empty: FC<NoProps> = () => <ZeroData
+export const Empty = (): JSX.Element => <ZeroData
     primaryText="No documents linked"
     className={styles.emptyData}
     secondaryText={<span>

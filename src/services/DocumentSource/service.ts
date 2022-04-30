@@ -9,6 +9,7 @@ export interface ILinkedDocument {
     name: string;
     url: string;
     addedDate?: Date;
+    isHide?: boolean;
 }
 
 
@@ -26,5 +27,9 @@ export const fetchCurrentDocuments = async (): Promise<ILinkedDocument[]> => {
     const documents = await Promise.all(extractor.map(f => f.readDocuments()));
     const distinctDocuments = distinctBy(documents.flat(), d => d.url);
 
-    return distinctDocuments.filter(d => !blockRules.some(r => r.rule.test(d.url)));
+    for (const document of distinctDocuments) {
+        document.isHide = blockRules.some(r => r.rule.test(document.url));
+    }
+
+    return distinctDocuments;
 };

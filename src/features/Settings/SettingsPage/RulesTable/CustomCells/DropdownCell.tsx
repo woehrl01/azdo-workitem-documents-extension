@@ -3,7 +3,8 @@ import { Dropdown } from 'azure-devops-ui/Dropdown';
 import { DropdownSelection } from 'azure-devops-ui/Utilities/DropdownSelection';
 import { IListBoxItem } from 'azure-devops-ui/ListBox';
 import { CustomEditCell, CustomEditCellProps } from './CustomEditCell';
-import { NoProps } from 'components/Common';
+
+type NoProps = Record<string, never>;
 
 interface DropdownCellProps<T> extends CustomEditCellProps<T> {
     items: IListBoxItem<NoProps>[];
