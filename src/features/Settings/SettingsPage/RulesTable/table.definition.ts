@@ -1,8 +1,8 @@
 import sharedStyle from '../SharedStyle';
 import { ColumnMore, ITableColumn } from 'azure-devops-ui/Table';
 import { ArrayItemProvider } from 'azure-devops-ui/Utilities/Provider';
-import { DropdownCell } from './Controls/DropdownCell';
-import { InputCell } from './Controls/InputCell';
+import { DropdownCell } from './CustomCells/DropdownCell';
+import { InputCell } from './CustomCells/InputCell';
 import { IReadonlyObservableValue, ObservableValue } from 'azure-devops-ui/Core/Observable';
 import { ITableItem } from './types';
 import { isValidRule } from 'services/Rules';

@@ -19,7 +19,8 @@ const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocu
 
 export const DocumentPage = (): JSX.Element => {
     const [selectedDocumentUrl, setSelectedDocumentUrl] = useState<string>('');
-    const { documents, isLoading } = useLinkedDocuments();
+    const { documents: allDocuments, isLoading } = useLinkedDocuments();
+    const documents = allDocuments.filter(d => d.isHide === false);
     const documentUrlToShow = fallbackToFirstPageIfNeeded(selectedDocumentUrl, documents);
 
     if (isLoading) {

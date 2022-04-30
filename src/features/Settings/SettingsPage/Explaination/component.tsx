@@ -14,7 +14,7 @@ export const Explaination = (): JSX.Element => {
             <p>
                 <Icon iconName='Accept' className={sharedStyle.allowed} /> Allow rules will include the documents in the list if they are referenced inside the <em>Description</em> field.
             </p>
-            <Icon iconName='Blocked' className={sharedStyle.blocked} /> Block rules will hide the documents from showing up in the embedded documents list. <em>Blocking overrides allow.</em>
+            <Icon iconName='Blocked' className={sharedStyle.blocked} /> Block rules will hide the documents from showing up in the embedded documents page. Documents are still showing up in the list. This can be useful if the document is not embeddable because of <code>X-Frame-Origin</code> contraints. <em>Blocking overrides allow.</em>
         </div>
     </Card>
 }
