@@ -1,0 +1,1 @@
+export { Explaination } from './component';

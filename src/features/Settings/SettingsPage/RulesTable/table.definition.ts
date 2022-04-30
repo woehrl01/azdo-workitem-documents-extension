@@ -1,6 +1,5 @@
-import styles from './style.module.scss';
+import sharedStyle from '../SharedStyle';
 import { ColumnMore, ITableColumn } from 'azure-devops-ui/Table';
-import { IHeaderCommandBarItem } from 'azure-devops-ui/HeaderCommandBar';
 import { ArrayItemProvider } from 'azure-devops-ui/Utilities/Provider';
 import { DropdownCell } from './Controls/DropdownCell';
 import { InputCell } from './Controls/InputCell';
@@ -13,14 +12,15 @@ const ruleTypeItems = [
     {
         id: 'allow',
         text: 'Allow',
-        iconProps: { iconName: 'Accept', className: styles.allowed }
+        iconProps: { iconName: 'Accept', className: sharedStyle.allowed }
     },
     {
         id: 'block',
         text: 'Block',
-        iconProps: { iconName: 'Blocked', className: styles.blocked }
+        iconProps: { iconName: 'Blocked', className: sharedStyle.blocked }
     }
 ];
+
 export const columns = (onDelete: (target: ITableItem) => void, onChange: (rowIndex: number, target: ITableItem) => void): ITableColumn<ITableItem>[] => {
     return [
         new InputCell({
@@ -53,24 +53,7 @@ export const columns = (onDelete: (target: ITableItem) => void, onChange: (rowIn
         }) as ITableColumn<ITableItem>,
     ];
 };
-export const commandBar = (disabled: boolean, onActivate: () => void): IHeaderCommandBarItem[] => {
-    return [
-        {
-            iconProps: {
-                iconName: 'Add'
-            },
-            id: 'create',
-            important: true,
-            isPrimary: true,
-            disabled: disabled,
-            onActivate: onActivate,
-            text: 'Add rule',
-            tooltipProps: {
-                text: 'Add new rule'
-            },
-        }
-    ];
-};
+
 export function buildTableItems(isLoading: boolean, rules: ITableItem[]): ArrayItemProvider<IReadonlyObservableValue<ITableItem | undefined>> | ArrayItemProvider<ITableItem> {
     if (isLoading) {
         /* we return an undefined list, which renders a 'loading' row */
