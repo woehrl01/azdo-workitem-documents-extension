@@ -26,7 +26,7 @@ export const useLinkedDocuments = (): IUseLinkedDocument => {
         console.log(`received ${fetchedDocuments.length} documents`);
         setDocuments(fetchedDocuments);
         setIsLoading(false);
-    }, [setIsLoading, setDocuments]);
+    }, []);
 
     useWorkItemChangedHandler(updateCurrentDocuments);
 
