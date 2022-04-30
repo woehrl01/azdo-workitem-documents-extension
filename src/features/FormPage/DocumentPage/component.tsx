@@ -1,10 +1,8 @@
 import styles from './style.module.scss';
 
-import { useState, FC } from 'react';
+import { useState } from 'react';
 
 import { Page } from 'azure-devops-ui/Page';
-
-import { NoProps } from 'components/Common';
 
 import { ILinkedDocument, useLinkedDocuments } from 'hooks/useLinkedDocument';
 import { PageContent } from '../PageContent';
@@ -19,13 +17,13 @@ const fallbackToFirstPageIfNeeded = (url: string, existingDocuments: ILinkedDocu
     return url
 }
 
-export const DocumentPage: FC<NoProps> = () => {
+export const DocumentPage = (): JSX.Element => {
     const [selectedDocumentUrl, setSelectedDocumentUrl] = useState<string>('');
     const { documents, isLoading } = useLinkedDocuments();
     const documentUrlToShow = fallbackToFirstPageIfNeeded(selectedDocumentUrl, documents);
 
     if (isLoading) {
-        return <Loading />
+        return <Loading />;
     }
 
     if (documents.length === 0) {

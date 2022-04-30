@@ -1,6 +1,5 @@
-import { FC, useCallback } from 'react';
+import { useCallback } from 'react';
 
-import { NoProps } from 'components/Common';
 import { Page } from 'azure-devops-ui/Page';
 import { Header, TitleSize } from 'azure-devops-ui/Header';
 import styles from './style.module.scss';
@@ -12,7 +11,7 @@ import { commandBar, columns, buildTableItems } from './table.definition';
 import { Link } from 'azure-devops-ui/Link';
 import { Icon } from 'azure-devops-ui/Icon';
 
-export const SettingsPage: FC<NoProps> = () => {
+export const SettingsPage = (): JSX.Element => {
   const { isLoading, value: rules, setValue: setRules } = useStoredValue<Array<ITableItem>>('rules', []);
 
   const addNewItem = useCallback((): void => {
