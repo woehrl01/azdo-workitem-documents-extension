@@ -110,6 +110,7 @@ module.exports = ({ isProd }) => {
     plugins: [
       new webpack.DefinePlugin({
         __APP_INSIGHTS__: JSON.stringify(customDefines.APP_INSIGHTS || process.env.APP_INSIGHTS),
+        __DEV__: !isProd,
       }),
       ...Object.entries(entries)
         .map(([name]) => createHtmlWebpackPluginEntry(name)),

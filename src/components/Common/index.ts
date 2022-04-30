@@ -4,6 +4,9 @@ import 'es6-promise/auto';
 import { ReactElement } from 'react';
 import { render } from 'react-dom';
 
+if (__DEV__) {
+    require('preact/debug');
+}
 
 export type NoProps = Record<string, never>;
 

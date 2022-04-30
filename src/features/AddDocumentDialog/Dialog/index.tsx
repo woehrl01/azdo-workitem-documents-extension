@@ -31,8 +31,13 @@ const storeDocument = async ({ url, description }: IDocument): Promise<void> => 
 
 const useConfiguration = (): IConfigurationState => {
     const config = SDK.getConfiguration();
+
+    const closeDialog = useCallback(() => {
+        config.dialog.close();
+    }, [config.dialog]);
+
     return {
-        closeDialog: (): void => { config.dialog.close(); }
+        closeDialog: closeDialog
     }
 }
 
@@ -56,19 +61,27 @@ export const Dialog = (): JSX.Element => {
         closeDialog();
     }, [closeDialog]);
 
+    const urlChanged = useCallback((_: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, value: string) => {
+        setUrl(value);
+    }, []);
+
+    const descriptionChanged = useCallback((_: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, value: string) => {
+        setDescription(value);
+    }, []);
+
     return <div className={styles.dialog}>
         <div className={styles.content}>
             <FormItem label="Document" className={styles.label} error={hasError} >
                 <TextField
                     value={url}
-                    onChange={(_, value): void => setUrl(value)}
+                    onChange={urlChanged}
                     placeholder="https://..."
                 />
             </FormItem>
             <FormItem label="Title" className={styles.label}>
                 <TextField
                     value={description}
-                    onChange={(_, value): void => setDescription(value)}
+                    onChange={descriptionChanged}
                     placeholder="Optional"
                 />
             </FormItem>
