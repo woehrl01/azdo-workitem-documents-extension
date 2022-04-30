@@ -7,6 +7,8 @@ import { Ago } from 'azure-devops-ui/Ago';
 import { AgoFormat } from 'azure-devops-ui/Utilities/Date';
 import { ILinkedDocument } from 'hooks/useLinkedDocument';
 import { getIcon } from 'services/UriOptimizer';
+import { memo } from 'react';
+import isEqual from 'react-fast-compare';
 
 type DocumentProps = {
   document: ILinkedDocument;
@@ -48,10 +50,11 @@ interface LinkedDocumentListProps {
   documents: ILinkedDocument[];
 }
 
-export const LinkedDocumentList = ({ documents }: LinkedDocumentListProps): JSX.Element => {
+const LinkedDocumentListInternal = ({ documents }: LinkedDocumentListProps): JSX.Element => {
   return <>
     {documents.map(d => <Document key={d.url} document={d} />)}
   </>
 }
 
+export const LinkedDocumentList = memo(LinkedDocumentListInternal, isEqual);
 

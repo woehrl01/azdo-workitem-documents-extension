@@ -1,7 +1,5 @@
 import { ApplicationInsights } from '@microsoft/applicationinsights-web'
 
-declare const __APP_INSIGHTS__: string;
-
 const IsAppInsightDisabled = !__APP_INSIGHTS__;
 
 const appInsights = new ApplicationInsights({

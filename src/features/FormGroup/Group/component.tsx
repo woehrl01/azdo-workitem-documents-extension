@@ -17,7 +17,7 @@ export const Group = (): JSX.Element => {
      * This can be due to collapse/expand of the group or the browser windows
      * size changes, etc. */
     const { width, height } = useWindowSize();
-    useEffect(resizeHostFrame, [width, height, documents]);
+    useEffect(resizeHostFrame, [width, height, documents.length]);
 
     return <div>
         <AddButton />
