@@ -3,9 +3,8 @@
 .la-item {
     padding: 4px 0;
     position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
+    margin-right: 0px;
+    padding-right: 24px;
 }
 
 .la-item-wrapper {
@@ -46,6 +45,9 @@
 }
 
 .la-document-delete {
+    position: absolute;
+    top: 4px;
+    right: 4px;
     border: none;
     background-color: transparent;
     margin: 0;
@@ -61,15 +63,15 @@
     min-height: 0;
 }
 
-.la-item:hover {
+.la-item-can-delete:hover {
     background-color: $communication-tint-30;
 }
 
-.la-item .la-document-delete i {
+.la-item-can-delete .la-document-delete i {
     color: transparent;
 }
 
-.la-item:hover .la-document-delete i {
+.la-item-can-delete:hover .la-document-delete i {
     color: black;
 }
 
