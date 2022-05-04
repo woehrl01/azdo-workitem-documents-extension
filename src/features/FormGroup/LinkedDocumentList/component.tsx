@@ -12,6 +12,7 @@ import { memo, useCallback } from 'react';
 import isEqual from 'react-fast-compare';
 import * as SDK from 'azure-devops-extension-sdk';
 import { IWorkItemFormService, WorkItemTrackingServiceIds } from 'azure-devops-extension-api/WorkItemTracking';
+import { css } from 'azure-devops-ui/Util';
 
 type DocumentProps = {
   document: ILinkedDocument;
@@ -62,13 +63,15 @@ const Document = ({ document }: DocumentProps): JSX.Element => {
     deleteDocument(document.url);
   }, [document.url]);
 
+  const canDelete = document.addedDate !== undefined;
+
   return (
-    <div className={styles.laItem}>
+    <div className={css(styles.laItem, canDelete ? styles.laItemCanDelete : null)}>
       <div className={styles.laItemWrapper}>
         <PrimaryData document={document} />
         <AdditionalData document={document} />
       </div>
-      <DeleteButton onClick={deleteThisDocument} />
+      {canDelete && <DeleteButton onClick={deleteThisDocument} />}
     </div>
   )
 }
