@@ -25,15 +25,17 @@ _If you have additional ideas, please create an [issue](https://github.com/woehr
 
 |![diagrams.net](static/diagrams.net.png)|
 |--|
-| Embedded documents |
+| _Embedded documents_ |
+
 
 |![form group](static/form_group.png)|
 |--|
-| Work item form group, to display documents as list |
+| _Work item form group, to display documents as list_ |
+
 
 |![add dialog](static/add_dialog.png)|
 |--|
-| Dialog to quickly add new documents |
+| _Dialog to quickly add new documents_ |
 
 ---
 
