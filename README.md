@@ -23,19 +23,18 @@ _If you have additional ideas, please create an [issue](https://github.com/woehr
 
 ### Screenshot
 
-|![diagrams.net](static/diagrams.net.png)|
-|--|
-| _Embedded documents_ |
+#### Embedded documents Tab (Example diagram.net)
 
+![diagrams.net](static/diagrams.net.png)
 
-|![form group](static/form_group.png)|
-|--|
-| _Work item form group, to display documents as list_ |
+#### Work item form group, to display documents as list
 
+![form group](static/form_group.png)
 
-|![add dialog](static/add_dialog.png)|
-|--|
-| _Dialog to quickly add new documents_ |
+#### Dialog to quickly add new documents
+
+![add dialog](static/add_dialog.png)
+
 
 ---
 
