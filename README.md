@@ -1,8 +1,11 @@
 # Azure DevOps - Work Item Documents Viewer extension
+![](https://img.shields.io/badge/license-MIT-blue.svg)
 
 Would you like to view all documents of a work item without opening several new tabs? This extension will display all linked documents in a tab next to the work item. Cool, huh? 🤩
 
 ### How?
+
+The most simple way to add documents is to add them via the _Add Document_ button in the work item form.
 
 All relations of the type _Hyperlink_ are embedded into a new tab _Documents_ on the work item form. Depending on the URL, an optimized visualization is displayed so that you can perform actions directly.
 
@@ -20,7 +23,17 @@ _If you have additional ideas, please create an [issue](https://github.com/woehr
 
 ### Screenshot
 
-![diagrams.net](static/diagrams.net.png)
+|![diagrams.net](static/diagrams.net.png)|
+|--|
+| Embedded documents |
+
+|![form group](static/form_group.png)|
+|--|
+| Work item form group, to display documents as list |
+
+|![add dialog](static/add_dialog.png)|
+|--|
+| Dialog to quickly add new documents |
 
 ---
 
