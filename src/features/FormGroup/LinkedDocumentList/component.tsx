@@ -1,4 +1,5 @@
 import styles from './style.module.scss';
+import '../BowtieIcons/bowtie.css';
 
 import { Link } from 'azure-devops-ui/Link'
 import { Icon } from 'azure-devops-ui/Icon';
@@ -7,11 +8,22 @@ import { Ago } from 'azure-devops-ui/Ago';
 import { AgoFormat } from 'azure-devops-ui/Utilities/Date';
 import { ILinkedDocument } from 'hooks/useLinkedDocument';
 import { getIcon } from 'services/UriOptimizer';
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import isEqual from 'react-fast-compare';
+import * as SDK from 'azure-devops-extension-sdk';
+import { IWorkItemFormService, WorkItemTrackingServiceIds } from 'azure-devops-extension-api/WorkItemTracking';
 
 type DocumentProps = {
   document: ILinkedDocument;
+}
+
+const deleteDocument = async (url: string): Promise<void> => {
+  const workItemService = await SDK.getService<IWorkItemFormService>(WorkItemTrackingServiceIds.WorkItemFormService);
+
+  const currentRelations = await workItemService.getWorkItemRelations()
+  const toDeleteRelation = currentRelations.filter(r => r.url === url);
+
+  await workItemService.removeWorkItemRelations(toDeleteRelation)
 }
 
 const PrimaryData = ({ document }: DocumentProps): JSX.Element => {
@@ -39,12 +51,27 @@ const AdditionalData = ({ document }: DocumentProps): JSX.Element => {
   );
 }
 
-const Document = ({ document }: DocumentProps): JSX.Element => (
-  <div className={styles.laItem}>
-    <PrimaryData document={document} />
-    <AdditionalData document={document} />
-  </div>
-)
+const DeleteButton = ({ onClick }: { onClick: () => void }): JSX.Element => (
+  <button onClick={onClick} className={styles.laDocumentDelete} aria-label="Remove document">
+    <i className="bowtie-icon bowtie-edit-delete"></i>
+  </button>
+);
+
+const Document = ({ document }: DocumentProps): JSX.Element => {
+  const deleteThisDocument = useCallback(() => {
+    deleteDocument(document.url);
+  }, [document.url]);
+
+  return (
+    <div className={styles.laItem}>
+      <div className={styles.laItemWrapper}>
+        <PrimaryData document={document} />
+        <AdditionalData document={document} />
+      </div>
+      <DeleteButton onClick={deleteThisDocument} />
+    </div>
+  )
+}
 
 interface LinkedDocumentListProps {
   documents: ILinkedDocument[];
