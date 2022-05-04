@@ -23,11 +23,11 @@ _If you have additional ideas, please create an [issue](https://github.com/woehr
 
 ### Screenshot
 
-#### Embedded documents Tab (Example diagram.net)
+#### Embedded documents zab
 
 ![diagrams.net](static/diagrams.net.png)
 
-#### Work item form group, to display documents as list
+#### Work item form group to display documents as a list
 
 ![form group](static/form_group.png)
 
