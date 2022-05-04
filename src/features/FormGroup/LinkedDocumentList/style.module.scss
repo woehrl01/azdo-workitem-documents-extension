@@ -3,7 +3,13 @@
 .la-item {
     padding: 4px 0;
     position: relative;
-    margin-right: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.la-item-wrapper {
+    flex: 1
 }
 
 .la-primary-data {
@@ -37,6 +43,40 @@
 .la-additional-data-item .la-text {
     display: inline;
     vertical-align: top;
+}
+
+.la-document-delete {
+    border: none;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    height: auto;
+    width: auto;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    text-align: initial;
+    border-radius: 0;
+    min-width: 0;
+    min-height: 0;
+}
+
+.la-item:hover {
+    background-color: $communication-tint-30;
+}
+
+.la-item .la-document-delete i {
+    color: transparent;
+}
+
+.la-item:hover .la-document-delete i {
+    color: black;
+}
+
+.la-document-delete:hover i {
+    color: rgba(218, 10, 0, 1) !important;
+    transition: color linear .1s;
+    cursor: pointer;
 }
 
 .button-container {

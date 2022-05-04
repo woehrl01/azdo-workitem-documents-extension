@@ -2,7 +2,7 @@ variables:
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
   isDependabot: $[contains(variables['Build.SourceBranch'], 'dependabot/')]
   major: 1
-  minor: 5
+  minor: 6
   patch: $[counter(format('{0}.{1}-{2}', variables['major'], variables['minor'], variables['isMain']), 0)]
   version: $[format('{0}.{1}.{2}', variables['major'], variables['minor'], variables['patch'])]
   npm_config_cache: $(Pipeline.Workspace)/.npm

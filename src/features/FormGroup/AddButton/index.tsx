@@ -1,5 +1,5 @@
 import styles from './style.module.scss';
-import './bowtie.css';
+import '../BowtieIcons/bowtie.css';
 
 import { openAddDocumentDialog } from 'services/OpenDialog';
 import { memo } from 'react';

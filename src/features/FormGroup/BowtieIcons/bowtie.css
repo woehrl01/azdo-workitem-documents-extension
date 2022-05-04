@@ -1,7 +1,9 @@
-/* source: https://github.com/jimlamb/bowtie/blob/master/style.css */
+/* source: https://github.com/jimlamb/bowtie/blob/master/style.css 
+   and: https://codepen.io/team/Bowtie/details/gPLPNx
+*/
 @font-face {
     font-family: 'Bowtie';
-    src: url('./Bowtie.woff') format('woff');
+    src: url('./bowtie.woff?2') format('woff');
 }
 
 .bowtie-icon {
@@ -20,6 +22,11 @@
 }
 
 .bowtie-math-plus:before {
-	content: "\E64C";
+	content: "\E970";
 }
+
+.bowtie-edit-delete:before {
+	content: "\E94F";
+}
+
 
