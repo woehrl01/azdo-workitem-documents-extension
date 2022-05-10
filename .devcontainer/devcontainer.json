@@ -17,6 +17,9 @@
 	"extensions": [
 		"dbaeumer.vscode-eslint"
 	],
+	"mounts": [
+		"source=${localEnv:HOME}${localEnv:USERPROFILE}/Dev/localhost-certs,target=/certs,type=bind,consistency=cached",
+	],
 	"postStartCommand": "npm install && (gh extension install seachicken/gh-poi || true)",
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
