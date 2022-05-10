@@ -69,6 +69,13 @@ export const Dialog = (): JSX.Element => {
         setDescription(value);
     }, []);
 
+    const submitOnEnter = useCallback((event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (event.key === 'Enter') {
+            handleSubmit();
+        }
+    }, [handleSubmit]);
+
+
     return <div className={styles.dialog}>
         <div className={styles.content}>
             <FormItem label="Document" className={styles.label} error={hasError} >
@@ -76,6 +83,7 @@ export const Dialog = (): JSX.Element => {
                     value={url}
                     onChange={urlChanged}
                     placeholder="https://..."
+                    onKeyPress={submitOnEnter}
                 />
             </FormItem>
             <FormItem label="Title" className={styles.label}>
@@ -83,6 +91,7 @@ export const Dialog = (): JSX.Element => {
                     value={description}
                     onChange={descriptionChanged}
                     placeholder="Optional"
+                    onKeyPress={submitOnEnter}
                 />
             </FormItem>
         </div>

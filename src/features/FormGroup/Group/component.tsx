@@ -12,12 +12,14 @@ const resizeHostFrame = (): void => {
 
 export const Group = (): JSX.Element => {
     const { documents } = useLinkedDocuments();
+    const numberOfDocuments = documents.length;
+    const numberOfAddtionalInfos = documents.filter(d => !!d.addedDate).length;
 
     /* we need to resize the group everytime the hosting frame is resized 
      * This can be due to collapse/expand of the group or the browser windows
      * size changes, etc. */
     const { width, height } = useWindowSize();
-    useEffect(resizeHostFrame, [width, height, documents.length]);
+    useEffect(resizeHostFrame, [width, height, numberOfDocuments, numberOfAddtionalInfos]);
 
     return <div>
         <AddButton />
