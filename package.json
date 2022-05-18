@@ -63,7 +63,7 @@
     "@testing-library/react": "10.4.9",
     "@types/jest": "27.5.1",
     "@types/react": "17.0.45",
-    "@types/react-dom": "17.0.17",
+    "@types/react-dom": "18.0.4",
     "@typescript-eslint/eslint-plugin": "5.25.0",
     "@typescript-eslint/parser": "5.25.0",
     "@vue/preload-webpack-plugin": "2.0.0",
