@@ -3,8 +3,8 @@ import react from '@vitejs/plugin-react'
 import legacy from '@vitejs/plugin-legacy'
 
 import { fileURLToPath } from 'url'
-import path from 'path'
-import fs from 'fs';
+import * as path from 'path'
+import * as fs from 'fs';
 
 
 let enableHttps = false
@@ -13,7 +13,7 @@ if (fs.existsSync('/certs/localhost.key')) {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig(({ _command, mode }) => {
+export default defineConfig(({ command, mode }) => {
 
   const env = loadEnv(mode, process.cwd(), '')
 
@@ -24,7 +24,7 @@ export default defineConfig(({ _command, mode }) => {
         targets: ['defaults', 'not IE 11']
       })
     ],
-    base: '',
+    base: command === 'serve' ? '/dist/' : '',
     define: {
       __DEV__: mode === 'development',
       __APP_INSIGHTS__: JSON.stringify(env.APP_INSIGHTS_KEY),
@@ -36,6 +36,11 @@ export default defineConfig(({ _command, mode }) => {
         'components': path.resolve(__dirname, 'src/components'),
         'test': path.resolve(__dirname, 'src/test'),
       },
+    },
+    css: {
+      modules: {
+        localsConvention: 'camelCaseOnly',
+      }
     },
     build: {
       rollupOptions: {

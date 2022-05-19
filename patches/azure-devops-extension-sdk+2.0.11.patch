@@ -1,0 +1,1545 @@
+diff --git a/node_modules/azure-devops-extension-sdk/SDK.d.ts b/node_modules/azure-devops-extension-sdk/SDK.d.ts
+index 32c096e..556dc50 100644
+--- a/node_modules/azure-devops-extension-sdk/SDK.d.ts
++++ b/node_modules/azure-devops-extension-sdk/SDK.d.ts
+@@ -81,6 +81,19 @@ export interface IHostContext {
+      */
+     type: HostType;
+ }
++/**
++ * Information about the current DevOps teamz
++ */
++export interface ITeamContext {
++    /**
++     * Unique GUID for this team
++     */
++    id: string;
++    /**
++     * Name of team
++     */
++    name: string;
++}
+ /**
+  * Identifier for the current extension
+  */
+@@ -140,6 +153,10 @@ export declare function getUser(): IUserContext;
+ */
+ export declare function getHost(): IHostContext;
+ /**
++* Gets information about the team that the page is targeting
++*/
++export declare function getTeam(): ITeamContext;
++/**
+ * Get the context about the extension that owns the content that is being hosted
+ */
+ export declare function getExtensionContext(): IExtensionContext;
+diff --git a/node_modules/azure-devops-extension-sdk/SDK.js b/node_modules/azure-devops-extension-sdk/SDK.js
+index b2b7516..92cb863 100644
+--- a/node_modules/azure-devops-extension-sdk/SDK.js
++++ b/node_modules/azure-devops-extension-sdk/SDK.js
+@@ -1,302 +1,235 @@
+-var __assign = (this && this.__assign) || Object.assign || function(t) {
+-    for (var s, i = 1, n = arguments.length; i < n; i++) {
+-        s = arguments[i];
+-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+-            t[p] = s[p];
+-    }
+-    return t;
+-};
+-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+-    return new (P || (P = Promise))(function (resolve, reject) {
+-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+-        step((generator = generator.apply(thisArg, _arguments || [])).next());
+-    });
+-};
+-var __generator = (this && this.__generator) || function (thisArg, body) {
+-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+-    function verb(n) { return function (v) { return step([n, v]); }; }
+-    function step(op) {
+-        if (f) throw new TypeError("Generator is already executing.");
+-        while (_) try {
+-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+-            if (y = 0, t) op = [op[0] & 2, t.value];
+-            switch (op[0]) {
+-                case 0: case 1: t = op; break;
+-                case 4: _.label++; return { value: op[1], done: false };
+-                case 5: _.label++; y = op[1]; op = [0]; continue;
+-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+-                default:
+-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+-                    if (t[2]) _.ops.pop();
+-                    _.trys.pop(); continue;
+-            }
+-            op = body.call(thisArg, _);
+-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+-    }
+-};
+-define(["require", "exports", "./XDM"], function (require, exports, XDM_1) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    /**
+-     * Web SDK version number. Can be specified in an extension's set of demands like: vss-sdk-version/3.0
+-     */
+-    exports.sdkVersion = 3.0;
+-    var global = window;
+-    if (global._AzureDevOpsSDKVersion) {
+-        console.error("The AzureDevOps SDK is already loaded. Only one version of this module can be loaded in a given document.");
+-    }
+-    global._AzureDevOpsSDKVersion = exports.sdkVersion;
+-    /**
+-     * DevOps host level
++import { channelManager } from "./XDM";
++/**
++ * Web SDK version number. Can be specified in an extension's set of demands like: vss-sdk-version/3.0
++ */
++export const sdkVersion = 3.0;
++const global = window;
++if (global._AzureDevOpsSDKVersion) {
++    console.error("The AzureDevOps SDK is already loaded. Only one version of this module can be loaded in a given document.");
++}
++global._AzureDevOpsSDKVersion = sdkVersion;
++/**
++ * DevOps host level
++ */
++export var HostType;
++(function (HostType) {
++    /**
++     * The Deployment host
+      */
+-    var HostType;
+-    (function (HostType) {
+-        /**
+-         * The Deployment host
+-         */
+-        HostType[HostType["Deployment"] = 1] = "Deployment";
+-        /**
+-         * The Enterprise host
+-         */
+-        HostType[HostType["Enterprise"] = 2] = "Enterprise";
+-        /**
+-         * The organization host
+-         */
+-        HostType[HostType["Organization"] = 4] = "Organization";
+-    })(HostType = exports.HostType || (exports.HostType = {}));
+-    var hostControlId = "DevOps.HostControl";
+-    var serviceManagerId = "DevOps.ServiceManager";
+-    var parentChannel = XDM_1.channelManager.addChannel(window.parent);
+-    var extensionContext;
+-    var initialConfiguration;
+-    var initialContributionId;
+-    var userContext;
+-    var hostContext;
+-    var themeElement;
+-    var resolveReady;
+-    var readyPromise = new Promise(function (resolve) {
+-        resolveReady = resolve;
+-    });
++    HostType[HostType["Deployment"] = 1] = "Deployment";
+     /**
+-     * Register a method so that the host frame can invoke events
++     * The Enterprise host
+      */
+-    function dispatchEvent(eventName, params) {
+-        var global = window;
+-        var evt;
+-        if (typeof global.CustomEvent === "function") {
+-            evt = new global.CustomEvent(eventName, params);
+-        }
+-        else {
+-            params = params || { bubbles: false, cancelable: false };
+-            evt = document.createEvent('CustomEvent');
+-            evt.initCustomEvent(eventName, params.bubbles, params.cancelable, params.detail);
+-        }
+-        window.dispatchEvent(evt);
+-    }
+-    parentChannel.getObjectRegistry().register("DevOps.SdkClient", {
+-        dispatchEvent: dispatchEvent
+-    });
++    HostType[HostType["Enterprise"] = 2] = "Enterprise";
+     /**
+-     * Initiates the handshake with the host window.
+-     *
+-     * @param options - Initialization options for the extension.
++     * The organization host
+      */
+-    function init(options) {
+-        return new Promise(function (resolve) {
+-            var initOptions = __assign({}, options, { sdkVersion: exports.sdkVersion });
+-            parentChannel.invokeRemoteMethod("initialHandshake", hostControlId, [initOptions]).then(function (handshakeData) {
+-                initialConfiguration = handshakeData.initialConfig || {};
+-                initialContributionId = handshakeData.contributionId;
+-                var context = handshakeData.context;
+-                extensionContext = context.extension;
+-                userContext = context.user;
+-                hostContext = context.host;
+-                if (handshakeData.themeData) {
+-                    applyTheme(handshakeData.themeData);
+-                    window.addEventListener("themeChanged", function (ev) {
+-                        applyTheme(ev.detail.data);
+-                    });
+-                }
+-                resolveReady();
+-                resolve();
+-            });
+-        });
+-    }
+-    exports.init = init;
+-    /**
+-    * Register a callback that gets called once the initial setup/handshake has completed.
+-    * If the initial setup is already completed, the callback is invoked at the end of the current call stack.
+-    */
+-    function ready() {
+-        return __awaiter(this, void 0, void 0, function () {
+-            return __generator(this, function (_a) {
+-                return [2 /*return*/, readyPromise];
+-            });
+-        });
+-    }
+-    exports.ready = ready;
+-    /**
+-    * Notifies the host that the extension successfully loaded (stop showing the loading indicator)
+-    */
+-    function notifyLoadSucceeded() {
+-        return parentChannel.invokeRemoteMethod("notifyLoadSucceeded", hostControlId);
+-    }
+-    exports.notifyLoadSucceeded = notifyLoadSucceeded;
+-    /**
+-    * Notifies the host that the extension failed to load
+-    */
+-    function notifyLoadFailed(e) {
+-        return parentChannel.invokeRemoteMethod("notifyLoadFailed", hostControlId, [e]);
+-    }
+-    exports.notifyLoadFailed = notifyLoadFailed;
+-    function getWaitForReadyError(method) {
+-        return "Attempted to call " + method + "() before init() was complete. Wait for init to complete or place within a ready() callback.";
+-    }
+-    /**
+-    * Get the configuration data passed in the initial handshake from the parent frame
+-    */
+-    function getConfiguration() {
+-        if (!initialConfiguration) {
+-            throw new Error(getWaitForReadyError("getConfiguration"));
+-        }
+-        return initialConfiguration;
+-    }
+-    exports.getConfiguration = getConfiguration;
+-    /**
+-    * Gets the information about the contribution that first caused this extension to load.
+-    */
+-    function getContributionId() {
+-        if (!initialContributionId) {
+-            throw new Error(getWaitForReadyError("getContributionId"));
+-        }
+-        return initialContributionId;
+-    }
+-    exports.getContributionId = getContributionId;
+-    /**
+-    * Gets information about the current user
+-    */
+-    function getUser() {
+-        if (!userContext) {
+-            throw new Error(getWaitForReadyError("getUser"));
+-        }
+-        return userContext;
+-    }
+-    exports.getUser = getUser;
+-    /**
+-    * Gets information about the host (i.e. an Azure DevOps organization) that the page is targeting
+-    */
+-    function getHost() {
+-        if (!hostContext) {
+-            throw new Error(getWaitForReadyError("getHost"));
+-        }
+-        return hostContext;
+-    }
+-    exports.getHost = getHost;
+-    /**
+-    * Get the context about the extension that owns the content that is being hosted
+-    */
+-    function getExtensionContext() {
+-        if (!extensionContext) {
+-            throw new Error(getWaitForReadyError("getExtensionContext"));
+-        }
+-        return extensionContext;
+-    }
+-    exports.getExtensionContext = getExtensionContext;
+-    /**
+-    * Get the contribution with the given contribution id. The returned contribution has a method to get a registered object within that contribution.
+-    *
+-    * @param contributionId - Id of the contribution to get
+-    */
+-    function getService(contributionId) {
+-        return __awaiter(this, void 0, void 0, function () {
+-            return __generator(this, function (_a) {
+-                return [2 /*return*/, ready().then(function () {
+-                        return parentChannel.invokeRemoteMethod("getService", serviceManagerId, [contributionId]);
+-                    })];
+-            });
+-        });
+-    }
+-    exports.getService = getService;
+-    /**
+-    * Register an object (instance or factory method) that this extension exposes to the host frame.
+-    *
+-    * @param instanceId - unique id of the registered object
+-    * @param instance - Either: (1) an object instance, or (2) a function that takes optional context data and returns an object instance.
+-    */
+-    function register(instanceId, instance) {
+-        parentChannel.getObjectRegistry().register(instanceId, instance);
+-    }
+-    exports.register = register;
+-    /**
+-    * Removes an object that this extension exposed to the host frame.
+-    *
+-    * @param instanceId - unique id of the registered object
+-    */
+-    function unregister(instanceId) {
+-        parentChannel.getObjectRegistry().unregister(instanceId);
+-    }
+-    exports.unregister = unregister;
+-    /**
+-    * Fetch an access token which will allow calls to be made to other DevOps services
+-    */
+-    function getAccessToken() {
+-        return __awaiter(this, void 0, void 0, function () {
+-            return __generator(this, function (_a) {
+-                return [2 /*return*/, parentChannel.invokeRemoteMethod("getAccessToken", hostControlId).then(function (tokenObj) { return tokenObj.token; })];
+-            });
+-        });
+-    }
+-    exports.getAccessToken = getAccessToken;
+-    /**
+-    * Fetch an token which can be used to identify the current user
+-    */
+-    function getAppToken() {
+-        return __awaiter(this, void 0, void 0, function () {
+-            return __generator(this, function (_a) {
+-                return [2 /*return*/, parentChannel.invokeRemoteMethod("getAppToken", hostControlId).then(function (tokenObj) { return tokenObj.token; })];
+-            });
+-        });
+-    }
+-    exports.getAppToken = getAppToken;
+-    /**
+-    * Requests the parent window to resize the container for this extension based on the current extension size.
+-    *
+-    * @param width - Optional width, defaults to scrollWidth
+-    * @param height - Optional height, defaults to scrollHeight
+-    */
+-    function resize(width, height) {
+-        var body = document.body;
+-        if (body) {
+-            var newWidth = typeof width === "number" ? width : (body ? body.scrollWidth : undefined);
+-            var newHeight = typeof height === "number" ? height : (body ? body.scrollHeight : undefined);
+-            parentChannel.invokeRemoteMethod("resize", hostControlId, [newWidth, newHeight]);
+-        }
+-    }
+-    exports.resize = resize;
+-    /**
+-     * Applies theme variables to the current document
+-     */
+-    function applyTheme(themeData) {
+-        if (!themeElement) {
+-            themeElement = document.createElement("style");
+-            themeElement.type = "text/css";
+-            document.head.appendChild(themeElement);
+-        }
+-        var cssVariables = [];
+-        if (themeData) {
+-            for (var varName in themeData) {
+-                cssVariables.push("--" + varName + ": " + themeData[varName]);
++    HostType[HostType["Organization"] = 4] = "Organization";
++})(HostType || (HostType = {}));
++const hostControlId = "DevOps.HostControl";
++const serviceManagerId = "DevOps.ServiceManager";
++const parentChannel = channelManager.addChannel(window.parent);
++let extensionContext;
++let initialConfiguration;
++let initialContributionId;
++let userContext;
++let hostContext;
++let teamContext;
++let themeElement;
++let resolveReady;
++const readyPromise = new Promise((resolve) => {
++    resolveReady = resolve;
++});
++/**
++ * Register a method so that the host frame can invoke events
++ */
++function dispatchEvent(eventName, params) {
++    const global = window;
++    let evt;
++    if (typeof global.CustomEvent === "function") {
++        evt = new global.CustomEvent(eventName, params);
++    }
++    else {
++        params = params || { bubbles: false, cancelable: false };
++        evt = document.createEvent('CustomEvent');
++        evt.initCustomEvent(eventName, params.bubbles, params.cancelable, params.detail);
++    }
++    window.dispatchEvent(evt);
++}
++parentChannel.getObjectRegistry().register("DevOps.SdkClient", {
++    dispatchEvent: dispatchEvent
++});
++/**
++ * Initiates the handshake with the host window.
++ *
++ * @param options - Initialization options for the extension.
++ */
++export function init(options) {
++    return new Promise((resolve) => {
++        const initOptions = { ...options, sdkVersion };
++        parentChannel.invokeRemoteMethod("initialHandshake", hostControlId, [initOptions]).then((handshakeData) => {
++            initialConfiguration = handshakeData.initialConfig || {};
++            initialContributionId = handshakeData.contributionId;
++            const context = handshakeData.context;
++            extensionContext = context.extension;
++            userContext = context.user;
++            hostContext = context.host;
++            teamContext = handshakeData.pageContext && handshakeData.pageContext && handshakeData.pageContext.webContext && handshakeData.pageContext.webContext.team;
++            if (handshakeData.themeData) {
++                applyTheme(handshakeData.themeData);
++                window.addEventListener("themeChanged", (ev) => {
++                    applyTheme(ev.detail.data);
++                });
+             }
++            resolveReady();
++            resolve();
++        });
++    });
++}
++/**
++* Register a callback that gets called once the initial setup/handshake has completed.
++* If the initial setup is already completed, the callback is invoked at the end of the current call stack.
++*/
++export async function ready() {
++    return readyPromise;
++}
++/**
++* Notifies the host that the extension successfully loaded (stop showing the loading indicator)
++*/
++export function notifyLoadSucceeded() {
++    return parentChannel.invokeRemoteMethod("notifyLoadSucceeded", hostControlId);
++}
++/**
++* Notifies the host that the extension failed to load
++*/
++export function notifyLoadFailed(e) {
++    return parentChannel.invokeRemoteMethod("notifyLoadFailed", hostControlId, [e]);
++}
++function getWaitForReadyError(method) {
++    return `Attempted to call ${method}() before init() was complete. Wait for init to complete or place within a ready() callback.`;
++}
++/**
++* Get the configuration data passed in the initial handshake from the parent frame
++*/
++export function getConfiguration() {
++    if (!initialConfiguration) {
++        throw new Error(getWaitForReadyError("getConfiguration"));
++    }
++    return initialConfiguration;
++}
++/**
++* Gets the information about the contribution that first caused this extension to load.
++*/
++export function getContributionId() {
++    if (!initialContributionId) {
++        throw new Error(getWaitForReadyError("getContributionId"));
++    }
++    return initialContributionId;
++}
++/**
++* Gets information about the current user
++*/
++export function getUser() {
++    if (!userContext) {
++        throw new Error(getWaitForReadyError("getUser"));
++    }
++    return userContext;
++}
++/**
++* Gets information about the host (i.e. an Azure DevOps organization) that the page is targeting
++*/
++export function getHost() {
++    if (!hostContext) {
++        throw new Error(getWaitForReadyError("getHost"));
++    }
++    return hostContext;
++}
++/**
++* Gets information about the team that the page is targeting
++*/
++export function getTeam() {
++    if (!teamContext) {
++        throw new Error(getWaitForReadyError("getTeam"));
++    }
++    return teamContext;
++}
++/**
++* Get the context about the extension that owns the content that is being hosted
++*/
++export function getExtensionContext() {
++    if (!extensionContext) {
++        throw new Error(getWaitForReadyError("getExtensionContext"));
++    }
++    return extensionContext;
++}
++/**
++* Get the contribution with the given contribution id. The returned contribution has a method to get a registered object within that contribution.
++*
++* @param contributionId - Id of the contribution to get
++*/
++export async function getService(contributionId) {
++    return ready().then(() => {
++        return parentChannel.invokeRemoteMethod("getService", serviceManagerId, [contributionId]);
++    });
++}
++/**
++* Register an object (instance or factory method) that this extension exposes to the host frame.
++*
++* @param instanceId - unique id of the registered object
++* @param instance - Either: (1) an object instance, or (2) a function that takes optional context data and returns an object instance.
++*/
++export function register(instanceId, instance) {
++    parentChannel.getObjectRegistry().register(instanceId, instance);
++}
++/**
++* Removes an object that this extension exposed to the host frame.
++*
++* @param instanceId - unique id of the registered object
++*/
++export function unregister(instanceId) {
++    parentChannel.getObjectRegistry().unregister(instanceId);
++}
++/**
++* Fetch an access token which will allow calls to be made to other DevOps services
++*/
++export async function getAccessToken() {
++    return parentChannel.invokeRemoteMethod("getAccessToken", hostControlId).then((tokenObj) => { return tokenObj.token; });
++}
++/**
++* Fetch an token which can be used to identify the current user
++*/
++export async function getAppToken() {
++    return parentChannel.invokeRemoteMethod("getAppToken", hostControlId).then((tokenObj) => { return tokenObj.token; });
++}
++/**
++* Requests the parent window to resize the container for this extension based on the current extension size.
++*
++* @param width - Optional width, defaults to scrollWidth
++* @param height - Optional height, defaults to scrollHeight
++*/
++export function resize(width, height) {
++    const body = document.body;
++    if (body) {
++        const newWidth = typeof width === "number" ? width : (body ? body.scrollWidth : undefined);
++        const newHeight = typeof height === "number" ? height : (body ? body.scrollHeight : undefined);
++        parentChannel.invokeRemoteMethod("resize", hostControlId, [newWidth, newHeight]);
++    }
++}
++/**
++ * Applies theme variables to the current document
++ */
++export function applyTheme(themeData) {
++    if (!themeElement) {
++        themeElement = document.createElement("style");
++        themeElement.type = "text/css";
++        document.head.appendChild(themeElement);
++    }
++    const cssVariables = [];
++    if (themeData) {
++        for (const varName in themeData) {
++            cssVariables.push("--" + varName + ": " + themeData[varName]);
+         }
+-        themeElement.innerText = ":root { " + cssVariables.join("; ") + " } body { color: var(--text-primary-color) }";
+-        dispatchEvent("themeApplied", { detail: themeData });
+     }
+-    exports.applyTheme = applyTheme;
+-});
++    themeElement.innerText = ":root { " + cssVariables.join("; ") + " } body { color: var(--text-primary-color) }";
++    dispatchEvent("themeApplied", { detail: themeData });
++}
+diff --git a/node_modules/azure-devops-extension-sdk/SDK.min.js b/node_modules/azure-devops-extension-sdk/SDK.min.js
+index 224844d..6938ea0 100644
+--- a/node_modules/azure-devops-extension-sdk/SDK.min.js
++++ b/node_modules/azure-devops-extension-sdk/SDK.min.js
+@@ -1 +1 @@
+-var __assign=this&&this.__assign||Object.assign||function(e){for(var t,n=1,r=arguments.length;n<r;n++){t=arguments[n];for(var o in t)Object.prototype.hasOwnProperty.call(t,o)&&(e[o]=t[o])}return e},__awaiter=this&&this.__awaiter||function(e,t,n,r){return new(n||(n=Promise))(function(o,i){function a(e){try{c(r.next(e))}catch(e){i(e)}}function u(e){try{c(r.throw(e))}catch(e){i(e)}}function c(e){e.done?o(e.value):new n(function(t){t(e.value)}).then(a,u)}c((r=r.apply(e,t||[])).next())})},__generator=this&&this.__generator||function(e,t){function n(n){return function(a){return function(n){if(r)throw new TypeError("Generator is already executing.");for(;u;)try{if(r=1,o&&(i=2&n[0]?o.return:n[0]?o.throw||((i=o.return)&&i.call(o),0):o.next)&&!(i=i.call(o,n[1])).done)return i;switch(o=0,i&&(n=[2&n[0],i.value]),n[0]){case 0:case 1:i=n;break;case 4:return u.label++,{value:n[1],done:!1};case 5:u.label++,o=n[1],n=[0];continue;case 7:n=u.ops.pop(),u.trys.pop();continue;default:if(i=u.trys,!(i=i.length>0&&i[i.length-1])&&(6===n[0]||2===n[0])){u=0;continue}if(3===n[0]&&(!i||n[1]>i[0]&&n[1]<i[3])){u.label=n[1];break}if(6===n[0]&&u.label<i[1]){u.label=i[1],i=n;break}if(i&&u.label<i[2]){u.label=i[2],u.ops.push(n);break}i[2]&&u.ops.pop(),u.trys.pop();continue}n=t.call(e,u)}catch(e){n=[6,e],o=0}finally{r=i=0}if(5&n[0])throw n[1];return{value:n[0]?n[1]:void 0,done:!0}}([n,a])}}var r,o,i,a,u={label:0,sent:function(){if(1&i[0])throw i[1];return i[1]},trys:[],ops:[]};return a={next:n(0),throw:n(1),return:n(2)},"function"==typeof Symbol&&(a[Symbol.iterator]=function(){return this}),a};define(["require","exports","./XDM"],function(e,t,n){"use strict";function r(e,t){var n,r=window;"function"==typeof r.CustomEvent?n=new r.CustomEvent(e,t):(t=t||{bubbles:!1,cancelable:!1},(n=document.createEvent("CustomEvent")).initCustomEvent(e,t.bubbles,t.cancelable,t.detail)),window.dispatchEvent(n)}function o(){return __awaiter(this,void 0,void 0,function(){return __generator(this,function(e){return[2,y]})})}function i(e){return"Attempted to call "+e+"() before init() was complete. Wait for init to complete or place within a ready() callback."}function a(e){h||((h=document.createElement("style")).type="text/css",document.head.appendChild(h));var t=[];if(e)for(var n in e)t.push("--"+n+": "+e[n]);h.innerText=":root { "+t.join("; ")+" } body { color: var(--text-primary-color) }",r("themeApplied",{detail:e})}Object.defineProperty(t,"__esModule",{value:!0}),t.sdkVersion=3;var u=window;u._AzureDevOpsSDKVersion&&console.error("The AzureDevOps SDK is already loaded. Only one version of this module can be loaded in a given document."),u._AzureDevOpsSDKVersion=t.sdkVersion;!function(e){e[e.Deployment=1]="Deployment",e[e.Enterprise=2]="Enterprise",e[e.Organization=4]="Organization"}(t.HostType||(t.HostType={}));var c,s,f,l,d,h,p,v="DevOps.HostControl",g="DevOps.ServiceManager",w=n.channelManager.addChannel(window.parent),y=new Promise(function(e){p=e});w.getObjectRegistry().register("DevOps.SdkClient",{dispatchEvent:r}),t.init=function(e){return new Promise(function(n){var r=__assign({},e,{sdkVersion:t.sdkVersion});w.invokeRemoteMethod("initialHandshake",v,[r]).then(function(e){s=e.initialConfig||{},f=e.contributionId;var t=e.context;c=t.extension,l=t.user,d=t.host,e.themeData&&(a(e.themeData),window.addEventListener("themeChanged",function(e){a(e.detail.data)})),p(),n()})})},t.ready=o,t.notifyLoadSucceeded=function(){return w.invokeRemoteMethod("notifyLoadSucceeded",v)},t.notifyLoadFailed=function(e){return w.invokeRemoteMethod("notifyLoadFailed",v,[e])},t.getConfiguration=function(){if(!s)throw new Error(i("getConfiguration"));return s},t.getContributionId=function(){if(!f)throw new Error(i("getContributionId"));return f},t.getUser=function(){if(!l)throw new Error(i("getUser"));return l},t.getHost=function(){if(!d)throw new Error(i("getHost"));return d},t.getExtensionContext=function(){if(!c)throw new Error(i("getExtensionContext"));return c},t.getService=function(e){return __awaiter(this,void 0,void 0,function(){return __generator(this,function(t){return[2,o().then(function(){return w.invokeRemoteMethod("getService",g,[e])})]})})},t.register=function(e,t){w.getObjectRegistry().register(e,t)},t.unregister=function(e){w.getObjectRegistry().unregister(e)},t.getAccessToken=function(){return __awaiter(this,void 0,void 0,function(){return __generator(this,function(e){return[2,w.invokeRemoteMethod("getAccessToken",v).then(function(e){return e.token})]})})},t.getAppToken=function(){return __awaiter(this,void 0,void 0,function(){return __generator(this,function(e){return[2,w.invokeRemoteMethod("getAppToken",v).then(function(e){return e.token})]})})},t.resize=function(e,t){var n=document.body;if(n){var r="number"==typeof e?e:n?n.scrollWidth:void 0,o="number"==typeof t?t:n?n.scrollHeight:void 0;w.invokeRemoteMethod("resize",v,[r,o])}},t.applyTheme=a});
+\ No newline at end of file
++function dispatchEvent(e, t) { const n = window; let o; "function" == typeof n.CustomEvent ? o = new n.CustomEvent(e, t) : (t = t || { bubbles: !1, cancelable: !1 }, (o = document.createEvent("CustomEvent")).initCustomEvent(e, t.bubbles, t.cancelable, t.detail)), window.dispatchEvent(o) } function getWaitForReadyError(e) { return `Attempted to call ${e}() before init() was complete. Wait for init to complete or place within a ready() callback.` } import { channelManager } from "./XDM"; export const sdkVersion = 3; const global = window; global._AzureDevOpsSDKVersion && console.error("The AzureDevOps SDK is already loaded. Only one version of this module can be loaded in a given document."), global._AzureDevOpsSDKVersion = sdkVersion; export var HostType; !function (e) { e[e.Deployment = 1] = "Deployment", e[e.Enterprise = 2] = "Enterprise", e[e.Organization = 4] = "Organization" }(HostType || (HostType = {})); const hostControlId = "DevOps.HostControl", serviceManagerId = "DevOps.ServiceManager", parentChannel = channelManager.addChannel(window.parent); let extensionContext, initialConfiguration, initialContributionId, userContext, hostContext, teamContext, themeElement, resolveReady; const readyPromise = new Promise(e => { resolveReady = e }); parentChannel.getObjectRegistry().register("DevOps.SdkClient", { dispatchEvent: dispatchEvent }); export function init(e) { return new Promise(t => { const n = { ...e, sdkVersion: sdkVersion }; parentChannel.invokeRemoteMethod("initialHandshake", hostControlId, [n]).then(e => { initialConfiguration = e.initialConfig || {}, initialContributionId = e.contributionId; const n = e.context; extensionContext = n.extension, userContext = n.user, hostContext = n.host, teamContext = e.pageContext && e.pageContext && e.pageContext.webContext && e.pageContext.webContext.team, e.themeData && (applyTheme(e.themeData), window.addEventListener("themeChanged", e => { applyTheme(e.detail.data) })), resolveReady(), t() }) }) }; export async function ready() { return readyPromise }; export function notifyLoadSucceeded() { return parentChannel.invokeRemoteMethod("notifyLoadSucceeded", hostControlId) }; export function notifyLoadFailed(e) { return parentChannel.invokeRemoteMethod("notifyLoadFailed", hostControlId, [e]) }; export function getConfiguration() { if (!initialConfiguration) throw new Error(getWaitForReadyError("getConfiguration")); return initialConfiguration }; export function getContributionId() { if (!initialContributionId) throw new Error(getWaitForReadyError("getContributionId")); return initialContributionId }; export function getUser() { if (!userContext) throw new Error(getWaitForReadyError("getUser")); return userContext }; export function getHost() { if (!hostContext) throw new Error(getWaitForReadyError("getHost")); return hostContext }; export function getTeam() { if (!teamContext) throw new Error(getWaitForReadyError("getTeam")); return teamContext }; export function getExtensionContext() { if (!extensionContext) throw new Error(getWaitForReadyError("getExtensionContext")); return extensionContext }; export async function getService(e) { return ready().then(() => parentChannel.invokeRemoteMethod("getService", serviceManagerId, [e])) }; export function register(e, t) { parentChannel.getObjectRegistry().register(e, t) }; export function unregister(e) { parentChannel.getObjectRegistry().unregister(e) }; export async function getAccessToken() { return parentChannel.invokeRemoteMethod("getAccessToken", hostControlId).then(e => e.token) }; export async function getAppToken() { return parentChannel.invokeRemoteMethod("getAppToken", hostControlId).then(e => e.token) }; export function resize(e, t) { const n = document.body; if (n) { const o = "number" == typeof e ? e : n ? n.scrollWidth : void 0, r = "number" == typeof t ? t : n ? n.scrollHeight : void 0; parentChannel.invokeRemoteMethod("resize", hostControlId, [o, r]) } }; export function applyTheme(e) { themeElement || ((themeElement = document.createElement("style")).type = "text/css", document.head.appendChild(themeElement)); const t = []; if (e) for (const n in e) t.push("--" + n + ": " + e[n]); themeElement.innerText = ":root { " + t.join("; ") + " } body { color: var(--text-primary-color) }", dispatchEvent("themeApplied", { detail: e }) };
+diff --git a/node_modules/azure-devops-extension-sdk/XDM.js b/node_modules/azure-devops-extension-sdk/XDM.js
+index 7f586fd..0a01a78 100644
+--- a/node_modules/azure-devops-extension-sdk/XDM.js
++++ b/node_modules/azure-devops-extension-sdk/XDM.js
+@@ -1,537 +1,480 @@
+-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+-    return new (P || (P = Promise))(function (resolve, reject) {
+-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+-        step((generator = generator.apply(thisArg, _arguments || [])).next());
+-    });
+-};
+-var __generator = (this && this.__generator) || function (thisArg, body) {
+-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+-    function verb(n) { return function (v) { return step([n, v]); }; }
+-    function step(op) {
+-        if (f) throw new TypeError("Generator is already executing.");
+-        while (_) try {
+-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+-            if (y = 0, t) op = [op[0] & 2, t.value];
+-            switch (op[0]) {
+-                case 0: case 1: t = op; break;
+-                case 4: _.label++; return { value: op[1], done: false };
+-                case 5: _.label++; y = op[1]; op = [0]; continue;
+-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+-                default:
+-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+-                    if (t[2]) _.ops.pop();
+-                    _.trys.pop(); continue;
++import "es6-promise/auto";
++import "es6-object-assign/auto";
++const smallestRandom = parseInt("10000000000", 36);
++const maxSafeInteger = Number.MAX_SAFE_INTEGER || 9007199254740991;
++/**
++ * Create a new random 22-character fingerprint.
++ * @return string fingerprint
++ */
++function newFingerprint() {
++    // smallestRandom ensures we will get a 11-character result from the base-36 conversion.
++    return Math.floor((Math.random() * (maxSafeInteger - smallestRandom)) + smallestRandom).toString(36) +
++        Math.floor((Math.random() * (maxSafeInteger - smallestRandom)) + smallestRandom).toString(36);
++}
++/**
++ * Gets all own and inherited property names of the given object, excluding
++ * those that are inherited from Object's prototype and "constructor".
++ * @param obj
++ */
++function getAllPropertyNames(obj) {
++    const properties = {};
++    while (obj && obj !== Object.prototype) {
++        const ownPropertyNames = Object.getOwnPropertyNames(obj);
++        for (const name of ownPropertyNames) {
++            if (name !== "constructor") {
++                properties[name] = true;
+             }
+-            op = body.call(thisArg, _);
+-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
++        }
++        obj = Object.getPrototypeOf(obj);
++    }
++    return properties;
++}
++/**
++ * Catalog of objects exposed for XDM
++ */
++export class XDMObjectRegistry {
++    constructor() {
++        this.objects = {};
+     }
+-};
+-define(["require", "exports", "es6-promise/auto", "es6-object-assign/auto"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    var smallestRandom = parseInt("10000000000", 36);
+-    var maxSafeInteger = Number.MAX_SAFE_INTEGER || 9007199254740991;
+     /**
+-     * Create a new random 22-character fingerprint.
+-     * @return string fingerprint
+-     */
+-    function newFingerprint() {
+-        // smallestRandom ensures we will get a 11-character result from the base-36 conversion.
+-        return Math.floor((Math.random() * (maxSafeInteger - smallestRandom)) + smallestRandom).toString(36) +
+-            Math.floor((Math.random() * (maxSafeInteger - smallestRandom)) + smallestRandom).toString(36);
++    * Register an object (instance or factory method) exposed by this frame to callers in a remote frame
++    *
++    * @param instanceId - unique id of the registered object
++    * @param instance - Either: (1) an object instance, or (2) a function that takes optional context data and returns an object instance.
++    */
++    register(instanceId, instance) {
++        this.objects[instanceId] = instance;
+     }
+     /**
+-     * Gets all own and inherited property names of the given object, excluding
+-     * those that are inherited from Object's prototype and "constructor".
+-     * @param obj
+-     */
+-    function getAllPropertyNames(obj) {
+-        var properties = {};
+-        while (obj && obj !== Object.prototype) {
+-            var ownPropertyNames = Object.getOwnPropertyNames(obj);
+-            for (var _i = 0, ownPropertyNames_1 = ownPropertyNames; _i < ownPropertyNames_1.length; _i++) {
+-                var name_1 = ownPropertyNames_1[_i];
+-                if (name_1 !== "constructor") {
+-                    properties[name_1] = true;
+-                }
+-            }
+-            obj = Object.getPrototypeOf(obj);
+-        }
+-        return properties;
++    * Unregister an object (instance or factory method) that was previously registered by this frame
++    *
++    * @param instanceId - unique id of the registered object
++    */
++    unregister(instanceId) {
++        delete this.objects[instanceId];
+     }
+     /**
+-     * Catalog of objects exposed for XDM
+-     */
+-    var XDMObjectRegistry = /** @class */ (function () {
+-        function XDMObjectRegistry() {
+-            this.objects = {};
++    * Get an instance of an object registered with the given id
++    *
++    * @param instanceId - unique id of the registered object
++    * @param contextData - Optional context data to pass to a registered object's factory method
++    */
++    getInstance(instanceId, contextData) {
++        var instance = this.objects[instanceId];
++        if (!instance) {
++            return undefined;
+         }
+-        /**
+-        * Register an object (instance or factory method) exposed by this frame to callers in a remote frame
+-        *
+-        * @param instanceId - unique id of the registered object
+-        * @param instance - Either: (1) an object instance, or (2) a function that takes optional context data and returns an object instance.
+-        */
+-        XDMObjectRegistry.prototype.register = function (instanceId, instance) {
+-            this.objects[instanceId] = instance;
+-        };
+-        /**
+-        * Unregister an object (instance or factory method) that was previously registered by this frame
+-        *
+-        * @param instanceId - unique id of the registered object
+-        */
+-        XDMObjectRegistry.prototype.unregister = function (instanceId) {
+-            delete this.objects[instanceId];
++        if (typeof instance === "function") {
++            return instance(contextData);
++        }
++        else {
++            return instance;
++        }
++    }
++}
++const MAX_XDM_DEPTH = 100;
++let nextChannelId = 1;
++/**
++ * Represents a channel of communication between frames\document
++ * Stays "alive" across multiple funtion\method calls
++ */
++export class XDMChannel {
++    constructor(postToWindow, targetOrigin) {
++        this.promises = {};
++        this.nextMessageId = 1;
++        this.nextProxyId = 1;
++        this.proxyFunctions = {};
++        this.postToWindow = postToWindow;
++        this.targetOrigin = targetOrigin;
++        this.registry = new XDMObjectRegistry();
++        this.channelId = nextChannelId++;
++        if (!this.targetOrigin) {
++            this.handshakeToken = newFingerprint();
++        }
++    }
++    /**
++    * Get the object registry to handle messages from this specific channel.
++    * Upon receiving a message, this channel registry will be used first, then
++    * the global registry will be used if no handler is found here.
++    */
++    getObjectRegistry() {
++        return this.registry;
++    }
++    /**
++    * Invoke a method via RPC. Lookup the registered object on the remote end of the channel and invoke the specified method.
++    *
++    * @param method - Name of the method to invoke
++    * @param instanceId - unique id of the registered object
++    * @param params - Arguments to the method to invoke
++    * @param instanceContextData - Optional context data to pass to a registered object's factory method
++    * @param serializationSettings - Optional serialization settings
++    */
++    async invokeRemoteMethod(methodName, instanceId, params, instanceContextData, serializationSettings) {
++        const message = {
++            id: this.nextMessageId++,
++            methodName: methodName,
++            instanceId: instanceId,
++            instanceContext: instanceContextData,
++            params: this._customSerializeObject(params, serializationSettings),
++            serializationSettings: serializationSettings
+         };
+-        /**
+-        * Get an instance of an object registered with the given id
+-        *
+-        * @param instanceId - unique id of the registered object
+-        * @param contextData - Optional context data to pass to a registered object's factory method
+-        */
+-        XDMObjectRegistry.prototype.getInstance = function (instanceId, contextData) {
+-            var instance = this.objects[instanceId];
+-            if (!instance) {
+-                return undefined;
++        if (!this.targetOrigin) {
++            message.handshakeToken = this.handshakeToken;
++        }
++        const promise = new Promise((resolve, reject) => {
++            this.promises[message.id] = { resolve, reject };
++        });
++        this._sendRpcMessage(message);
++        return promise;
++    }
++    /**
++    * Get a proxied object that represents the object registered with the given instance id on the remote side of this channel.
++    *
++    * @param instanceId - unique id of the registered object
++    * @param contextData - Optional context data to pass to a registered object's factory method
++    */
++    getRemoteObjectProxy(instanceId, contextData) {
++        return this.invokeRemoteMethod("", instanceId, undefined, contextData);
++    }
++    invokeMethod(registeredInstance, rpcMessage) {
++        if (!rpcMessage.methodName) {
++            // Null/empty method name indicates to return the registered object itself.
++            this._success(rpcMessage, registeredInstance, rpcMessage.handshakeToken);
++            return;
++        }
++        var method = registeredInstance[rpcMessage.methodName];
++        if (typeof method !== "function") {
++            this.error(rpcMessage, new Error("RPC method not found: " + rpcMessage.methodName));
++            return;
++        }
++        try {
++            // Call specified method.  Add nested success and error call backs with closure
++            // so we can post back a response as a result or error as appropriate
++            var methodArgs = [];
++            if (rpcMessage.params) {
++                methodArgs = this._customDeserializeObject(rpcMessage.params, {});
+             }
+-            if (typeof instance === "function") {
+-                return instance(contextData);
++            var result = method.apply(registeredInstance, methodArgs);
++            if (result && result.then && typeof result.then === "function") {
++                result.then((asyncResult) => {
++                    this._success(rpcMessage, asyncResult, rpcMessage.handshakeToken);
++                }, (e) => {
++                    this.error(rpcMessage, e);
++                });
+             }
+             else {
+-                return instance;
++                this._success(rpcMessage, result, rpcMessage.handshakeToken);
+             }
+-        };
+-        return XDMObjectRegistry;
+-    }());
+-    exports.XDMObjectRegistry = XDMObjectRegistry;
+-    var MAX_XDM_DEPTH = 100;
+-    var nextChannelId = 1;
++        }
++        catch (exception) {
++            // send back as error if an exception is thrown
++            this.error(rpcMessage, exception);
++        }
++    }
++    getRegisteredObject(instanceId, instanceContext) {
++        if (instanceId === "__proxyFunctions") {
++            // Special case for proxied functions of remote instances
++            return this.proxyFunctions;
++        }
++        // Look in the channel registry first
++        var registeredObject = this.registry.getInstance(instanceId, instanceContext);
++        if (!registeredObject) {
++            // Look in the global registry as a fallback
++            registeredObject = globalObjectRegistry.getInstance(instanceId, instanceContext);
++        }
++        return registeredObject;
++    }
+     /**
+-     * Represents a channel of communication between frames\document
+-     * Stays "alive" across multiple funtion\method calls
+-     */
+-    var XDMChannel = /** @class */ (function () {
+-        function XDMChannel(postToWindow, targetOrigin) {
+-            this.promises = {};
+-            this.nextMessageId = 1;
+-            this.nextProxyId = 1;
+-            this.proxyFunctions = {};
+-            this.postToWindow = postToWindow;
+-            this.targetOrigin = targetOrigin;
+-            this.registry = new XDMObjectRegistry();
+-            this.channelId = nextChannelId++;
+-            if (!this.targetOrigin) {
+-                this.handshakeToken = newFingerprint();
++    * Handle a received message on this channel. Dispatch to the appropriate object found via object registry
++    *
++    * @param rpcMessage - Message data
++    * @return True if the message was handled by this channel. Otherwise false.
++    */
++    onMessage(rpcMessage) {
++        if (rpcMessage.instanceId) {
++            // Find the object that handles this requestNeed to find implementation
++            // Look in the channel registry first
++            const registeredObject = this.getRegisteredObject(rpcMessage.instanceId, rpcMessage.instanceContext);
++            if (!registeredObject) {
++                // If not found return false to indicate that the message was not handled
++                return false;
+             }
+-        }
+-        /**
+-        * Get the object registry to handle messages from this specific channel.
+-        * Upon receiving a message, this channel registry will be used first, then
+-        * the global registry will be used if no handler is found here.
+-        */
+-        XDMChannel.prototype.getObjectRegistry = function () {
+-            return this.registry;
+-        };
+-        /**
+-        * Invoke a method via RPC. Lookup the registered object on the remote end of the channel and invoke the specified method.
+-        *
+-        * @param method - Name of the method to invoke
+-        * @param instanceId - unique id of the registered object
+-        * @param params - Arguments to the method to invoke
+-        * @param instanceContextData - Optional context data to pass to a registered object's factory method
+-        * @param serializationSettings - Optional serialization settings
+-        */
+-        XDMChannel.prototype.invokeRemoteMethod = function (methodName, instanceId, params, instanceContextData, serializationSettings) {
+-            return __awaiter(this, void 0, void 0, function () {
+-                var message, promise;
+-                var _this = this;
+-                return __generator(this, function (_a) {
+-                    message = {
+-                        id: this.nextMessageId++,
+-                        methodName: methodName,
+-                        instanceId: instanceId,
+-                        instanceContext: instanceContextData,
+-                        params: this._customSerializeObject(params, serializationSettings),
+-                        serializationSettings: serializationSettings
+-                    };
+-                    if (!this.targetOrigin) {
+-                        message.handshakeToken = this.handshakeToken;
+-                    }
+-                    promise = new Promise(function (resolve, reject) {
+-                        _this.promises[message.id] = { resolve: resolve, reject: reject };
+-                    });
+-                    this._sendRpcMessage(message);
+-                    return [2 /*return*/, promise];
++            if (typeof registeredObject["then"] === "function") {
++                registeredObject.then((resolvedInstance) => {
++                    this.invokeMethod(resolvedInstance, rpcMessage);
++                }, (e) => {
++                    this.error(rpcMessage, e);
+                 });
+-            });
+-        };
+-        /**
+-        * Get a proxied object that represents the object registered with the given instance id on the remote side of this channel.
+-        *
+-        * @param instanceId - unique id of the registered object
+-        * @param contextData - Optional context data to pass to a registered object's factory method
+-        */
+-        XDMChannel.prototype.getRemoteObjectProxy = function (instanceId, contextData) {
+-            return this.invokeRemoteMethod("", instanceId, undefined, contextData);
+-        };
+-        XDMChannel.prototype.invokeMethod = function (registeredInstance, rpcMessage) {
+-            var _this = this;
+-            if (!rpcMessage.methodName) {
+-                // Null/empty method name indicates to return the registered object itself.
+-                this._success(rpcMessage, registeredInstance, rpcMessage.handshakeToken);
+-                return;
+-            }
+-            var method = registeredInstance[rpcMessage.methodName];
+-            if (typeof method !== "function") {
+-                this.error(rpcMessage, new Error("RPC method not found: " + rpcMessage.methodName));
+-                return;
+             }
+-            try {
+-                // Call specified method.  Add nested success and error call backs with closure
+-                // so we can post back a response as a result or error as appropriate
+-                var methodArgs = [];
+-                if (rpcMessage.params) {
+-                    methodArgs = this._customDeserializeObject(rpcMessage.params, {});
+-                }
+-                var result = method.apply(registeredInstance, methodArgs);
+-                if (result && result.then && typeof result.then === "function") {
+-                    result.then(function (asyncResult) {
+-                        _this._success(rpcMessage, asyncResult, rpcMessage.handshakeToken);
+-                    }, function (e) {
+-                        _this.error(rpcMessage, e);
+-                    });
+-                }
+-                else {
+-                    this._success(rpcMessage, result, rpcMessage.handshakeToken);
+-                }
++            else {
++                this.invokeMethod(registeredObject, rpcMessage);
+             }
+-            catch (exception) {
+-                // send back as error if an exception is thrown
+-                this.error(rpcMessage, exception);
++        }
++        else {
++            const promise = this.promises[rpcMessage.id];
++            if (!promise) {
++                // Message not handled by this channel.
++                return false;
+             }
+-        };
+-        XDMChannel.prototype.getRegisteredObject = function (instanceId, instanceContext) {
+-            if (instanceId === "__proxyFunctions") {
+-                // Special case for proxied functions of remote instances
+-                return this.proxyFunctions;
++            if (rpcMessage.error) {
++                promise.reject(this._customDeserializeObject([rpcMessage.error], {})[0]);
+             }
+-            // Look in the channel registry first
+-            var registeredObject = this.registry.getInstance(instanceId, instanceContext);
+-            if (!registeredObject) {
+-                // Look in the global registry as a fallback
+-                registeredObject = exports.globalObjectRegistry.getInstance(instanceId, instanceContext);
++            else {
++                promise.resolve(this._customDeserializeObject([rpcMessage.result], {})[0]);
+             }
+-            return registeredObject;
+-        };
+-        /**
+-        * Handle a received message on this channel. Dispatch to the appropriate object found via object registry
+-        *
+-        * @param rpcMessage - Message data
+-        * @return True if the message was handled by this channel. Otherwise false.
+-        */
+-        XDMChannel.prototype.onMessage = function (rpcMessage) {
+-            var _this = this;
+-            if (rpcMessage.instanceId) {
+-                // Find the object that handles this requestNeed to find implementation
+-                // Look in the channel registry first
+-                var registeredObject = this.getRegisteredObject(rpcMessage.instanceId, rpcMessage.instanceContext);
+-                if (!registeredObject) {
+-                    // If not found return false to indicate that the message was not handled
+-                    return false;
+-                }
+-                if (typeof registeredObject["then"] === "function") {
+-                    registeredObject.then(function (resolvedInstance) {
+-                        _this.invokeMethod(resolvedInstance, rpcMessage);
+-                    }, function (e) {
+-                        _this.error(rpcMessage, e);
+-                    });
++            delete this.promises[rpcMessage.id];
++        }
++        // Message handled by this channel
++        return true;
++    }
++    owns(source, origin, rpcMessage) {
++        /// Determines whether the current message belongs to this channel or not
++        if (this.postToWindow === source) {
++            // For messages coming from sandboxed iframes the origin will be set to the string "null".  This is 
++            // how onprem works.  If it is not a sandboxed iFrame we will get the origin as expected.
++            if (this.targetOrigin) {
++                if (origin) {
++                    return origin.toLowerCase() === "null" || this.targetOrigin.toLowerCase().indexOf(origin.toLowerCase()) === 0;
+                 }
+                 else {
+-                    this.invokeMethod(registeredObject, rpcMessage);
++                    return false;
+                 }
+             }
+             else {
+-                var promise = this.promises[rpcMessage.id];
+-                if (!promise) {
+-                    // Message not handled by this channel.
+-                    return false;
+-                }
+-                if (rpcMessage.error) {
+-                    promise.reject(this._customDeserializeObject([rpcMessage.error], {})[0]);
+-                }
+-                else {
+-                    promise.resolve(this._customDeserializeObject([rpcMessage.result], {})[0]);
++                if (rpcMessage.handshakeToken && rpcMessage.handshakeToken === this.handshakeToken) {
++                    this.targetOrigin = origin;
++                    return true;
+                 }
+-                delete this.promises[rpcMessage.id];
+             }
+-            // Message handled by this channel
+-            return true;
+-        };
+-        XDMChannel.prototype.owns = function (source, origin, rpcMessage) {
+-            /// Determines whether the current message belongs to this channel or not
+-            if (this.postToWindow === source) {
+-                // For messages coming from sandboxed iframes the origin will be set to the string "null".  This is 
+-                // how onprem works.  If it is not a sandboxed iFrame we will get the origin as expected.
+-                if (this.targetOrigin) {
+-                    if (origin) {
+-                        return origin.toLowerCase() === "null" || this.targetOrigin.toLowerCase().indexOf(origin.toLowerCase()) === 0;
+-                    }
+-                    else {
+-                        return false;
+-                    }
+-                }
+-                else {
+-                    if (rpcMessage.handshakeToken && rpcMessage.handshakeToken === this.handshakeToken) {
+-                        this.targetOrigin = origin;
+-                        return true;
+-                    }
+-                }
++        }
++        return false;
++    }
++    error(messageObj, errorObj) {
++        this._sendRpcMessage({
++            id: messageObj.id,
++            error: this._customSerializeObject([errorObj], messageObj.serializationSettings)[0],
++            handshakeToken: messageObj.handshakeToken
++        });
++    }
++    _success(messageObj, result, handshakeToken) {
++        this._sendRpcMessage({
++            id: messageObj.id,
++            result: this._customSerializeObject([result], messageObj.serializationSettings)[0],
++            handshakeToken
++        });
++    }
++    _sendRpcMessage(message) {
++        this.postToWindow.postMessage(JSON.stringify(message), "*");
++    }
++    _customSerializeObject(obj, settings, prevParentObjects, nextCircularRefId = 1, depth = 1) {
++        if (!obj || depth > MAX_XDM_DEPTH) {
++            return undefined;
++        }
++        if (obj instanceof Node || obj instanceof Window || obj instanceof Event) {
++            return undefined;
++        }
++        var returnValue;
++        let parentObjects;
++        if (!prevParentObjects) {
++            parentObjects = {
++                newObjects: [],
++                originalObjects: []
++            };
++        }
++        else {
++            parentObjects = prevParentObjects;
++        }
++        parentObjects.originalObjects.push(obj);
++        var serializeMember = (parentObject, newObject, key) => {
++            var item;
++            try {
++                item = parentObject[key];
+             }
+-            return false;
+-        };
+-        XDMChannel.prototype.error = function (messageObj, errorObj) {
+-            this._sendRpcMessage({
+-                id: messageObj.id,
+-                error: this._customSerializeObject([errorObj], messageObj.serializationSettings)[0],
+-                handshakeToken: messageObj.handshakeToken
+-            });
+-        };
+-        XDMChannel.prototype._success = function (messageObj, result, handshakeToken) {
+-            this._sendRpcMessage({
+-                id: messageObj.id,
+-                result: this._customSerializeObject([result], messageObj.serializationSettings)[0],
+-                handshakeToken: handshakeToken
+-            });
+-        };
+-        XDMChannel.prototype._sendRpcMessage = function (message) {
+-            this.postToWindow.postMessage(JSON.stringify(message), "*");
+-        };
+-        XDMChannel.prototype._customSerializeObject = function (obj, settings, prevParentObjects, nextCircularRefId, depth) {
+-            var _this = this;
+-            if (nextCircularRefId === void 0) { nextCircularRefId = 1; }
+-            if (depth === void 0) { depth = 1; }
+-            if (!obj || depth > MAX_XDM_DEPTH) {
+-                return undefined;
++            catch (ex) {
++                // Cannot access this property. Skip its serialization.
+             }
+-            if (obj instanceof Node || obj instanceof Window || obj instanceof Event) {
+-                return undefined;
++            var itemType = typeof item;
++            if (itemType === "undefined") {
++                return;
+             }
+-            var returnValue;
+-            var parentObjects;
+-            if (!prevParentObjects) {
+-                parentObjects = {
+-                    newObjects: [],
+-                    originalObjects: []
++            // Check for a circular reference by looking at parent objects
++            var parentItemIndex = -1;
++            if (itemType === "object") {
++                parentItemIndex = parentObjects.originalObjects.indexOf(item);
++            }
++            if (parentItemIndex >= 0) {
++                // Circular reference found. Add reference to parent
++                var parentItem = parentObjects.newObjects[parentItemIndex];
++                if (!parentItem.__circularReferenceId) {
++                    parentItem.__circularReferenceId = nextCircularRefId++;
++                }
++                newObject[key] = {
++                    __circularReference: parentItem.__circularReferenceId
+                 };
+             }
+             else {
+-                parentObjects = prevParentObjects;
+-            }
+-            parentObjects.originalObjects.push(obj);
+-            var serializeMember = function (parentObject, newObject, key) {
+-                var item;
+-                try {
+-                    item = parentObject[key];
+-                }
+-                catch (ex) {
+-                    // Cannot access this property. Skip its serialization.
+-                }
+-                var itemType = typeof item;
+-                if (itemType === "undefined") {
+-                    return;
+-                }
+-                // Check for a circular reference by looking at parent objects
+-                var parentItemIndex = -1;
+-                if (itemType === "object") {
+-                    parentItemIndex = parentObjects.originalObjects.indexOf(item);
+-                }
+-                if (parentItemIndex >= 0) {
+-                    // Circular reference found. Add reference to parent
+-                    var parentItem = parentObjects.newObjects[parentItemIndex];
+-                    if (!parentItem.__circularReferenceId) {
+-                        parentItem.__circularReferenceId = nextCircularRefId++;
+-                    }
++                if (itemType === "function") {
++                    var proxyFunctionId = this.nextProxyId++;
+                     newObject[key] = {
+-                        __circularReference: parentItem.__circularReferenceId
++                        __proxyFunctionId: this._registerProxyFunction(item, obj),
++                        _channelId: this.channelId
+                     };
+                 }
+-                else {
+-                    if (itemType === "function") {
+-                        var proxyFunctionId = _this.nextProxyId++;
++                else if (itemType === "object") {
++                    if (item && item instanceof Date) {
+                         newObject[key] = {
+-                            __proxyFunctionId: _this._registerProxyFunction(item, obj),
+-                            _channelId: _this.channelId
++                            __proxyDate: item.getTime()
+                         };
+                     }
+-                    else if (itemType === "object") {
+-                        if (item && item instanceof Date) {
+-                            newObject[key] = {
+-                                __proxyDate: item.getTime()
+-                            };
+-                        }
+-                        else {
+-                            newObject[key] = _this._customSerializeObject(item, settings, parentObjects, nextCircularRefId, depth + 1);
+-                        }
+-                    }
+-                    else if (key !== "__proxyFunctionId") {
+-                        // Just add non object/function properties as-is. Don't include "__proxyFunctionId" to protect
+-                        // our proxy methods from being invoked from other messages.
+-                        newObject[key] = item;
++                    else {
++                        newObject[key] = this._customSerializeObject(item, settings, parentObjects, nextCircularRefId, depth + 1);
+                     }
+                 }
+-            };
+-            if (obj instanceof Array) {
+-                returnValue = [];
+-                parentObjects.newObjects.push(returnValue);
+-                for (var i = 0, l = obj.length; i < l; i++) {
+-                    serializeMember(obj, returnValue, i);
++                else if (key !== "__proxyFunctionId") {
++                    // Just add non object/function properties as-is. Don't include "__proxyFunctionId" to protect
++                    // our proxy methods from being invoked from other messages.
++                    newObject[key] = item;
+                 }
+             }
+-            else {
+-                returnValue = {};
+-                parentObjects.newObjects.push(returnValue);
+-                var keys = {};
+-                try {
+-                    keys = getAllPropertyNames(obj);
+-                }
+-                catch (ex) {
+-                    // We may not be able to access the iterator of this object. Skip its serialization.
+-                }
+-                for (var key in keys) {
+-                    // Don't serialize properties that start with an underscore.
+-                    if ((key && key[0] !== "_") || (settings && settings.includeUnderscoreProperties)) {
+-                        serializeMember(obj, returnValue, key);
+-                    }
++        };
++        if (obj instanceof Array) {
++            returnValue = [];
++            parentObjects.newObjects.push(returnValue);
++            for (var i = 0, l = obj.length; i < l; i++) {
++                serializeMember(obj, returnValue, i);
++            }
++        }
++        else {
++            returnValue = {};
++            parentObjects.newObjects.push(returnValue);
++            let keys = {};
++            try {
++                keys = getAllPropertyNames(obj);
++            }
++            catch (ex) {
++                // We may not be able to access the iterator of this object. Skip its serialization.
++            }
++            for (var key in keys) {
++                // Don't serialize properties that start with an underscore.
++                if ((key && key[0] !== "_") || (settings && settings.includeUnderscoreProperties)) {
++                    serializeMember(obj, returnValue, key);
+                 }
+             }
+-            parentObjects.originalObjects.pop();
+-            parentObjects.newObjects.pop();
+-            return returnValue;
+-        };
+-        XDMChannel.prototype._registerProxyFunction = function (func, context) {
+-            var proxyFunctionId = this.nextProxyId++;
+-            this.proxyFunctions["proxy" + proxyFunctionId] = function () {
+-                return func.apply(context, Array.prototype.slice.call(arguments, 0));
+-            };
+-            return proxyFunctionId;
++        }
++        parentObjects.originalObjects.pop();
++        parentObjects.newObjects.pop();
++        return returnValue;
++    }
++    _registerProxyFunction(func, context) {
++        var proxyFunctionId = this.nextProxyId++;
++        this.proxyFunctions["proxy" + proxyFunctionId] = function () {
++            return func.apply(context, Array.prototype.slice.call(arguments, 0));
+         };
+-        XDMChannel.prototype._customDeserializeObject = function (obj, circularRefs) {
+-            var _this = this;
+-            var that = this;
+-            if (!obj) {
+-                return null;
++        return proxyFunctionId;
++    }
++    _customDeserializeObject(obj, circularRefs) {
++        var that = this;
++        if (!obj) {
++            return null;
++        }
++        var deserializeMember = (parentObject, key) => {
++            var item = parentObject[key];
++            var itemType = typeof item;
++            if (key === "__circularReferenceId" && itemType === 'number') {
++                circularRefs[item] = parentObject;
++                delete parentObject[key];
+             }
+-            var deserializeMember = function (parentObject, key) {
+-                var item = parentObject[key];
+-                var itemType = typeof item;
+-                if (key === "__circularReferenceId" && itemType === 'number') {
+-                    circularRefs[item] = parentObject;
+-                    delete parentObject[key];
++            else if (itemType === "object" && item) {
++                if (item.__proxyFunctionId) {
++                    parentObject[key] = function () {
++                        return that.invokeRemoteMethod("proxy" + item.__proxyFunctionId, "__proxyFunctions", Array.prototype.slice.call(arguments, 0), {}, { includeUnderscoreProperties: true });
++                    };
+                 }
+-                else if (itemType === "object" && item) {
+-                    if (item.__proxyFunctionId) {
+-                        parentObject[key] = function () {
+-                            return that.invokeRemoteMethod("proxy" + item.__proxyFunctionId, "__proxyFunctions", Array.prototype.slice.call(arguments, 0), {}, { includeUnderscoreProperties: true });
+-                        };
+-                    }
+-                    else if (item.__proxyDate) {
+-                        parentObject[key] = new Date(item.__proxyDate);
+-                    }
+-                    else if (item.__circularReference) {
+-                        parentObject[key] = circularRefs[item.__circularReference];
+-                    }
+-                    else {
+-                        _this._customDeserializeObject(item, circularRefs);
+-                    }
++                else if (item.__proxyDate) {
++                    parentObject[key] = new Date(item.__proxyDate);
+                 }
+-            };
+-            if (obj instanceof Array) {
+-                for (var i = 0, l = obj.length; i < l; i++) {
+-                    deserializeMember(obj, i);
++                else if (item.__circularReference) {
++                    parentObject[key] = circularRefs[item.__circularReference];
+                 }
+-            }
+-            else if (typeof obj === "object") {
+-                for (var key in obj) {
+-                    deserializeMember(obj, key);
++                else {
++                    this._customDeserializeObject(item, circularRefs);
+                 }
+             }
+-            return obj;
+         };
+-        return XDMChannel;
+-    }());
+-    exports.XDMChannel = XDMChannel;
+-    /**
+-    * Registry of XDM channels kept per target frame/window
+-    */
+-    var XDMChannelManager = /** @class */ (function () {
+-        function XDMChannelManager() {
+-            var _this = this;
+-            this._channels = [];
+-            this._handleMessageReceived = function (event) {
+-                // get channel and dispatch to it
+-                var rpcMessage;
+-                if (typeof event.data === "string") {
+-                    try {
+-                        rpcMessage = JSON.parse(event.data);
+-                    }
+-                    catch (error) {
+-                        // The message is not a valid JSON string. Not one of our events.
++        if (obj instanceof Array) {
++            for (var i = 0, l = obj.length; i < l; i++) {
++                deserializeMember(obj, i);
++            }
++        }
++        else if (typeof obj === "object") {
++            for (var key in obj) {
++                deserializeMember(obj, key);
++            }
++        }
++        return obj;
++    }
++}
++/**
++* Registry of XDM channels kept per target frame/window
++*/
++class XDMChannelManager {
++    constructor() {
++        this._channels = [];
++        this._handleMessageReceived = (event) => {
++            // get channel and dispatch to it
++            let rpcMessage;
++            if (typeof event.data === "string") {
++                try {
++                    rpcMessage = JSON.parse(event.data);
++                }
++                catch (error) {
++                    // The message is not a valid JSON string. Not one of our events.
++                }
++            }
++            if (rpcMessage) {
++                let handled = false;
++                let channelOwner;
++                for (const channel of this._channels) {
++                    if (channel.owns(event.source, event.origin, rpcMessage)) {
++                        // keep a reference to the channel owner found. 
++                        channelOwner = channel;
++                        handled = channel.onMessage(rpcMessage) || handled;
+                     }
+                 }
+-                if (rpcMessage) {
+-                    var handled = false;
+-                    var channelOwner = void 0;
+-                    for (var _i = 0, _a = _this._channels; _i < _a.length; _i++) {
+-                        var channel = _a[_i];
+-                        if (channel.owns(event.source, event.origin, rpcMessage)) {
+-                            // keep a reference to the channel owner found. 
+-                            channelOwner = channel;
+-                            handled = channel.onMessage(rpcMessage) || handled;
+-                        }
++                if (channelOwner && !handled) {
++                    if (window.console) {
++                        console.error(`No handler found on any channel for message: ${JSON.stringify(rpcMessage)}`);
+                     }
+-                    if (channelOwner && !handled) {
+-                        if (window.console) {
+-                            console.error("No handler found on any channel for message: " + JSON.stringify(rpcMessage));
+-                        }
+-                        // for instance based proxies, send an error on the channel owning the message to resolve any control creation promises
+-                        // on the host frame. 
+-                        if (rpcMessage.instanceId) {
+-                            channelOwner.error(rpcMessage, new Error("The registered object " + rpcMessage.instanceId + " could not be found."));
+-                        }
++                    // for instance based proxies, send an error on the channel owning the message to resolve any control creation promises
++                    // on the host frame. 
++                    if (rpcMessage.instanceId) {
++                        channelOwner.error(rpcMessage, new Error(`The registered object ${rpcMessage.instanceId} could not be found.`));
+                     }
+                 }
+-            };
+-            window.addEventListener("message", this._handleMessageReceived);
+-        }
+-        /**
+-        * Add an XDM channel for the given target window/iframe
+-        *
+-        * @param window - Target iframe window to communicate with
+-        * @param targetOrigin - Url of the target iframe (if known)
+-        */
+-        XDMChannelManager.prototype.addChannel = function (window, targetOrigin) {
+-            var channel = new XDMChannel(window, targetOrigin);
+-            this._channels.push(channel);
+-            return channel;
+-        };
+-        XDMChannelManager.prototype.removeChannel = function (channel) {
+-            this._channels = this._channels.filter(function (c) { return c !== channel; });
++            }
+         };
+-        return XDMChannelManager;
+-    }());
+-    /**
+-    * The registry of global XDM handlers
+-    */
+-    exports.globalObjectRegistry = new XDMObjectRegistry();
++        window.addEventListener("message", this._handleMessageReceived);
++    }
+     /**
+-    * Manages XDM channels per target window/frame
++    * Add an XDM channel for the given target window/iframe
++    *
++    * @param window - Target iframe window to communicate with
++    * @param targetOrigin - Url of the target iframe (if known)
+     */
+-    exports.channelManager = new XDMChannelManager();
+-});
++    addChannel(window, targetOrigin) {
++        const channel = new XDMChannel(window, targetOrigin);
++        this._channels.push(channel);
++        return channel;
++    }
++    removeChannel(channel) {
++        this._channels = this._channels.filter(c => c !== channel);
++    }
++}
++/**
++* The registry of global XDM handlers
++*/
++export const globalObjectRegistry = new XDMObjectRegistry();
++/**
++* Manages XDM channels per target window/frame
++*/
++export const channelManager = new XDMChannelManager();
+diff --git a/node_modules/azure-devops-extension-sdk/XDM.min.js b/node_modules/azure-devops-extension-sdk/XDM.min.js
+index 6b06e27..45b7751 100644
+--- a/node_modules/azure-devops-extension-sdk/XDM.min.js
++++ b/node_modules/azure-devops-extension-sdk/XDM.min.js
+@@ -1 +1 @@
+-var __awaiter=this&&this.__awaiter||function(e,t,n,r){return new(n||(n=Promise))(function(o,i){function s(e){try{c(r.next(e))}catch(e){i(e)}}function a(e){try{c(r.throw(e))}catch(e){i(e)}}function c(e){e.done?o(e.value):new n(function(t){t(e.value)}).then(s,a)}c((r=r.apply(e,t||[])).next())})},__generator=this&&this.__generator||function(e,t){function n(n){return function(s){return function(n){if(r)throw new TypeError("Generator is already executing.");for(;a;)try{if(r=1,o&&(i=2&n[0]?o.return:n[0]?o.throw||((i=o.return)&&i.call(o),0):o.next)&&!(i=i.call(o,n[1])).done)return i;switch(o=0,i&&(n=[2&n[0],i.value]),n[0]){case 0:case 1:i=n;break;case 4:return a.label++,{value:n[1],done:!1};case 5:a.label++,o=n[1],n=[0];continue;case 7:n=a.ops.pop(),a.trys.pop();continue;default:if(i=a.trys,!(i=i.length>0&&i[i.length-1])&&(6===n[0]||2===n[0])){a=0;continue}if(3===n[0]&&(!i||n[1]>i[0]&&n[1]<i[3])){a.label=n[1];break}if(6===n[0]&&a.label<i[1]){a.label=i[1],i=n;break}if(i&&a.label<i[2]){a.label=i[2],a.ops.push(n);break}i[2]&&a.ops.pop(),a.trys.pop();continue}n=t.call(e,a)}catch(e){n=[6,e],o=0}finally{r=i=0}if(5&n[0])throw n[1];return{value:n[0]?n[1]:void 0,done:!0}}([n,s])}}var r,o,i,s,a={label:0,sent:function(){if(1&i[0])throw i[1];return i[1]},trys:[],ops:[]};return s={next:n(0),throw:n(1),return:n(2)},"function"==typeof Symbol&&(s[Symbol.iterator]=function(){return this}),s};define(["require","exports","es6-promise/auto","es6-object-assign/auto"],function(e,t){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n=parseInt("10000000000",36),r=Number.MAX_SAFE_INTEGER||9007199254740991,o=function(){function e(){this.objects={}}return e.prototype.register=function(e,t){this.objects[e]=t},e.prototype.unregister=function(e){delete this.objects[e]},e.prototype.getInstance=function(e,t){var n=this.objects[e];if(n)return"function"==typeof n?n(t):n},e}();t.XDMObjectRegistry=o;var i=1,s=function(){function e(e,t){this.promises={},this.nextMessageId=1,this.nextProxyId=1,this.proxyFunctions={},this.postToWindow=e,this.targetOrigin=t,this.registry=new o,this.channelId=i++,this.targetOrigin||(this.handshakeToken=Math.floor(Math.random()*(r-n)+n).toString(36)+Math.floor(Math.random()*(r-n)+n).toString(36))}return e.prototype.getObjectRegistry=function(){return this.registry},e.prototype.invokeRemoteMethod=function(e,t,n,r,o){return __awaiter(this,void 0,void 0,function(){var i,s,a=this;return __generator(this,function(c){return i={id:this.nextMessageId++,methodName:e,instanceId:t,instanceContext:r,params:this._customSerializeObject(n,o),serializationSettings:o},this.targetOrigin||(i.handshakeToken=this.handshakeToken),s=new Promise(function(e,t){a.promises[i.id]={resolve:e,reject:t}}),this._sendRpcMessage(i),[2,s]})})},e.prototype.getRemoteObjectProxy=function(e,t){return this.invokeRemoteMethod("",e,void 0,t)},e.prototype.invokeMethod=function(e,t){var n=this;if(t.methodName){var r=e[t.methodName];if("function"==typeof r)try{var o=[];t.params&&(o=this._customDeserializeObject(t.params,{}));var i=r.apply(e,o);i&&i.then&&"function"==typeof i.then?i.then(function(e){n._success(t,e,t.handshakeToken)},function(e){n.error(t,e)}):this._success(t,i,t.handshakeToken)}catch(e){this.error(t,e)}else this.error(t,new Error("RPC method not found: "+t.methodName))}else this._success(t,e,t.handshakeToken)},e.prototype.getRegisteredObject=function(e,n){if("__proxyFunctions"===e)return this.proxyFunctions;var r=this.registry.getInstance(e,n);return r||(r=t.globalObjectRegistry.getInstance(e,n)),r},e.prototype.onMessage=function(e){var t=this;if(e.instanceId){var n=this.getRegisteredObject(e.instanceId,e.instanceContext);if(!n)return!1;"function"==typeof n.then?n.then(function(n){t.invokeMethod(n,e)},function(n){t.error(e,n)}):this.invokeMethod(n,e)}else{var r=this.promises[e.id];if(!r)return!1;e.error?r.reject(this._customDeserializeObject([e.error],{})[0]):r.resolve(this._customDeserializeObject([e.result],{})[0]),delete this.promises[e.id]}return!0},e.prototype.owns=function(e,t,n){if(this.postToWindow===e){if(this.targetOrigin)return!!t&&("null"===t.toLowerCase()||0===this.targetOrigin.toLowerCase().indexOf(t.toLowerCase()));if(n.handshakeToken&&n.handshakeToken===this.handshakeToken)return this.targetOrigin=t,!0}return!1},e.prototype.error=function(e,t){this._sendRpcMessage({id:e.id,error:this._customSerializeObject([t],e.serializationSettings)[0],handshakeToken:e.handshakeToken})},e.prototype._success=function(e,t,n){this._sendRpcMessage({id:e.id,result:this._customSerializeObject([t],e.serializationSettings)[0],handshakeToken:n})},e.prototype._sendRpcMessage=function(e){this.postToWindow.postMessage(JSON.stringify(e),"*")},e.prototype._customSerializeObject=function(e,t,n,r,o){var i=this;if(void 0===r&&(r=1),void 0===o&&(o=1),e&&!(o>100)&&!(e instanceof Node||e instanceof Window||e instanceof Event)){var s,a;(a=n||{newObjects:[],originalObjects:[]}).originalObjects.push(e);var c=function(n,s,c){var u;try{u=n[c]}catch(e){}var h=typeof u;if("undefined"!==h){var f=-1;if("object"===h&&(f=a.originalObjects.indexOf(u)),f>=0){var l=a.newObjects[f];l.__circularReferenceId||(l.__circularReferenceId=r++),s[c]={__circularReference:l.__circularReferenceId}}else if("function"===h){i.nextProxyId++;s[c]={__proxyFunctionId:i._registerProxyFunction(u,e),_channelId:i.channelId}}else"object"===h?u&&u instanceof Date?s[c]={__proxyDate:u.getTime()}:s[c]=i._customSerializeObject(u,t,a,r,o+1):"__proxyFunctionId"!==c&&(s[c]=u)}};if(e instanceof Array){s=[],a.newObjects.push(s);for(var u=0,h=e.length;u<h;u++)c(e,s,u)}else{s={},a.newObjects.push(s);var f={};try{f=function(e){for(var t={};e&&e!==Object.prototype;){for(var n=0,r=Object.getOwnPropertyNames(e);n<r.length;n++){var o=r[n];"constructor"!==o&&(t[o]=!0)}e=Object.getPrototypeOf(e)}return t}(e)}catch(e){}for(var l in f)(l&&"_"!==l[0]||t&&t.includeUnderscoreProperties)&&c(e,s,l)}return a.originalObjects.pop(),a.newObjects.pop(),s}},e.prototype._registerProxyFunction=function(e,t){var n=this.nextProxyId++;return this.proxyFunctions["proxy"+n]=function(){return e.apply(t,Array.prototype.slice.call(arguments,0))},n},e.prototype._customDeserializeObject=function(e,t){var n=this,r=this;if(!e)return null;var o=function(e,o){var i=e[o],s=typeof i;"__circularReferenceId"===o&&"number"===s?(t[i]=e,delete e[o]):"object"===s&&i&&(i.__proxyFunctionId?e[o]=function(){return r.invokeRemoteMethod("proxy"+i.__proxyFunctionId,"__proxyFunctions",Array.prototype.slice.call(arguments,0),{},{includeUnderscoreProperties:!0})}:i.__proxyDate?e[o]=new Date(i.__proxyDate):i.__circularReference?e[o]=t[i.__circularReference]:n._customDeserializeObject(i,t))};if(e instanceof Array)for(var i=0,s=e.length;i<s;i++)o(e,i);else if("object"==typeof e)for(var a in e)o(e,a);return e},e}();t.XDMChannel=s;var a=function(){function e(){var e=this;this._channels=[],this._handleMessageReceived=function(t){var n;if("string"==typeof t.data)try{n=JSON.parse(t.data)}catch(e){}if(n){for(var r=!1,o=void 0,i=0,s=e._channels;i<s.length;i++){var a=s[i];a.owns(t.source,t.origin,n)&&(o=a,r=a.onMessage(n)||r)}o&&!r&&(window.console&&console.error("No handler found on any channel for message: "+JSON.stringify(n)),n.instanceId&&o.error(n,new Error("The registered object "+n.instanceId+" could not be found.")))}},window.addEventListener("message",this._handleMessageReceived)}return e.prototype.addChannel=function(e,t){var n=new s(e,t);return this._channels.push(n),n},e.prototype.removeChannel=function(e){this._channels=this._channels.filter(function(t){return t!==e})},e}();t.globalObjectRegistry=new o,t.channelManager=new a});
+\ No newline at end of file
++function newFingerprint() { return Math.floor(Math.random() * (maxSafeInteger - smallestRandom) + smallestRandom).toString(36) + Math.floor(Math.random() * (maxSafeInteger - smallestRandom) + smallestRandom).toString(36) } function getAllPropertyNames(e) { const t = {}; for (; e && e !== Object.prototype;) { const n = Object.getOwnPropertyNames(e); for (const e of n) "constructor" !== e && (t[e] = !0); e = Object.getPrototypeOf(e) } return t } import "es6-promise/auto"; import "es6-object-assign/auto"; const smallestRandom = parseInt("10000000000", 36), maxSafeInteger = Number.MAX_SAFE_INTEGER || 9007199254740991; export class XDMObjectRegistry { constructor() { this.objects = {} } register(e, t) { this.objects[e] = t } unregister(e) { delete this.objects[e] } getInstance(e, t) { var n = this.objects[e]; if (n) return "function" == typeof n ? n(t) : n } }; const MAX_XDM_DEPTH = 100; let nextChannelId = 1; export class XDMChannel { constructor(e, t) { this.promises = {}, this.nextMessageId = 1, this.nextProxyId = 1, this.proxyFunctions = {}, this.postToWindow = e, this.targetOrigin = t, this.registry = new XDMObjectRegistry, this.channelId = nextChannelId++, this.targetOrigin || (this.handshakeToken = newFingerprint()) } getObjectRegistry() { return this.registry } async invokeRemoteMethod(e, t, n, r, s) { const i = { id: this.nextMessageId++, methodName: e, instanceId: t, instanceContext: r, params: this._customSerializeObject(n, s), serializationSettings: s }; this.targetOrigin || (i.handshakeToken = this.handshakeToken); const o = new Promise((e, t) => { this.promises[i.id] = { resolve: e, reject: t } }); return this._sendRpcMessage(i), o } getRemoteObjectProxy(e, t) { return this.invokeRemoteMethod("", e, void 0, t) } invokeMethod(e, t) { if (t.methodName) { var n = e[t.methodName]; if ("function" == typeof n) try { var r = []; t.params && (r = this._customDeserializeObject(t.params, {})); var s = n.apply(e, r); s && s.then && "function" == typeof s.then ? s.then(e => { this._success(t, e, t.handshakeToken) }, e => { this.error(t, e) }) : this._success(t, s, t.handshakeToken) } catch (e) { this.error(t, e) } else this.error(t, new Error("RPC method not found: " + t.methodName)) } else this._success(t, e, t.handshakeToken) } getRegisteredObject(e, t) { if ("__proxyFunctions" === e) return this.proxyFunctions; var n = this.registry.getInstance(e, t); return n || (n = globalObjectRegistry.getInstance(e, t)), n } onMessage(e) { if (e.instanceId) { const t = this.getRegisteredObject(e.instanceId, e.instanceContext); if (!t) return !1; "function" == typeof t.then ? t.then(t => { this.invokeMethod(t, e) }, t => { this.error(e, t) }) : this.invokeMethod(t, e) } else { const t = this.promises[e.id]; if (!t) return !1; e.error ? t.reject(this._customDeserializeObject([e.error], {})[0]) : t.resolve(this._customDeserializeObject([e.result], {})[0]), delete this.promises[e.id] } return !0 } owns(e, t, n) { if (this.postToWindow === e) { if (this.targetOrigin) return !!t && ("null" === t.toLowerCase() || 0 === this.targetOrigin.toLowerCase().indexOf(t.toLowerCase())); if (n.handshakeToken && n.handshakeToken === this.handshakeToken) return this.targetOrigin = t, !0 } return !1 } error(e, t) { this._sendRpcMessage({ id: e.id, error: this._customSerializeObject([t], e.serializationSettings)[0], handshakeToken: e.handshakeToken }) } _success(e, t, n) { this._sendRpcMessage({ id: e.id, result: this._customSerializeObject([t], e.serializationSettings)[0], handshakeToken: n }) } _sendRpcMessage(e) { this.postToWindow.postMessage(JSON.stringify(e), "*") } _customSerializeObject(e, t, n, r = 1, s = 1) { if (!e || s > 100) return; if (e instanceof Node || e instanceof Window || e instanceof Event) return; var i; let o; (o = n || { newObjects: [], originalObjects: [] }).originalObjects.push(e); var a = (n, i, a) => { var c; try { c = n[a] } catch (e) { } var h = typeof c; if ("undefined" !== h) { var l = -1; if ("object" === h && (l = o.originalObjects.indexOf(c)), l >= 0) { var d = o.newObjects[l]; d.__circularReferenceId || (d.__circularReferenceId = r++), i[a] = { __circularReference: d.__circularReferenceId } } else if ("function" === h) { this.nextProxyId++; i[a] = { __proxyFunctionId: this._registerProxyFunction(c, e), _channelId: this.channelId } } else "object" === h ? c && c instanceof Date ? i[a] = { __proxyDate: c.getTime() } : i[a] = this._customSerializeObject(c, t, o, r, s + 1) : "__proxyFunctionId" !== a && (i[a] = c) } }; if (e instanceof Array) { i = [], o.newObjects.push(i); for (var c = 0, h = e.length; c < h; c++)a(e, i, c) } else { i = {}, o.newObjects.push(i); let n = {}; try { n = getAllPropertyNames(e) } catch (e) { } for (var l in n) (l && "_" !== l[0] || t && t.includeUnderscoreProperties) && a(e, i, l) } return o.originalObjects.pop(), o.newObjects.pop(), i } _registerProxyFunction(e, t) { var n = this.nextProxyId++; return this.proxyFunctions["proxy" + n] = function () { return e.apply(t, Array.prototype.slice.call(arguments, 0)) }, n } _customDeserializeObject(e, t) { var n = this; if (!e) return null; var r = (e, r) => { var s = e[r], i = typeof s; "__circularReferenceId" === r && "number" === i ? (t[s] = e, delete e[r]) : "object" === i && s && (s.__proxyFunctionId ? e[r] = function () { return n.invokeRemoteMethod("proxy" + s.__proxyFunctionId, "__proxyFunctions", Array.prototype.slice.call(arguments, 0), {}, { includeUnderscoreProperties: !0 }) } : s.__proxyDate ? e[r] = new Date(s.__proxyDate) : s.__circularReference ? e[r] = t[s.__circularReference] : this._customDeserializeObject(s, t)) }; if (e instanceof Array) for (var s = 0, i = e.length; s < i; s++)r(e, s); else if ("object" == typeof e) for (var o in e) r(e, o); return e } }; class XDMChannelManager { constructor() { this._channels = [], this._handleMessageReceived = (e => { let t; if ("string" == typeof e.data) try { t = JSON.parse(e.data) } catch (e) { } if (t) { let n, r = !1; for (const s of this._channels) s.owns(e.source, e.origin, t) && (n = s, r = s.onMessage(t) || r); n && !r && (window.console && console.error(`No handler found on any channel for message: ${JSON.stringify(t)}`), t.instanceId && n.error(t, new Error(`The registered object ${t.instanceId} could not be found.`))) } }), window.addEventListener("message", this._handleMessageReceived) } addChannel(e, t) { const n = new XDMChannel(e, t); return this._channels.push(n), n } removeChannel(e) { this._channels = this._channels.filter(t => t !== e) } } export const globalObjectRegistry = new XDMObjectRegistry; export const channelManager = new XDMChannelManager;

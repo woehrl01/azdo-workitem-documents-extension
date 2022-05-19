@@ -17,7 +17,7 @@
     "build": "tsc && vite build",
     "build:dev": "npm run build",
     "postinstall": "patch-package",
-    "serve": "vite",
+    "serve": "vite serve",
     "package-extension": "tfx extension create --manifest-globs manifest.common.json manifest.prod.json src/features/**/*.json",
     "package-extension:dev": "tfx extension create --manifest-globs manifest.common.json manifest.dev.json src/features/**/*.json",
     "publish-extension": "tfx extension publish --manifest-globs manifest.common.json manifest.prod.json src/features/**/*.json",
@@ -56,6 +56,12 @@
     },
     "async": {
       "version": "$async"
+    },
+    "react": {
+      "version": "$react"
+    },
+    "react-dom": {
+      "version": "$react-dom"
     }
   },
   "devDependencies": {
