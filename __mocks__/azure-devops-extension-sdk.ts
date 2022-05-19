@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { CommonServiceIds } from 'components/Common'
+import { CommonServiceIds } from '../src/components/Common';
 
 export const getAccessToken = () => Promise.resolve('token');
 
