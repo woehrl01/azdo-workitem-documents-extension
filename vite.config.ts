@@ -67,9 +67,9 @@ export default defineConfig(({ command, mode }) => {
       setupFiles: './src/test/setup.ts',
       deps: {
         inline: [
-          'azure-devops-ui'
+          'azure-devops-ui',
         ]
-      }
+      },
     },
   }
 })
