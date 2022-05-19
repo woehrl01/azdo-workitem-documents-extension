@@ -27,8 +27,11 @@ steps:
 - script: npm ci
   displayName: 'Install dependencies'
 
-- script: npm run build${{ parameters.buildPostfix }}
+- script: npm run build
   displayName: 'Run build'
+
+- script: npm run test
+  displayName: 'Run tests'
 
 - script: |
     npm run publish-extension${{ parameters.buildPostfix }} -- -t "$(PUBLISH_TOKEN)" --override '{"version":"$(version)","baseUri":"${{ parameters.baseUri }}"}' ${{ parameters.additionalCommandArgs }}
