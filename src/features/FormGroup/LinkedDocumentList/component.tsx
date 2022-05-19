@@ -11,8 +11,9 @@ import { getIcon } from 'services/UriOptimizer';
 import { memo, useCallback } from 'react';
 import isEqual from 'react-fast-compare';
 import * as SDK from 'azure-devops-extension-sdk';
-import { IWorkItemFormService, WorkItemTrackingServiceIds } from 'azure-devops-extension-api/WorkItemTracking';
+import { IWorkItemFormService } from 'azure-devops-extension-api/WorkItemTracking';
 import { css } from 'azure-devops-ui/Util';
+import { WorkItemTrackingServiceIds } from 'components/Common';
 
 type DocumentProps = {
   document: ILinkedDocument;

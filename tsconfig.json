@@ -16,7 +16,6 @@
     "noUnusedLocals": false,
     "noFallthroughCasesInSwitch": true,
     "suppressImplicitAnyIndexErrors": true,
-    "target": "es5",
     "downlevelIteration": true,
     "importHelpers": true,
     "rootDir": "src/",
@@ -24,6 +23,17 @@
     "jsx": "react-jsx",
     "skipLibCheck": true,
     "esModuleInterop": true,
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
     "plugins": [
       {
         "name": "typescript-plugin-css-modules",
@@ -49,5 +59,10 @@
   "include": [
     "src",
     "index.d.ts"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }
