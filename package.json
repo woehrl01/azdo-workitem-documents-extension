@@ -22,6 +22,7 @@
     "publish-extension": "tfx extension publish --manifest-globs manifest.common.json manifest.prod.json src/features/**/*.json",
     "publish-extension:dev": "tfx extension publish --manifest-globs manifest.common.json manifest.dev.json src/features/**/*.json",
     "test": "vitest",
+    "test:ci": "vitest run",
     "coverage": "vitest run --coverage",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "preview": "vite preview"

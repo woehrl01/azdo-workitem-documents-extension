@@ -30,7 +30,7 @@ steps:
 - script: npm run build
   displayName: 'Run build'
 
-- script: npm run test
+- script: npm run test:ci
   displayName: 'Run tests'
 
 - script: |
