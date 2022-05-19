@@ -10,3 +10,4 @@ test-results.xml
 coverage
 *.lcov
 defines.js
+stats.html
