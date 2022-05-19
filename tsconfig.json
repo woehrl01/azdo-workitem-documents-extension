@@ -54,6 +54,9 @@
       "components/*": [
         "src/components/*"
       ],
+      "test/*": [
+        "src/test/*"
+      ],
     }
   },
   "include": [

@@ -27,13 +27,14 @@ export default defineConfig(({ _command, mode }) => {
     base: '',
     define: {
       __DEV__: mode === 'development',
-      __APP_INSIGHTS__: env.APP_INSIGHTS_KEY,
+      __APP_INSIGHTS__: JSON.stringify(env.APP_INSIGHTS_KEY),
     },
     resolve: {
       alias: {
         'hooks': path.resolve(__dirname, 'src/hooks'),
         'services': path.resolve(__dirname, 'src/services'),
         'components': path.resolve(__dirname, 'src/components'),
+        'test': path.resolve(__dirname, 'src/test'),
       },
     },
     build: {
@@ -54,6 +55,16 @@ export default defineConfig(({ _command, mode }) => {
         cert: fs.readFileSync('/certs/localhost.pem'),
         requestCert: false,
       } : undefined,
-    }
+    },
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      setupFiles: './src/test/setup.ts',
+      deps: {
+        inline: [
+          'azure-devops-ui'
+        ]
+      }
+    },
   }
 })
