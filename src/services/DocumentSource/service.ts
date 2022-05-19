@@ -1,9 +1,10 @@
 import * as SDK from 'azure-devops-extension-sdk';
-import { IWorkItemFormService, WorkItemTrackingServiceIds } from 'azure-devops-extension-api/WorkItemTracking';
+import { IWorkItemFormService } from 'azure-devops-extension-api/WorkItemTracking';
 import { DescriptionBasedDocumentSource } from './DescriptionBasedDocumentSource';
 import { RelationBasedDocumentSource } from './RelationBasedDocumentSource';
 import { distinctBy } from 'services/DistinctBy';
 import { AllowRules, BlockRules } from 'services/Rules';
+import { WorkItemTrackingServiceIds } from 'components/Common';
 
 export interface ILinkedDocument {
     name: string;

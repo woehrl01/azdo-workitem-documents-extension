@@ -1,1 +1,2 @@
-export { ILinkedDocument, fetchCurrentDocuments } from './service';
+export type { ILinkedDocument } from './service';
+export { fetchCurrentDocuments } from './service';

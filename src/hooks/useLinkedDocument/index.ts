@@ -1,2 +1,3 @@
-export { ILinkedDocument } from 'services/DocumentSource';
-export { IUseLinkedDocument, useLinkedDocuments } from './hook';
+export type { ILinkedDocument } from 'services/DocumentSource';
+export type { IUseLinkedDocument, } from './hook';
+export { useLinkedDocuments } from './hook'

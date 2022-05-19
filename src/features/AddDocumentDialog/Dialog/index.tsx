@@ -4,8 +4,9 @@ import { Button } from 'azure-devops-ui/Button';
 import { TextField } from 'azure-devops-ui/TextField';
 import { FormItem } from 'azure-devops-ui/FormItem';
 import styles from './style.module.scss'
-import { IWorkItemFormService, WorkItemTrackingServiceIds } from 'azure-devops-extension-api/WorkItemTracking';
+import { IWorkItemFormService } from 'azure-devops-extension-api/WorkItemTracking';
 import { Measure, trackEvent } from 'components/AppInsights';
+import { WorkItemTrackingServiceIds } from 'components/Common';
 
 interface IConfigurationState {
     closeDialog: () => void;

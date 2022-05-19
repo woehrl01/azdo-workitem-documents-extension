@@ -1,1 +1,2 @@
-export {useStoredValue, UseStoredValueState} from './hook';
+export { useStoredValue } from './hook';
+export type { UseStoredValueState } from './hook';
