@@ -14,7 +14,7 @@ describe('Simple working test', () => {
 
     it('Should add new row when clicking the button', async () => {
         render(<SettingsPage />)
-        expect(await screen.findAllByPlaceholderText(/rule/i)).toHaveLength(0)
+        expect(await screen.queryAllByPlaceholderText(/rule/i)).toHaveLength(0)
 
         userEvent.click(screen.getByRole('menuitem', { name: /add rule/i }))
         expect(await screen.findAllByPlaceholderText(/rule/i)).toHaveLength(1)
