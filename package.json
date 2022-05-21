@@ -81,7 +81,7 @@
     "compression-webpack-plugin": "10.0.0",
     "css-loader": "6.7.1",
     "css-minimizer-webpack-plugin": "4.0.0",
-    "eslint": "8.15.0",
+    "eslint": "8.16.0",
     "eslint-config-node": "4.1.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-node": "11.1.0",
