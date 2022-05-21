@@ -1,7 +1,7 @@
 # Azure DevOps - Work Item Documents Viewer extension
 ![](https://img.shields.io/badge/license-MIT-blue.svg)
 
-Would you like to view all documents of a work item without opening several new tabs? This extension will display all linked documents in a tab next to the work item. Cool, huh? 🤩
+Would you like to view all documents of a work item without opening several new tabs? This extension will display all linked documents in a tab and list next to the work item. Cool, huh? 🤩
 
 ### How?
 
@@ -23,7 +23,7 @@ _If you have additional ideas, please create an [issue](https://github.com/woehr
 
 ### Screenshot
 
-#### Embedded documents zab
+#### Embedded documents tab
 
 ![diagrams.net](static/diagrams.net.png)
 
