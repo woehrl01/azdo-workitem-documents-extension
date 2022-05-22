@@ -4,10 +4,14 @@ import { CommonServiceIds } from '../src/components/Common';
 
 export const getAccessToken = () => Promise.resolve('token');
 
+export const ready = () => Promise.resolve();
+export const init = () => { };
+
 export const getService = (serviceId: string) => {
     switch (serviceId) {
         case CommonServiceIds.ExtensionDataService:
             return {
+
                 getExtensionDataManager: () => Promise.resolve(
                     {
                         setValue: () => Promise.resolve(),
@@ -21,6 +25,6 @@ export const getService = (serviceId: string) => {
 
 export const register = () => { };
 export const getContributionId = () => '';
-export const init = () => { };
+
 
 
