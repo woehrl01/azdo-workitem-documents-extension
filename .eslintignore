@@ -1,1 +1,4 @@
-dist
+dist/
+vite.config.ts
+.eslintrc.js
+__mocks__/
