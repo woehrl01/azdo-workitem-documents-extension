@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, it, vi } from 'vitest'
 import { SettingsPage } from './SettingsPage'
-import { flushPromises, render, screen, userEvent, waitForElementToBeRemoved } from 'test/utils'
+import { flushPromises as allPendingPromisesCompleted, render, screen, userEvent, waitForElementToBeRemoved } from 'test/utils'
 import * as SDK from 'azure-devops-extension-sdk'
 
 vi.mock('azure-devops-extension-sdk')
 
-describe('Simple working test', () => {
+describe('Settings page', () => {
     beforeEach(() => {
         (SDK as any).__resetMockedData()
     });
 
     it('the title is visible', async () => {
         render(<SettingsPage />)
-        await flushPromises()
+        await allPendingPromisesCompleted()
 
         const heading = await screen.findByRole('heading')
         expect(heading).toBeInTheDocument()
@@ -22,11 +22,11 @@ describe('Simple working test', () => {
 
     it('Should add new row when clicking the button', async () => {
         render(<SettingsPage />)
-        await flushPromises();
+        await allPendingPromisesCompleted();
 
         expect(screen.queryByPlaceholderText(/rule/i)).not.toBeInTheDocument();
         userEvent.click(screen.getByRole('menuitem', { name: /add rule/i }))
-        await flushPromises()
+        await allPendingPromisesCompleted()
         expect(await screen.findByPlaceholderText(/rule/i)).toBeInTheDocument()
     })
 
@@ -35,14 +35,16 @@ describe('Simple working test', () => {
         (SDK as any).__setMockedData('rules', [{ rule: 'somerule', type: 'allow' }])
 
         render(<SettingsPage />)
-        await flushPromises();
+        await allPendingPromisesCompleted();
 
         const someRule = await screen.findByDisplayValue(/somerule/i);
         expect(someRule).toBeInTheDocument()
 
         userEvent.click(screen.getByRole('button', { name: /more options/i }))
+        await allPendingPromisesCompleted()
+
         userEvent.click(await screen.findByRole('menuitem', { name: /delete/i }))
-        
+
         await waitForElementToBeRemoved(someRule);
     })
 

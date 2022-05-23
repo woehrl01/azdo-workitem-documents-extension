@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "publisher": "lukaswoehrl",
-    "description": "Display linked documents on an additional tab at the work item form for direct viewing.",
+    "description": "Display linked documents on an additional tab and in a list at the work item form for direct viewing.",
     "categories": [
         "Azure Boards"
     ],
