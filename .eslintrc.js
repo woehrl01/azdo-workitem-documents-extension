@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 module.exports = {
     root: true,
     parser: '@typescript-eslint/parser',
@@ -29,16 +28,20 @@ module.exports = {
         'react/void-dom-elements-no-children': 'error',
         '@typescript-eslint/await-thenable': 'error',
         'no-return-await': 'error',
-    }
-    , 'settings': {
-        'react': {
-            'createClass': 'createReactClass',
-            'pragma': 'React',
-            'fragment': 'Fragment',
-            'version': 'detect',
+    }, 
+    settings: {
+        react: {
+            createClass: 'createReactClass',
+            pragma: 'React',
+            fragment: 'Fragment',
+            version: 'detect',
         },
     },
     parserOptions: {
-        project: './tsconfig.json'
-    }
+        project: './tsconfig.json',
+        ecmaVersion: 'latest',
+        ecmaFeatures: {
+            jsx: true
+        }
+    },
 };
