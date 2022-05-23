@@ -27,6 +27,8 @@ module.exports = {
         'react/no-typos': 'warn',
         'react/prefer-stateless-function': 'warn',
         'react/void-dom-elements-no-children': 'error',
+        '@typescript-eslint/await-thenable': 'error',
+        'no-return-await': 'error',
     }
     , 'settings': {
         'react': {
@@ -35,5 +37,8 @@ module.exports = {
             'fragment': 'Fragment',
             'version': 'detect',
         },
+    },
+    parserOptions: {
+        project: './tsconfig.json'
     }
 };
