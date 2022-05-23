@@ -24,7 +24,7 @@ describe('Simple working test', () => {
         render(<SettingsPage />)
         await flushPromises();
 
-        expect(screen.queryAllByPlaceholderText(/rule/i)).toHaveLength(0)
+        expect(screen.queryByPlaceholderText(/rule/i)).not.toBeInTheDocument();
         userEvent.click(screen.getByRole('menuitem', { name: /add rule/i }))
         await flushPromises()
         expect(await screen.findByPlaceholderText(/rule/i)).toBeInTheDocument()
