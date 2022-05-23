@@ -15,7 +15,7 @@ const customRender = (ui: React.ReactElement, options = {}) =>
         ...options,
     })
 
-const flushPromises = async (): Promise<void> => await new Promise(process.nextTick);
+const flushPromises = async (): Promise<void> => new Promise(process.nextTick);
 
 /* see: https://github.com/testing-library/user-event/issues/833 */
 const userEvent = userEventInternal.setup({ delay: null });

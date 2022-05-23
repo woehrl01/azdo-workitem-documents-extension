@@ -15,5 +15,5 @@ const dataServicePromise = SDK.ready()
       .then(([dataService, token]) => dataService.getExtensionDataManager(SDK.getContributionId(), token)));
 
 export async function getDataManager(): Promise<IExtensionDataManager> {
-  return await dataServicePromise;
+  return dataServicePromise;
 }

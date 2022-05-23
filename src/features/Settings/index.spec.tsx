@@ -45,4 +45,5 @@ describe('Simple working test', () => {
         
         await waitForElementToBeRemoved(someRule);
     })
+
 })
