@@ -66,6 +66,8 @@ export default defineConfig(({ command, mode }) => {
       globals: true,
       environment: 'jsdom',
       setupFiles: './src/test/setup.ts',
+      reporters: ['default', 'junit'],
+      outputFile: './test-results.xml',
       deps: {
         inline: [
           'azure-devops-ui',
