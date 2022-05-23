@@ -73,6 +73,18 @@ export default defineConfig(({ command, mode }) => {
           'azure-devops-ui',
         ]
       },
+      coverage: {
+        //reportDir: './coverage',
+        reporter: 'cobertura',
+        threshold: {
+          global: {
+            statements: 100,
+            branches: 100,
+            functions: 100,
+            lines: 100,
+          }
+        }
+      }
     },
   }
 })
