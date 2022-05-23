@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useEffectOnce } from 'usehooks-ts';
 
 const registerWorkItemChangeHandler = async (callback: () => void): Promise<void> => {
-    await SDK.init({ loaded: false });
+    await SDK.ready();
     SDK.register(SDK.getContributionId(), () => ({
         onLoaded(_: IWorkItemLoadedArgs): void {
             callback();
@@ -28,7 +28,6 @@ const registerWorkItemChangeHandler = async (callback: () => void): Promise<void
         }
     } as IWorkItemNotificationListener));
     await SDK.notifyLoadSucceeded();
-    await SDK.ready();
     /* call the callback initially if events have
      * been missed because of later loading */
     callback();
@@ -47,5 +46,9 @@ export const useWorkItemChangedHandler = (handler: () => void): void => {
 
     useEffectOnce(() => {
         registerWorkItemChangeHandler(callback);
+
+        return () => {
+            SDK.unregister(SDK.getContributionId());
+        }
     });
 }
