@@ -2,22 +2,21 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import legacy from '@vitejs/plugin-legacy'
 import { visualizer } from 'rollup-plugin-visualizer';
+import eslint from 'vite-plugin-eslint'
 
 import { fileURLToPath } from 'url'
 import * as path from 'path'
 import * as fs from 'fs';
 
 
-let enableHttps = false
-if (fs.existsSync('/certs/localhost.key')) {
-  enableHttps = true
-}
-
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
+  const enableHttps = fs.existsSync('/certs/localhost.key');
+
   return {
     plugins: [
       react(),
+      eslint(),
       visualizer(),
       legacy({
         targets: ['defaults', 'not IE 11']
