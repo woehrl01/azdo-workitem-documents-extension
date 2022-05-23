@@ -47,8 +47,6 @@ export const useWorkItemChangedHandler = (handler: () => void): void => {
     useEffectOnce(() => {
         registerWorkItemChangeHandler(callback);
 
-        return () => {
-            SDK.unregister(SDK.getContributionId());
-        }
+        return () => SDK.unregister(SDK.getContributionId());
     });
 }
