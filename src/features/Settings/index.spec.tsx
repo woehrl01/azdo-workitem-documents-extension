@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, it, vi } from 'vitest'
 import { SettingsPage } from './SettingsPage'
 import { flushPromises, render, screen, userEvent } from 'test/utils'
-import * as SdkMock from '../../../__mocks__/azure-devops-extension-sdk';
+import * as SDK from 'azure-devops-extension-sdk'
 
 vi.mock('azure-devops-extension-sdk')
 
 describe('Simple working test', () => {
     beforeEach(() => {
-        SdkMock.__resetMockedData()
+        (SDK as any).__resetMockedData()
     });
 
     it('the title is visible', async () => {
@@ -33,7 +34,7 @@ describe('Simple working test', () => {
 
     it('Should remove row on delete', async () => {
 
-        SdkMock.__setMockedData('rules', [{ rule: 'somerule', type: 'allow' }])
+        (SDK as any).__setMockedData('rules', [{ rule: 'somerule', type: 'allow' }])
 
         render(<SettingsPage />)
         await flushPromises();
