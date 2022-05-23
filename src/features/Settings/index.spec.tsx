@@ -1,11 +1,15 @@
 import { describe, expect, it, vi } from 'vitest'
 import { SettingsPage } from './SettingsPage'
 import { flushPromises, render, screen, userEvent } from 'test/utils'
-import * as SDK from 'azure-devops-extension-sdk'
+import * as SdkMock from '../../../__mocks__/azure-devops-extension-sdk';
 
 vi.mock('azure-devops-extension-sdk')
 
 describe('Simple working test', () => {
+    beforeEach(() => {
+        SdkMock.__resetMockedData()
+    });
+
     it('the title is visible', async () => {
         render(<SettingsPage />)
         await flushPromises();
@@ -26,10 +30,10 @@ describe('Simple working test', () => {
 
         expect(await screen.findAllByPlaceholderText(/rule/i)).toHaveLength(1)
     })
-    
+
     it('Should remove row on delete', async () => {
 
-        SDK.__setStoredData('rules', [{rule: 'somerule', type: 'allow'}])
+        SdkMock.__setMockedData('rules', [{ rule: 'somerule', type: 'allow' }])
 
         render(<SettingsPage />)
         await flushPromises();

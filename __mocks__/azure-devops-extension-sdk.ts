@@ -7,11 +7,14 @@ export const getAccessToken = () => Promise.resolve('token');
 export const ready = () => Promise.resolve();
 export const init = () => { };
 
-const __storedData = {}
-
-export const __setStoredData = <T>(key: string, data: T) => 
+let __mockedData = {}
+export const __setMockedData = <T>(key: string, data: T) => 
 {
-    __storedData[key] = data;
+    __mockedData[key] = data;
+}
+
+export const __resetMockedData = () => {
+    __mockedData = {};
 }
 
 export const getService = (serviceId: string) => {
@@ -21,7 +24,7 @@ export const getService = (serviceId: string) => {
                 getExtensionDataManager: () => Promise.resolve(
                     {
                         setValue: () => Promise.resolve(),
-                        getValue: (key: string) => Promise.resolve(__storedData[key])
+                        getValue: (key: string) => Promise.resolve(__mockedData[key])
                     }
                 )
             }
