@@ -41,7 +41,6 @@ export class Measure {
 
 export const trackEvent = (name: string, properties?: { [key: string]: unknown }): void => {
     if (IsAppInsightDisabled) { return }
-
     appInsights.trackEvent({ name }, properties);
 }
 
