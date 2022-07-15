@@ -66,7 +66,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.5",
-    "@testing-library/user-event": "14.2.1",
+    "@testing-library/user-event": "14.2.5",
     "@types/jest": "28.1.5",
     "@types/node": "17.0.35",
     "@types/react": "17.0.47",
@@ -88,7 +88,7 @@
     "patch-package": "6.4.7",
     "prettier": "2.7.1",
     "rimraf": "3.0.2",
-    "rollup-plugin-visualizer": "5.6.0",
+    "rollup-plugin-visualizer": "5.7.0",
     "tfx-cli": "0.12.0",
     "tslib": "2.4.0",
     "typescript": "4.7.4",
