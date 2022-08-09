@@ -33,7 +33,7 @@ steps:
 - script: npm run coverage
   displayName: 'Run tests'
 
-- task: PublishTestResults@2
+- task: PublishTestResults@2.203.0
   inputs:
     testResultsFiles: '**/test-*.xml'
 
