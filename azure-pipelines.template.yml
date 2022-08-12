@@ -37,7 +37,7 @@ steps:
   inputs:
     testResultsFiles: '**/test-*.xml'
 
-- task: PublishCodeCoverageResults@1.200.0
+- task: PublishCodeCoverageResults@2.198.0
   inputs:
     codeCoverageTool: 'Cobertura'
     summaryFileLocation: '**/cobertura-coverage.xml'
