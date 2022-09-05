@@ -1,54 +1,54 @@
 parameters:
-- name: buildPostfix 
-  type: string
-  default: ''
-- name: additionalCommandArgs 
-  type: string
-  default: ''
-- name: baseUri 
-  type: string
-  default: ''
-- name: setGitTag 
-  type: boolean
-  default: false
+  - name: buildPostfix
+    type: string
+    default: ""
+  - name: additionalCommandArgs
+    type: string
+    default: ""
+  - name: baseUri
+    type: string
+    default: ""
+  - name: setGitTag
+    type: boolean
+    default: false
 
 steps:
-- checkout: self
-  persistCredentials: true
+  - checkout: self
+    persistCredentials: true
 
-- task: NodeTool@0.200.0
-  inputs:
-    versionSpec: '18.x'
-  displayName: 'Use node'
+  - task: NodeTool@0.200.0
+    inputs:
+      versionSpec: "18.x"
+    displayName: "Use node"
 
-- script: npm install -g npm@8.12
-  displayName: 'Use NPM'
+  - script: npm install -g npm@8.12
+    displayName: "Use NPM"
 
-- script: npm ci
-  displayName: 'Install dependencies'
+  - script: npm ci
+    displayName: "Install dependencies"
 
-- script: npm run build
-  displayName: 'Run build'
+  - script: npm run build
+    displayName: "Run build"
 
-- script: npm run coverage
-  displayName: 'Run tests'
+  - script: npm run coverage
+    displayName: "Run tests"
+  - task: PublishTestResults@2.203.0
 
-- task: PublishTestResults@2.210.0
-  inputs:
-    testResultsFiles: '**/test-*.xml'
+    inputs:
+      testResultsFiles: "**/test-*.xml"
 
-- task: PublishCodeCoverageResults@1.200.0
-  inputs:
-    codeCoverageTool: 'Cobertura'
-    summaryFileLocation: '**/cobertura-coverage.xml'
+  - task: PublishCodeCoverageResults@1.200.0
+    inputs:
+      codeCoverageTool: "Cobertura"
+      summaryFileLocation: "**/cobertura-coverage.xml"
 
-- script: |
-    npm run publish-extension${{ parameters.buildPostfix }} -- -t "$(PUBLISH_TOKEN)" --override '{"version":"$(version)","baseUri":"${{ parameters.baseUri }}"}' ${{ parameters.additionalCommandArgs }}
-  displayName: 'Publish extension'
-  condition: and(succeeded(), eq(variables.isDependabot, 'false'))
+  - script: |
+      npm run publish-extension${{ parameters.buildPostfix }} -- -t "$(PUBLISH_TOKEN)" --override '{"version":"$(version)","baseUri":"${{ parameters.baseUri }}"}' ${{ parameters.additionalCommandArgs }}
+    displayName: "Publish extension"
+    condition: and(succeeded(), eq(variables.isDependabot, 'false'))
 
-- script: |
-     git tag $(version)
-     git push origin $(version)
-  workingDirectory: $(Build.SourcesDirectory)
-  condition: and(succeeded(), eq('${{ parameters.setGitTag }}', 'true'))
+  - script: |
+      git tag $(version)
+      git push origin $(version)
+    workingDirectory: $(Build.SourcesDirectory)
+    condition: and(succeeded(), eq('${{ parameters.setGitTag }}', 'true'))
