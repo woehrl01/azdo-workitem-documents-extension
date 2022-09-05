@@ -30,7 +30,7 @@
     "@microsoft/applicationinsights-web": "2.8.6",
     "azure-devops-extension-api": "1.158.0",
     "azure-devops-extension-sdk": "2.0.11",
-    "azure-devops-ui": "2.167.39",
+    "azure-devops-ui": "2.167.44",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "react-fast-compare": "3.2.0",
