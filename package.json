@@ -96,6 +96,6 @@
     "typescript-plugin-css-modules": "4.2.1",
     "vite": "2.9.15",
     "vite-plugin-eslint": "1.8.1",
-    "vitest": "0.28.5"
+    "vitest": "3.2.6"
   }
 }
